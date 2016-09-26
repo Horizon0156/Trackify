@@ -66,7 +66,7 @@ namespace BookingHelper.ViewModels
             private set
             {
                 SetProperty(ref _efforts, value);
-                OnPropertyChanged("TotalEffortToday");
+                OnPropertyChanged(nameof(TotalEffortToday));
             }
         }
 
