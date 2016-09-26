@@ -82,11 +82,6 @@ namespace BookingHelper.ViewModels
             {
                 _selectedDate = value;
                 LoadBookingsForSelectedDate();
-
-                if (SelectedDate.HasValue)
-                {
-                    CurrentBooking.Date = SelectedDate.Value;
-                }
             }
         }
 
@@ -127,6 +122,12 @@ namespace BookingHelper.ViewModels
 
         private void SaveBooking()
         {
+            if (!SelectedDate.HasValue)
+            {
+                throw new InvalidOperationException("The save command can not execute.");
+            }
+
+            CurrentBooking.Date = SelectedDate.Value;
             var bookingDto = Mapper.Map<Booking>(CurrentBooking);
 
             _databaseContext.Bookings.Add(bookingDto);
