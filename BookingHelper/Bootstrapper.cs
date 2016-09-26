@@ -55,7 +55,7 @@ namespace BookingHelper
 
             ThemeManager.ChangeAppStyle(
                 app,
-                ThemeManager.GetAccent("Green"),
+                ThemeManager.GetAccent("Red"),
                 ThemeManager.GetAppTheme("BaseDark"));
         }
 
