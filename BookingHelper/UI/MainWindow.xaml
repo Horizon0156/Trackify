@@ -5,6 +5,7 @@
                       xmlns:b="clr-namespace:Horizon.Framework.Xaml.Behaviors;assembly=Horizon.Framework"
                       xmlns:i="clr-namespace:Horizon.Framework.Xaml.Interaction;assembly=Horizon.Framework"
                       xmlns:vm="clr-namespace:BookingHelper.ViewModels"
+                      xmlns:controls="clr-namespace:BookingHelper.Controls"
                       x:Name="Root"
                       Title="Booking Helper v0.1"
                       Width="300"
@@ -81,29 +82,27 @@
             <StackPanel>
                 <ItemsControl ItemTemplate="{StaticResource BookingEntryTemplate}" ItemsSource="{Binding BookingContainer}" />
                 <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
-                    <TextBox Width="45"
+                    <controls:TimeBox Width="45"
                              Margin="5"
                              VerticalContentAlignment="Center"
-                             Controls:TextBoxHelper.Watermark="00:00"
                              DockPanel.Dock="Left"
                              GotFocus="PrefillWithCurrentTimeIfEmpty"
                              Text="{Binding CurrentBooking.StartTime,
                                             StringFormat=hh\\:mm,
                                             Mode=TwoWay,
-                                            UpdateSourceTrigger=PropertyChanged}" />
+                                            UpdateSourceTrigger=LostFocus}" />
                     <TextBlock VerticalAlignment="Center"
                                DockPanel.Dock="Left"
                                Text="-" />
-                    <TextBox Width="45"
+                    <controls:TimeBox Width="45"
                              Margin="5"
                              VerticalContentAlignment="Center"
-                             Controls:TextBoxHelper.Watermark="00:00"
                              DockPanel.Dock="Left"
                              GotFocus="PrefillWithCurrentTimeIfEmpty"
                              Text="{Binding CurrentBooking.EndTime,
                                             StringFormat=hh\\:mm,
                                             Mode=TwoWay,
-                                            UpdateSourceTrigger=PropertyChanged}" />
+                                            UpdateSourceTrigger=LostFocus}" />
                     <Button Width="30"
                             Height="30"
                             Margin="5"

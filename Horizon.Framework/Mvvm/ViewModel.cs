@@ -46,7 +46,7 @@ namespace Horizon.Framework.Mvvm
 
         private bool AreEqual(object value1, object value2)
         {
-            return value1 == value2;
+            return value1.Equals(value2);
         }
     }
 }
