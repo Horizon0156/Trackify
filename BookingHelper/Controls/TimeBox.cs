@@ -6,6 +6,9 @@ using System.Windows.Input;
 
 namespace BookingHelper.Controls
 {
+    using System.Diagnostics;
+    using System.Globalization;
+
     internal class TimeBox : TextBox
     {
         private const string TIME_INPUT_PATTERN = "^[0-2]?[0-9]?:?[0-9]?[0-9]?$";
@@ -16,8 +19,8 @@ namespace BookingHelper.Controls
             "Time",
             typeof(TimeSpan?),
             typeof(TimeBox),
-            new FrameworkPropertyMetadata(null, ConvertTimeToText));
-
+            new FrameworkPropertyMetadata(null));
+        
         public TimeSpan? Time
         {
             get
@@ -33,6 +36,28 @@ namespace BookingHelper.Controls
         public TimeBox()
         {
             PreviewTextInput += ValidateInput;
+            TextChanged += ValidateTime;
+        }
+
+        private void ValidateTime(object sender, TextChangedEventArgs e)
+        {
+            if (Regex.IsMatch(Text, TIME_VALIDATION_PATTERN))
+            {
+                TimeSpan parsedResult;
+
+                if (TimeSpan.TryParseExact(Text, @"hh\:mm", new DateTimeFormatInfo(), out parsedResult))
+                {
+                    Time = parsedResult;
+                }
+                else if (TimeSpan.TryParseExact(Text, @"hhMM", new DateTimeFormatInfo(), out parsedResult))
+                {
+                    Time = parsedResult;
+                }
+                else
+                {
+                    Time = null;
+                }
+            }
         }
 
         private void ValidateInput(object sender, TextCompositionEventArgs textCompositionEventArgs)
@@ -41,11 +66,6 @@ namespace BookingHelper.Controls
             var resultingText = currentText.Insert(CaretIndex, textCompositionEventArgs.Text);
             var isInputValid = Regex.IsMatch(resultingText, TIME_INPUT_PATTERN);
             textCompositionEventArgs.Handled = !isInputValid;
-        }
-
-        private static object ConvertTimeToText(DependencyObject d, object basevalue)
-        {
-            return d;
         }
     }
 }

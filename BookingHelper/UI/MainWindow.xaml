@@ -86,6 +86,7 @@
                              Margin="5"
                              VerticalContentAlignment="Center"
                              DockPanel.Dock="Left"
+                                Style="{StaticResource {x:Type TextBox}}"
                              GotFocus="PrefillWithCurrentTimeIfEmpty"
                              Text="{Binding CurrentBooking.StartTime,
                                             StringFormat=hh\\:mm,
