@@ -166,6 +166,7 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Controls\TimeBox.cs" />
+    <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\Booking.cs" />
     <Compile Include="DataModels\BreakRegulation.cs" />
     <Compile Include="DataModels\IBookingsContext.cs" />

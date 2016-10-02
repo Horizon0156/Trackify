@@ -5,7 +5,9 @@
                       xmlns:b="clr-namespace:Horizon.Framework.Xaml.Behaviors;assembly=Horizon.Framework"
                       xmlns:i="clr-namespace:Horizon.Framework.Xaml.Interaction;assembly=Horizon.Framework"
                       xmlns:vm="clr-namespace:BookingHelper.ViewModels"
+                      xmlns:converter="clr-namespace:BookingHelper.Converter"
                       xmlns:controls="clr-namespace:BookingHelper.Controls"
+                      xmlns:system="clr-namespace:System;assembly=mscorlib"
                       x:Name="Root"
                       Title="Booking Helper v0.1"
                       Width="350"
@@ -22,6 +24,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <converter:TotalEffortToColorConverter x:Key="TotalEffortToColorConverter"/>
+            <system:Double x:Key="DAILY_WORK_HOURS">8.00</system:Double>
 
             <DataTemplate x:Key="BookingEntryTemplate" DataType="{x:Type vm:BookingModel}">
                 <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
@@ -176,6 +181,9 @@
                        FontWeight="Bold"
                        Text="{Binding TotalEffortClearToday,
                                       StringFormat='Netto: {0:N2} h'}"
+                       Foreground="{Binding TotalEffortClearToday, 
+                                            Converter={StaticResource TotalEffortToColorConverter}, 
+                                            ConverterParameter={StaticResource DAILY_WORK_HOURS}}"
                        TextAlignment="Right"
                        Margin="0,0,10,0" />
             <TextBlock VerticalAlignment="Center"
