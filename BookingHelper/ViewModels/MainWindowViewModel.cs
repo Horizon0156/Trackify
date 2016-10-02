@@ -13,6 +13,7 @@ namespace BookingHelper.ViewModels
     internal class MainWindowViewModel : ViewModel
     {
         private ObservableCollection<BookingModel> _bookingContainer;
+        private List<BreakRegulation> _breakRegulations;
         private BookingModel _currentBooking;
         private IBookingsContext _databaseContext;
         private IEnumerable<Effort> _efforts;
@@ -29,7 +30,8 @@ namespace BookingHelper.ViewModels
             CurrentBooking = new BookingModel();
             SelectedDate = DateTime.Today;
             LoadBookingsForSelectedDate();
-        }
+            InitializeBreakRegulations();
+        }        
 
         public ObservableCollection<BookingModel> BookingContainer
         {
@@ -66,7 +68,9 @@ namespace BookingHelper.ViewModels
             private set
             {
                 SetProperty(ref _efforts, value);
-                OnPropertyChanged(nameof(TotalEffortToday));
+                OnPropertyChanged(nameof(TotalEffortGrossToday));
+                OnPropertyChanged(nameof(TotalEffortClearToday));
+                OnPropertyChanged(nameof(MandatoryBreakTime));
             }
         }
 
@@ -85,7 +89,35 @@ namespace BookingHelper.ViewModels
             }
         }
 
-        public double TotalEffortToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
+        public double TotalEffortGrossToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
+        public double TotalEffortClearToday => Efforts?.Where(e => !e.Description.ToLower().Contains("pause")).Sum(e => e.EffortTimeInHours) ?? 0;
+        public double MandatoryBreakTime => GetMandatoryBreakTime();
+
+        private void InitializeBreakRegulations()
+        {
+            _breakRegulations = new List<BreakRegulation>
+            {
+                new BreakRegulation(6, 0.5),
+                new BreakRegulation(9, 0.75)
+            };
+        }
+
+        private double GetMandatoryBreakTime()
+        {
+            double breakTime = 0;
+            foreach(var breakRegulation in _breakRegulations.OrderBy(br => br.WorkEffortLimit).ToList())
+            {
+                if(TotalEffortClearToday > breakRegulation.WorkEffortLimit)
+                {
+                    breakTime = breakRegulation.MandatoryBreakTime;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return breakTime;
+        }
 
         private void DeleteBooking(BookingModel booking)
         {
