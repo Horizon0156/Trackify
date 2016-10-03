@@ -66,6 +66,7 @@
     <Compile Include="Xaml\Behaviors\InputRestrictionBehavior.cs" />
     <Compile Include="Xaml\Behaviors\MinimizeToTrayBehavior.cs" />
     <Compile Include="Xaml\Collections\AttentiveCollection.cs" />
+    <Compile Include="Xaml\Collections\NotifyInnerElementChangedEventArgs.cs" />
     <Compile Include="Xaml\Extensions\ApplicationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

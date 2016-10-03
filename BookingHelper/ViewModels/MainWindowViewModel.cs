@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using BookingHelper.DataModels;
 using Horizon.Framework.Mvvm;
+using Horizon.Framework.Xaml.Collections;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -12,7 +13,7 @@ namespace BookingHelper.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        private ObservableCollection<BookingModel> _bookingContainer;
+        private AttentiveCollection<BookingModel> _bookingContainer;
         private List<BreakRegulation> _breakRegulations;
         private BookingModel _currentBooking;
         private IBookingsContext _databaseContext;
@@ -34,7 +35,7 @@ namespace BookingHelper.ViewModels
             InitializeBreakRegulations();
         }
 
-        public ObservableCollection<BookingModel> BookingContainer
+        public AttentiveCollection<BookingModel> BookingContainer
         {
             get
             {
@@ -135,27 +136,27 @@ namespace BookingHelper.ViewModels
         private bool IsCurrentBookingValid()
         {
             return SelectedDate.HasValue
-                && !string.IsNullOrWhiteSpace(CurrentBooking.Description)
-                && CurrentBooking.StartTime.HasValue
-                && CurrentBooking.EndTime.HasValue
-                && CurrentBooking.StartTime <= CurrentBooking.EndTime;
+                && CurrentBooking.IsBookingEntryValid();
         }
 
         private void LoadBookingsForSelectedDate()
         {
             if (BookingContainer != null)
             {
+                BookingContainer.InnerElementChanged -= SaveChangedBooking;
                 BookingContainer.CollectionChanged -= UpdateEffort;
             }
 
             if (SelectedDate.HasValue)
             {
-                BookingContainer = new ObservableCollection<BookingModel>(
+                BookingContainer = new AttentiveCollection<BookingModel>(
                     _databaseContext
                         .Bookings
                         .Where(b => b.Date == SelectedDate)
                         .Select(b => Mapper.Map<BookingModel>(b)));
 
+                BookingContainer.FireCollectionChangeWhenInnerElementChanges = true;
+                BookingContainer.InnerElementChanged += SaveChangedBooking;
                 BookingContainer.CollectionChanged += UpdateEffort;
                 UpdateEffort();
             }
@@ -177,6 +178,18 @@ namespace BookingHelper.ViewModels
 
             BookingContainer.Add(CurrentBooking);
             CurrentBooking = new BookingModel();
+        }
+
+        private void SaveChangedBooking(object sender, NotifyInnerElementChangedEventArgs e)
+        {
+            var booking = (BookingModel) e.ChangedItem;
+
+            if (booking.IsBookingEntryValid())
+            {
+                var bookingToEdit = _databaseContext.Bookings.First(b => b.Id == booking.Id);
+                Mapper.Map(booking, bookingToEdit);
+                _databaseContext.SaveChanges();
+            }
         }
 
         private void UpdateEffort()

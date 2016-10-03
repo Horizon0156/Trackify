@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
-using JetBrains.Annotations;
 
 namespace Horizon.Framework.Xaml.Collections
 {
@@ -20,7 +21,7 @@ namespace Horizon.Framework.Xaml.Collections
         public AttentiveCollection()
         {
             FireCollectionChangeWhenInnerElementChanges = false;
-            AttachCollectionWatcher();
+            AttachElementWatcher();
         }
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace Horizon.Framework.Xaml.Collections
             Contract.Requires(list != null);
 
             FireCollectionChangeWhenInnerElementChanges = false;
-            AttachCollectionWatcher();
+            AttachElementWatcher();
         }
 
         /// <summary>
@@ -44,13 +45,13 @@ namespace Horizon.Framework.Xaml.Collections
             Contract.Requires(collection != null);
 
             FireCollectionChangeWhenInnerElementChanges = false;
-            AttachCollectionWatcher();
+            AttachElementWatcher();
         }
 
         /// <summary>
         /// Occurs when an inner element changes its content.
         /// </summary>
-        public event PropertyChangedEventHandler InnerElementChanged;
+        public event EventHandler<NotifyInnerElementChangedEventArgs> InnerElementChanged;
 
         /// <summary>
         /// Gets or sets a value indicating whether a collection changed event should be fired
@@ -58,12 +59,17 @@ namespace Horizon.Framework.Xaml.Collections
         /// </summary>
         public bool FireCollectionChangeWhenInnerElementChanges { get; set; }
 
-        private void AttachCollectionWatcher()
+        private void AttachElementWatcher()
         {
-            CollectionChanged += AttachOrDetachCollectionWatcher;
+            foreach (var item in this)
+            {
+                ((INotifyPropertyChanged)item).PropertyChanged += InformAboutChangedItem;
+            }
+
+            CollectionChanged += AttachOrDetachElementWatcher;
         }
 
-        private void AttachOrDetachCollectionWatcher([NotNull] object sender, [NotNull] NotifyCollectionChangedEventArgs e)
+        private void AttachOrDetachElementWatcher([NotNull] object sender, [NotNull] NotifyCollectionChangedEventArgs e)
         {
             if (e.OldItems != null)
             {
@@ -84,16 +90,16 @@ namespace Horizon.Framework.Xaml.Collections
 
         private void InformAboutChangedItem([NotNull] object sender, [NotNull] PropertyChangedEventArgs e)
         {
-            OnInnerElementChanged(e);
+            OnInnerElementChanged(new NotifyInnerElementChangedEventArgs(sender, e.PropertyName));
 
             if (FireCollectionChangeWhenInnerElementChanges)
             {
-                var changedEventArgs = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, sender);
+                var changedEventArgs = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, sender, sender);
                 OnCollectionChanged(changedEventArgs);
             }
         }
 
-        private void OnInnerElementChanged([NotNull] PropertyChangedEventArgs e)
+        private void OnInnerElementChanged([NotNull] NotifyInnerElementChangedEventArgs e)
         {
             InnerElementChanged?.Invoke(this, e);
         }
