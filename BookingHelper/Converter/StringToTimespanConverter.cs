@@ -48,7 +48,7 @@ namespace BookingHelper.Converter
         {
             EnsureTimeDelimeterIsPresent(ref text);
 
-            return TimeSpan.TryParseExact(text, @"HH\:mm", CultureInfo.InvariantCulture, out parsedTime);
+            return TimeSpan.TryParseExact(text, @"hh\:mm", CultureInfo.InvariantCulture, out parsedTime);
         }
     }
 }
