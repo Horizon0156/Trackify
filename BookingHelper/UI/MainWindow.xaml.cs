@@ -16,7 +16,7 @@ namespace BookingHelper.UI
 
             if (string.IsNullOrEmpty(textbox.Text))
             {
-                textbox.Text = string.Format("{0:HH:mm}", DateTime.Now);
+                textbox.Text = DateTime.Now.TimeOfDay.ToString(@"hh\:mm");
             }
         }
     }

@@ -53,6 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xaml\Behaviors\AutoScrollBehavior.cs" />
     <Compile Include="Xaml\Behaviors\FocusHandoverBehavior.cs" />
+    <Compile Include="Xaml\Behaviors\InputRestrictionBehavior.cs" />
     <Compile Include="Xaml\Collections\AttentiveCollection.cs" />
     <Compile Include="Xaml\Extensions\ApplicationExtensions.cs" />
     <Compile Include="Xaml\Interaction\Attach.cs" />

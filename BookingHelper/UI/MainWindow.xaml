@@ -1,52 +1,83 @@
-﻿<Controls:MetroWindow x:Class="BookingHelper.UI.MainWindow"
-                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      xmlns:b="clr-namespace:Horizon.Framework.Xaml.Behaviors;assembly=Horizon.Framework"
-                      xmlns:i="clr-namespace:Horizon.Framework.Xaml.Interaction;assembly=Horizon.Framework"
-                      xmlns:vm="clr-namespace:BookingHelper.ViewModels"
-                      xmlns:controls="clr-namespace:BookingHelper.Controls"
-                      x:Name="Root"
-                      Title="Booking Helper v0.1"
-                      Width="300"
-                      Height="350"
-                      MinWidth="280"
-                      MinHeight="300"
-                      x:ClassModifier="internal"
-                      BorderBrush="{DynamicResource AccentColorBrush}"
-                      BorderThickness="1"
-                      SaveWindowPosition="True"
-                      ShowIconOnTitleBar="True">
+﻿<metro:MetroWindow x:Class="BookingHelper.UI.MainWindow"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:b="clr-namespace:Horizon.Framework.Xaml.Behaviors;assembly=Horizon.Framework"
+                   xmlns:converter="clr-namespace:BookingHelper.Converter"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                   xmlns:vm="clr-namespace:BookingHelper.ViewModels"
+                   x:Name="Root"
+                   Title="Booking Helper"
+                   Width="300"
+                   Height="350"
+                   MinWidth="280"
+                   MinHeight="300"
+                   x:ClassModifier="internal"
+                   BorderBrush="{DynamicResource AccentColorBrush}"
+                   BorderThickness="1"
+                   SaveWindowPosition="True"
+                   ShowIconOnTitleBar="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <converter:TimeToStringConverter x:Key="TimeToStringConverter" />
+
             <DataTemplate x:Key="BookingEntryTemplate" DataType="{x:Type vm:BookingModel}">
-                <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
-                    <TextBox Width="45"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0"
+                             Width="45"
                              Margin="5"
                              VerticalContentAlignment="Center"
-                             DockPanel.Dock="Left"
+                             metro:TextBoxHelper.SelectAllOnFocus="True"
                              Text="{Binding StartTime,
-                                            StringFormat=hh\\:mm}" />
-                    <TextBlock VerticalAlignment="Center"
-                               DockPanel.Dock="Left"
+                                            Converter={StaticResource TimeToStringConverter},
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=LostFocus}">
+                        <i:Interaction.Behaviors>
+                            <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                    <TextBlock Grid.Column="1"
+                               VerticalAlignment="Center"
                                Text="-" />
-                    <TextBox Width="45"
+                    <TextBox Grid.Column="2"
+                             Width="45"
                              Margin="5"
                              VerticalContentAlignment="Center"
-                             DockPanel.Dock="Left"
+                             metro:TextBoxHelper.SelectAllOnFocus="True"
                              Text="{Binding EndTime,
-                                            StringFormat=hh\\:mm}" />
-                    <Button Width="30"
+                                            Converter={StaticResource TimeToStringConverter},
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=LostFocus}">
+                        <i:Interaction.Behaviors>
+                            <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                    <TextBox Grid.Column="3"
+                             Margin="5"
+                             HorizontalAlignment="Stretch"
+                             VerticalContentAlignment="Center"
+                             metro:TextBoxHelper.SelectAllOnFocus="True"
+                             Text="{Binding Description,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=LostFocus}" />
+                    <Button Grid.Column="5"
+                            Width="30"
                             Height="30"
                             Margin="5"
                             Command="{Binding ElementName=Root,
                                               Path=DataContext.DeleteCommand}"
                             CommandParameter="{Binding .}"
-                            DockPanel.Dock="Right"
                             Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="10"
                                    Height="10"
@@ -54,19 +85,11 @@
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_delete}" />
                             </Rectangle.OpacityMask>
-
                         </Rectangle>
                     </Button>
-                    <TextBox Margin="5"
-                             HorizontalAlignment="Stretch"
-                             VerticalContentAlignment="Center"
-                             Text="{Binding Description,
-                                            Mode=TwoWay,
-                                            UpdateSourceTrigger=LostFocus}" />
-                </DockPanel>
+                </Grid>
             </DataTemplate>
         </ResourceDictionary>
-
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -80,35 +103,55 @@
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Visible">
             <StackPanel>
-                <ItemsControl ItemTemplate="{StaticResource BookingEntryTemplate}" ItemsSource="{Binding BookingContainer}" />
-                <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
-                    <controls:TimeBox Width="45"
+                <ItemsControl Focusable="False"
+                              ItemTemplate="{StaticResource BookingEntryTemplate}"
+                              ItemsSource="{Binding BookingContainer}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0"
+                             Width="45"
                              Margin="5"
                              VerticalContentAlignment="Center"
-                             DockPanel.Dock="Left"
-                                Style="{StaticResource {x:Type TextBox}}"
+                             metro:TextBoxHelper.SelectAllOnFocus="True"
+                             metro:TextBoxHelper.Watermark="00:00"
                              GotFocus="PrefillWithCurrentTimeIfEmpty"
                              Text="{Binding CurrentBooking.StartTime,
-                                            StringFormat=hh\\:mm,
+                                            Converter={StaticResource TimeToStringConverter},
                                             Mode=TwoWay,
-                                            UpdateSourceTrigger=LostFocus}" />
-                    <TextBlock VerticalAlignment="Center"
-                               DockPanel.Dock="Left"
+                                            UpdateSourceTrigger=LostFocus}">
+                        <i:Interaction.Behaviors>
+                            <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                    <TextBlock Grid.Column="1"
+                               VerticalAlignment="Center"
                                Text="-" />
-                    <controls:TimeBox Width="45"
+                    <TextBox Grid.Column="2"
+                             Width="45"
                              Margin="5"
                              VerticalContentAlignment="Center"
-                             DockPanel.Dock="Left"
+                             metro:TextBoxHelper.SelectAllOnFocus="True"
+                             metro:TextBoxHelper.Watermark="00:00"
                              GotFocus="PrefillWithCurrentTimeIfEmpty"
                              Text="{Binding CurrentBooking.EndTime,
-                                            StringFormat=hh\\:mm,
+                                            Converter={StaticResource TimeToStringConverter},
                                             Mode=TwoWay,
-                                            UpdateSourceTrigger=LostFocus}" />
-                    <Button Width="30"
+                                            UpdateSourceTrigger=LostFocus}">
+                        <i:Interaction.Behaviors>
+                            <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                    <Button Grid.Column="4"
+                            Width="30"
                             Height="30"
                             Margin="5"
                             Command="{Binding SaveCommand}"
-                            DockPanel.Dock="Right"
                             Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="10"
                                    Height="10"
@@ -116,13 +159,14 @@
                             <Rectangle.OpacityMask>
                                 <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_save}" />
                             </Rectangle.OpacityMask>
-
                         </Rectangle>
                     </Button>
-                    <TextBox Margin="5"
+                    <TextBox Grid.Column="3"
+                             Margin="5"
                              HorizontalAlignment="Stretch"
                              VerticalContentAlignment="Center"
-                             Controls:TextBoxHelper.Watermark="Description"
+                             metro:TextBoxHelper.SelectAllOnFocus="True"
+                             metro:TextBoxHelper.Watermark="Description"
                              Text="{Binding CurrentBooking.Description,
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=PropertyChanged}">
@@ -130,11 +174,11 @@
                             <KeyBinding Key="Enter" Command="{Binding SaveCommand}" />
                         </TextBox.InputBindings>
                     </TextBox>
-                </DockPanel>
+                </Grid>
             </StackPanel>
-            <i:Attach.Behaviors>
+            <i:Interaction.Behaviors>
                 <b:AutoScrollBehavior />
-            </i:Attach.Behaviors>
+            </i:Interaction.Behaviors>
         </ScrollViewer>
         <ScrollViewer Grid.Row="2"
                       HorizontalScrollBarVisibility="Auto"
@@ -166,4 +210,4 @@
                        TextAlignment="Right" />
         </DockPanel>
     </Grid>
-</Controls:MetroWindow>
+</metro:MetroWindow>
