@@ -46,6 +46,8 @@
       <HintPath>..\packages\Expression.Blend.Sdk.WPF.1.0.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +64,7 @@
     <Compile Include="Xaml\Behaviors\AutoScrollBehavior.cs" />
     <Compile Include="Xaml\Behaviors\FocusHandoverBehavior.cs" />
     <Compile Include="Xaml\Behaviors\InputRestrictionBehavior.cs" />
+    <Compile Include="Xaml\Behaviors\MinimizeToTrayBehavior.cs" />
     <Compile Include="Xaml\Collections\AttentiveCollection.cs" />
     <Compile Include="Xaml\Extensions\ApplicationExtensions.cs" />
   </ItemGroup>

@@ -5,12 +5,13 @@
                    xmlns:converter="clr-namespace:BookingHelper.Converter"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                    xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                   xmlns:system="clr-namespace:System;assembly=mscorlib"
                    xmlns:vm="clr-namespace:BookingHelper.ViewModels"
                    x:Name="Root"
                    Title="Booking Helper"
-                   Width="300"
-                   Height="350"
-                   MinWidth="280"
+                   Width="350"
+                   Height="370"
+                   MinWidth="350"
                    MinHeight="300"
                    x:ClassModifier="internal"
                    BorderBrush="{DynamicResource AccentColorBrush}"
@@ -24,6 +25,8 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converter:TimeToStringConverter x:Key="TimeToStringConverter" />
+            <system:Double x:Key="DAILY_WORK_HOURS">8.00</system:Double>
+            <converter:TotalEffortToColorConverter x:Key="TotalEffortToColorConverter" />
 
             <DataTemplate x:Key="BookingEntryTemplate" DataType="{x:Type vm:BookingModel}">
                 <Grid>
@@ -200,14 +203,38 @@
         <DockPanel Grid.Row="3"
                    Margin="0 5 15 5"
                    HorizontalAlignment="Stretch">
-            <DatePicker BorderThickness="0"
+            <DatePicker Margin="0,0,15,0"
+                        BorderThickness="0"
                         DockPanel.Dock="Left"
                         SelectedDate="{Binding SelectedDate}" />
-            <TextBlock VerticalAlignment="Center"
+            <Rectangle Width="10"
+                       Height="10"
                        DockPanel.Dock="Right"
-                       Text="{Binding TotalEffortToday,
-                                      StringFormat='{}{0:N2} h'}"
+                       Fill="White">
+                <Rectangle.ToolTip>
+                    <TextBlock Text="{Binding MandatoryBreakTime, StringFormat='Vorgeschriebene Pausenzeit: {0:N2} h'}" />
+                </Rectangle.ToolTip>
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_information_circle}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+            <TextBlock Margin="0,0,10,0"
+                       VerticalAlignment="Center"
+                       DockPanel.Dock="Right"
+                       FontWeight="Bold"
+                       Foreground="{Binding TotalEffortClearToday,
+                                            Converter={StaticResource TotalEffortToColorConverter},
+                                            ConverterParameter={StaticResource DAILY_WORK_HOURS}}"
+                       Text="{Binding TotalEffortClearToday,
+                                      StringFormat='Netto: {0:N2} h'}"
                        TextAlignment="Right" />
+            <TextBlock Margin="0,0,10,0"
+                       VerticalAlignment="Center"
+                       DockPanel.Dock="Right"
+                       Text="{Binding TotalEffortGrossToday,
+                                      StringFormat='Brutto: {0:N2} h'}"
+                       TextAlignment="Right" />
+
         </DockPanel>
     </Grid>
 </metro:MetroWindow>

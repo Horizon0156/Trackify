@@ -174,7 +174,9 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Converter\StringToTimespanConverter.cs" />
+	<Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\Booking.cs" />
+    <Compile Include="DataModels\BreakRegulation.cs" />
     <Compile Include="DataModels\IBookingsContext.cs" />
     <Compile Include="DataModels\BookingsContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
