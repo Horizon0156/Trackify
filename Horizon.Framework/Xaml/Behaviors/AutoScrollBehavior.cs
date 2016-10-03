@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Controls;
-
-using Horizon.Framework.Xaml.Interaction;
+using System.Windows.Interactivity;
 
 namespace Horizon.Framework.Xaml.Behaviors
 {

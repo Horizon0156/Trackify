@@ -34,10 +34,18 @@
       <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Expression.Blend.Sdk.WPF.1.0.1\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Expression.Blend.Sdk.WPF.1.0.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,11 +64,6 @@
     <Compile Include="Xaml\Behaviors\InputRestrictionBehavior.cs" />
     <Compile Include="Xaml\Collections\AttentiveCollection.cs" />
     <Compile Include="Xaml\Extensions\ApplicationExtensions.cs" />
-    <Compile Include="Xaml\Interaction\Attach.cs" />
-    <Compile Include="Xaml\Interaction\Behavior.cs" />
-    <Compile Include="Xaml\Interaction\BehaviorCollection.cs" />
-    <Compile Include="Xaml\Interaction\Behavior{T}.cs" />
-    <Compile Include="Xaml\Interaction\IAttachable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
