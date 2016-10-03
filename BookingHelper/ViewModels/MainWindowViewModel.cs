@@ -97,7 +97,11 @@ namespace BookingHelper.ViewModels
 
         private bool IsCurrentBookingValid()
         {
-            return SelectedDate.HasValue && !string.IsNullOrWhiteSpace(CurrentBooking.Description);
+            return SelectedDate.HasValue 
+                && !string.IsNullOrWhiteSpace(CurrentBooking.Description)
+                && CurrentBooking.StartTime.HasValue
+                && CurrentBooking.EndTime.HasValue
+                && CurrentBooking.StartTime <= CurrentBooking.EndTime;
         }
 
         private void LoadBookingsForSelectedDate()
