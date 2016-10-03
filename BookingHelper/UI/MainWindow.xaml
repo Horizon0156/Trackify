@@ -147,6 +147,19 @@
                             <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
                         </i:Interaction.Behaviors>
                     </TextBox>
+                    <TextBox Grid.Column="3"
+                             Margin="5"
+                             HorizontalAlignment="Stretch"
+                             VerticalContentAlignment="Center"
+                             metro:TextBoxHelper.SelectAllOnFocus="True"
+                             metro:TextBoxHelper.Watermark="Description"
+                             Text="{Binding CurrentBooking.Description,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding SaveCommand}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
                     <Button Grid.Column="4"
                             Width="30"
                             Height="30"
@@ -161,19 +174,6 @@
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
-                    <TextBox Grid.Column="3"
-                             Margin="5"
-                             HorizontalAlignment="Stretch"
-                             VerticalContentAlignment="Center"
-                             metro:TextBoxHelper.SelectAllOnFocus="True"
-                             metro:TextBoxHelper.Watermark="Description"
-                             Text="{Binding CurrentBooking.Description,
-                                            Mode=TwoWay,
-                                            UpdateSourceTrigger=PropertyChanged}">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding SaveCommand}" />
-                        </TextBox.InputBindings>
-                    </TextBox>
                 </Grid>
             </StackPanel>
             <i:Interaction.Behaviors>
