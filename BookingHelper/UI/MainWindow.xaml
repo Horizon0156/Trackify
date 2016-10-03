@@ -4,6 +4,7 @@
                    xmlns:b="clr-namespace:Horizon.Framework.Xaml.Behaviors;assembly=Horizon.Framework"
                    xmlns:converter="clr-namespace:BookingHelper.Converter"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:localBehavior="clr-namespace:BookingHelper.Behavior"
                    xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                    xmlns:system="clr-namespace:System;assembly=mscorlib"
                    xmlns:vm="clr-namespace:BookingHelper.ViewModels"
@@ -45,9 +46,10 @@
                              Text="{Binding StartTime,
                                             Converter={StaticResource TimeToStringConverter},
                                             Mode=TwoWay,
-                                            UpdateSourceTrigger=LostFocus}">
+                                            UpdateSourceTrigger=Explicit}">
                         <i:Interaction.Behaviors>
                             <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
+                            <localBehavior:UpdateableTextBoxBehavior />
                         </i:Interaction.Behaviors>
                     </TextBox>
                     <TextBlock Grid.Column="1"
@@ -61,9 +63,10 @@
                              Text="{Binding EndTime,
                                             Converter={StaticResource TimeToStringConverter},
                                             Mode=TwoWay,
-                                            UpdateSourceTrigger=LostFocus}">
+                                            UpdateSourceTrigger=Explicit}">
                         <i:Interaction.Behaviors>
                             <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
+                            <localBehavior:UpdateableTextBoxBehavior />
                         </i:Interaction.Behaviors>
                     </TextBox>
                     <TextBox Grid.Column="3"
@@ -73,7 +76,11 @@
                              metro:TextBoxHelper.SelectAllOnFocus="True"
                              Text="{Binding Description,
                                             Mode=TwoWay,
-                                            UpdateSourceTrigger=LostFocus}" />
+                                            UpdateSourceTrigger=Explicit}">
+                        <i:Interaction.Behaviors>
+                            <localBehavior:UpdateableTextBoxBehavior />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
                     <Button Grid.Column="5"
                             Width="30"
                             Height="30"

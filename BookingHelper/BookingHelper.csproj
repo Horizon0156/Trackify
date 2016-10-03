@@ -172,9 +172,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behavior\UpdateableTextBoxBehavior.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Converter\StringToTimespanConverter.cs" />
-	<Compile Include="Converter\TotalEffortToColorConverter.cs" />
+    <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\Booking.cs" />
     <Compile Include="DataModels\BreakRegulation.cs" />
     <Compile Include="DataModels\IBookingsContext.cs" />
