@@ -5,7 +5,6 @@ using Horizon.Framework.Xaml.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -70,11 +69,15 @@ namespace BookingHelper.ViewModels
             private set
             {
                 SetProperty(ref _efforts, value);
+
                 OnPropertyChanged(nameof(TotalEffortGrossToday));
                 OnPropertyChanged(nameof(TotalEffortClearToday));
                 OnPropertyChanged(nameof(MandatoryBreakTime));
+                OnPropertyChanged(nameof(HomeTime));
             }
         }
+
+        public TimeSpan HomeTime => DateTime.Now.TimeOfDay + TimeSpan.FromHours(8 - TotalEffortClearToday);
 
         public double MandatoryBreakTime => GetMandatoryBreakTime();
 
@@ -96,8 +99,6 @@ namespace BookingHelper.ViewModels
         public double TotalEffortClearToday => Efforts?.Where(e => !e.Description.ToLower().Contains("pause")).Sum(e => e.EffortTimeInHours) ?? 0;
 
         public double TotalEffortGrossToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
-
-        public double TotalEffortToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
 
         private void DeleteBooking(BookingModel booking)
         {
@@ -182,7 +183,7 @@ namespace BookingHelper.ViewModels
 
         private void SaveChangedBooking(object sender, NotifyInnerElementChangedEventArgs e)
         {
-            var booking = (BookingModel) e.ChangedItem;
+            var booking = (BookingModel)e.ChangedItem;
 
             if (booking.IsBookingEntryValid())
             {

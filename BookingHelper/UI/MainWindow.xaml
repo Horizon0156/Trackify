@@ -10,9 +10,9 @@
                    xmlns:vm="clr-namespace:BookingHelper.ViewModels"
                    x:Name="Root"
                    Title="Booking Helper"
-                   Width="350"
-                   Height="370"
-                   MinWidth="350"
+                   Width="300"
+                   Height="380"
+                   MinWidth="280"
                    MinHeight="300"
                    x:ClassModifier="internal"
                    BorderBrush="{DynamicResource AccentColorBrush}"
@@ -214,12 +214,34 @@
                         BorderThickness="0"
                         DockPanel.Dock="Left"
                         SelectedDate="{Binding SelectedDate}" />
-            <Rectangle Width="10"
-                       Height="10"
+            <Rectangle Width="15"
+                       Height="15"
+                       Margin="5 0 0 0"
+                       VerticalAlignment="Center"
                        DockPanel.Dock="Right"
                        Fill="White">
                 <Rectangle.ToolTip>
-                    <TextBlock Text="{Binding MandatoryBreakTime, StringFormat='Vorgeschriebene Pausenzeit: {0:N2} h'}" />
+                    <TextBlock Text="{Binding HomeTime, StringFormat='Home time: {0:hh\\:mm}'}" />
+                </Rectangle.ToolTip>
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_clock}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+            <Rectangle Width="15"
+                       Height="15"
+                       VerticalAlignment="Center"
+                       DockPanel.Dock="Right"
+                       Fill="White">
+                <Rectangle.ToolTip>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="Vorgeschriebene Pausenzeit: {0:N2} h&#x0a;Summe inkl. Pause: {1:N2} h&#x0a;Summe exkl. Pause: {2:N2} h">
+                                <Binding Path="MandatoryBreakTime" />
+                                <Binding Path="TotalEffortGrossToday" />
+                                <Binding Path="TotalEffortClearToday" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                 </Rectangle.ToolTip>
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_information_circle}" />
@@ -228,18 +250,11 @@
             <TextBlock Margin="0,0,10,0"
                        VerticalAlignment="Center"
                        DockPanel.Dock="Right"
-                       FontWeight="Bold"
                        Foreground="{Binding TotalEffortClearToday,
                                             Converter={StaticResource TotalEffortToColorConverter},
                                             ConverterParameter={StaticResource DAILY_WORK_HOURS}}"
                        Text="{Binding TotalEffortClearToday,
-                                      StringFormat='Netto: {0:N2} h'}"
-                       TextAlignment="Right" />
-            <TextBlock Margin="0,0,10,0"
-                       VerticalAlignment="Center"
-                       DockPanel.Dock="Right"
-                       Text="{Binding TotalEffortGrossToday,
-                                      StringFormat='Brutto: {0:N2} h'}"
+                                      StringFormat='{}{0:N2} h'}"
                        TextAlignment="Right" />
 
         </DockPanel>

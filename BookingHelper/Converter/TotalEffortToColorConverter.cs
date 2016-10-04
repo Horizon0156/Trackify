@@ -15,7 +15,7 @@ namespace BookingHelper.Converter
         {
             var effort = System.Convert.ToDouble(value);
             var neededEffort = System.Convert.ToDouble(parameter);
-            return (effort >= neededEffort) ? Brushes.Green : Brushes.White;
+            return (effort >= neededEffort) ? Brushes.LimeGreen : Brushes.White;
         }
 
         public object ConvertBack(object value, Type t, object parameter, CultureInfo culture)
