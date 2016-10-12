@@ -14,11 +14,6 @@ namespace Horizon.Framework.Mvvm
 
         public Command([NotNull] Action execute, [CanBeNull] Func<bool> canExecute = null)
         {
-            if (execute == null)
-            {
-                throw new ArgumentNullException("execute");
-            }
-
             _execute = execute;
             _canExecute = canExecute;
         }

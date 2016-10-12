@@ -10,16 +10,13 @@ using System.Windows;
 
 namespace BookingHelper
 {
-    /// <summary>
-    /// Bootstrapper for the BookingHelper application.
-    /// </summary>
-    public static class Bootstrapper
+    internal static class Bootstrapper
     {
         private static Container _container = new Container();
 
         [STAThread]
         public static int Main()
-        {
+        { 
             var app = new Application();
             InitializeMetroTheme(app);
             app.Startup += ShowMainWindow;

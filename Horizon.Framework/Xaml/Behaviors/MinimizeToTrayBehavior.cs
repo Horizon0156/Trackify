@@ -3,25 +3,29 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Windows.Interactivity;
+using JetBrains.Annotations;
 
 namespace Horizon.Framework.Xaml.Behaviors
 {
-    public class MinimizeToTrayBehavior : Behavior<Window>
+    /// <summary>
+    /// Behavior which minimizes a window into the system's tray.
+    /// </summary>
+    public sealed class MinimizeToTrayBehavior : Behavior<Window>
     {
-        private NotifyIcon _notificationIcon;        
-
+        /// <inheritdoc/>
         protected override void OnAttached()
         {
             base.OnAttached();
 
-            _notificationIcon = new NotifyIcon();
-            _notificationIcon.Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetEntryAssembly().ManifestModule.Name);
-            _notificationIcon.Visible = true;
-            _notificationIcon.DoubleClick += MaximizeWindow;
+            var notificationIcon = new NotifyIcon();
+            notificationIcon.Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetEntryAssembly().ManifestModule.Name);
+            notificationIcon.Visible = true;
+            notificationIcon.DoubleClick += MaximizeWindow;
 
             AssociatedObject.StateChanged += HideTaskbarEntryWhenMinimized;
         }
 
+        /// <inheritdoc/>
         protected override void OnDetaching()
         {
             base.OnDetaching();
@@ -29,13 +33,13 @@ namespace Horizon.Framework.Xaml.Behaviors
             AssociatedObject.StateChanged -= HideTaskbarEntryWhenMinimized;
         }
 
-        private void MaximizeWindow(object sender, EventArgs e)
+        private void MaximizeWindow([NotNull] object sender, [NotNull] EventArgs e)
         {
             AssociatedObject.Show();
             AssociatedObject.WindowState = WindowState.Normal;
         }
 
-        private void HideTaskbarEntryWhenMinimized(object sender, EventArgs e)
+        private void HideTaskbarEntryWhenMinimized([NotNull] object sender, [NotNull] EventArgs e)
         {
             if (AssociatedObject.WindowState == WindowState.Minimized)
             {
