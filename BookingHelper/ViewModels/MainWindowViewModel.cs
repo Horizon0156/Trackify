@@ -5,7 +5,6 @@ using Horizon.Framework.Xaml.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -182,7 +181,7 @@ namespace BookingHelper.ViewModels
 
         private void SaveChangedBooking(object sender, NotifyInnerElementChangedEventArgs e)
         {
-            var booking = (BookingModel) e.ChangedItem;
+            var booking = (BookingModel)e.ChangedItem;
 
             if (booking.IsBookingEntryValid())
             {
