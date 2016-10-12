@@ -163,11 +163,6 @@ namespace BookingHelper.ViewModels
 
         private void SaveBooking()
         {
-            if (!SelectedDate.HasValue)
-            {
-                throw new InvalidOperationException("The save command can not execute.");
-            }
-
             CurrentBooking.Date = SelectedDate.Value;
             var bookingDto = Mapper.Map<Booking>(CurrentBooking);
 

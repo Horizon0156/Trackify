@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using Horizon.Framework.Exceptions;
+using JetBrains.Annotations;
 using System;
 using System.Windows.Input;
 
@@ -50,6 +51,8 @@ namespace Horizon.Framework.Mvvm
 
         private void Execute(T parameter)
         {
+            Throw.IfOperationIsInvalid(isOperationInvalid: !CanExecute(parameter), message: "The command can not execute");
+
             _execute.Invoke(parameter);
         }
     }
