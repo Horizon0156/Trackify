@@ -19,6 +19,7 @@ namespace BookingHelper.ViewModels
         private IEnumerable<Effort> _efforts;
         private DateTime? _selectedDate;
 
+        // Test
         public MainWindowViewModel(IBookingsContext bookingsContext)
         {
             SaveCommand = CreateCommand(SaveBooking, IsCurrentBookingValid);
