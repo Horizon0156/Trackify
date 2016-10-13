@@ -1,4 +1,5 @@
 packages
+publish
 bin
 obj
 *.user
