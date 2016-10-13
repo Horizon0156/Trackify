@@ -6,7 +6,7 @@ using System.Windows.Interactivity;
 
 namespace BookingHelper.Behavior
 {
-    internal class UpdateableTextBoxBehavior : Behavior<TextBox>
+    internal sealed class UpdateableTextBoxBehavior : Behavior<TextBox>
     {
         private bool _isEditingInProgress;
         private string _originalTextBeforeEditing;

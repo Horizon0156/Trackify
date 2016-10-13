@@ -1,10 +1,10 @@
-﻿using JetBrains.Annotations;
+﻿using Horizon.Framework.Exceptions;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 
 namespace Horizon.Framework.Xaml.Collections
 {
@@ -28,9 +28,10 @@ namespace Horizon.Framework.Xaml.Collections
         /// Initializes a new instance of the <see cref="AttentiveCollection{T}"/> class.
         /// </summary>
         /// <param name="list">The list from which the elements are copied.</param>
+        /// <exception cref="ArgumentNullException"> If any of the provided arguments is null. </exception>
         public AttentiveCollection([NotNull] List<T> list) : base(list)
         {
-            Contract.Requires(list != null);
+            Throw.IfArgumentIsNull(list, nameof(list));
 
             FireCollectionChangeWhenInnerElementChanges = false;
             AttachElementWatcher();
@@ -40,9 +41,10 @@ namespace Horizon.Framework.Xaml.Collections
         /// Initializes a new instance of the <see cref="AttentiveCollection{T}"/> class.
         /// </summary>
         /// <param name="collection">The collection from which the elements are copied.</param>
+        /// <exception cref="ArgumentNullException"> If any of the provided arguments is null. </exception>
         public AttentiveCollection([NotNull] IEnumerable<T> collection) : base(collection)
         {
-            Contract.Requires(collection != null);
+            Throw.IfArgumentIsNull(collection, nameof(collection));
 
             FireCollectionChangeWhenInnerElementChanges = false;
             AttachElementWatcher();

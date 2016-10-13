@@ -1,4 +1,4 @@
-﻿namespace BookingHelper.DataModels
+﻿namespace BookingHelper.ViewModels
 {
     internal class BreakRegulation
     {
@@ -8,8 +8,8 @@
             MandatoryBreakTime = mandatoryBreakTime;
         }
 
-        public double MandatoryBreakTime { get; set; }
+        public double MandatoryBreakTime { get; }
 
-        public int WorkEffortLimit { get; set; }
+        public int WorkEffortLimit { get; }
     }
 }

@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
 namespace BookingHelper.Converter
 {
-    public class TotalEffortToColorConverter : IValueConverter
+    internal sealed class TotalEffortToColorConverter : IValueConverter
     {
         public object Convert(object value, Type t, object parameter, CultureInfo culture)
         {

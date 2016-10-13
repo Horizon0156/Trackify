@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using JetBrains.Annotations;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -6,7 +7,10 @@ using System.Windows.Interactivity;
 
 namespace Horizon.Framework.Xaml.Behaviors
 {
-    public class InputRestrictionBehavior : Behavior<TextBox>
+    /// <summary>
+    /// Behavior which restricts the input of a <see cref="TextBox"/>
+    /// </summary>
+    public sealed class InputRestrictionBehavior : Behavior<TextBox>
     {
         private static readonly DependencyProperty _inputExpressionProperty = DependencyProperty.Register(
             "InputExpression",
@@ -14,6 +18,9 @@ namespace Horizon.Framework.Xaml.Behaviors
             typeof(InputRestrictionBehavior),
             new PropertyMetadata(null));
 
+        /// <summary>
+        /// The input restriction as a RegEx expression.
+        /// </summary>
         public string InputExpression
         {
             get
@@ -26,6 +33,7 @@ namespace Horizon.Framework.Xaml.Behaviors
             }
         }
 
+        /// <inheritdoc/>
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -33,6 +41,7 @@ namespace Horizon.Framework.Xaml.Behaviors
             AssociatedObject.PreviewTextInput += ValidateKeyInput;
         }
 
+        /// <inheritdoc/>
         protected override void OnDetaching()
         {
             base.OnDetaching();
@@ -40,7 +49,7 @@ namespace Horizon.Framework.Xaml.Behaviors
             AssociatedObject.PreviewTextInput -= ValidateKeyInput;
         }
 
-        private void ValidateKeyInput(object sender, TextCompositionEventArgs textCompositionEventArgs)
+        private void ValidateKeyInput([NotNull] object sender, [NotNull] TextCompositionEventArgs textCompositionEventArgs)
         {
             var textBox = AssociatedObject;
 

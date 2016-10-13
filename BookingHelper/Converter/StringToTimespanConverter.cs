@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace BookingHelper.Converter
 {
-    internal class TimeToStringConverter : IValueConverter
+    internal sealed class TimeToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
