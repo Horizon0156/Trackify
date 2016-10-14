@@ -6,6 +6,7 @@
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                    xmlns:localBehavior="clr-namespace:BookingHelper.Behavior"
                    xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                   xmlns:metroBehaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                    xmlns:system="clr-namespace:System;assembly=mscorlib"
                    xmlns:vm="clr-namespace:BookingHelper.ViewModels"
                    x:Name="Root"
@@ -17,8 +18,11 @@
                    x:ClassModifier="internal"
                    BorderBrush="{DynamicResource AccentColorBrush}"
                    BorderThickness="1"
-                   SaveWindowPosition="True"
-                   ShowIconOnTitleBar="True">
+                   SaveWindowPosition="True">
+    <i:Interaction.Behaviors>
+        <b:MinimizeToTrayBehavior />
+        <metroBehaviours:BorderlessWindowBehavior />
+    </i:Interaction.Behaviors>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
