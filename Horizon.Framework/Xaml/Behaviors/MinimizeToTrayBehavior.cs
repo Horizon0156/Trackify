@@ -1,27 +1,34 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
+using System.Drawing;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
-using System.Drawing;
 using System.Windows.Interactivity;
-using JetBrains.Annotations;
 
 namespace Horizon.Framework.Xaml.Behaviors
 {
     /// <summary>
     /// Behavior which minimizes a window into the system's tray.
     /// </summary>
-    public sealed class MinimizeToTrayBehavior : Behavior<Window>
+    public sealed class MinimizeToTrayBehavior : Behavior<Window>, IDisposable
     {
+        [CanBeNull]
+        private NotifyIcon _notificationIcon;
+
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            _notificationIcon?.Dispose();
+        }
+
         /// <inheritdoc/>
         protected override void OnAttached()
         {
             base.OnAttached();
+            CreateNotificationIcon();
 
-            var notificationIcon = new NotifyIcon();
-            notificationIcon.Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetEntryAssembly().ManifestModule.Name);
-            notificationIcon.Visible = true;
-            notificationIcon.DoubleClick += MaximizeWindow;
-
+            AssociatedObject.Closed += HideNotificationIcon;
             AssociatedObject.StateChanged += HideTaskbarEntryWhenMinimized;
         }
 
@@ -31,12 +38,26 @@ namespace Horizon.Framework.Xaml.Behaviors
             base.OnDetaching();
 
             AssociatedObject.StateChanged -= HideTaskbarEntryWhenMinimized;
+            AssociatedObject.Closed -= HideNotificationIcon;
         }
 
-        private void MaximizeWindow([NotNull] object sender, [NotNull] EventArgs e)
+        private void CreateNotificationIcon()
         {
-            AssociatedObject.Show();
-            AssociatedObject.WindowState = WindowState.Normal;
+            if (_notificationIcon == null)
+            {
+                _notificationIcon = new NotifyIcon();
+                _notificationIcon.Icon = Icon.ExtractAssociatedIcon(Assembly.GetEntryAssembly().ManifestModule.Name);
+                _notificationIcon.Visible = true;
+                _notificationIcon.Click += MaximizeWindow;
+            }
+        }
+
+        private void HideNotificationIcon([NotNull] object sender, [NotNull] EventArgs e)
+        {
+            if (_notificationIcon != null)
+            {
+                _notificationIcon.Visible = false;
+            }
         }
 
         private void HideTaskbarEntryWhenMinimized([NotNull] object sender, [NotNull] EventArgs e)
@@ -45,6 +66,12 @@ namespace Horizon.Framework.Xaml.Behaviors
             {
                 AssociatedObject.Hide();
             }
+        }
+
+        private void MaximizeWindow([NotNull] object sender, [NotNull] EventArgs e)
+        {
+            AssociatedObject.Show();
+            AssociatedObject.WindowState = WindowState.Normal;
         }
     }
 }
