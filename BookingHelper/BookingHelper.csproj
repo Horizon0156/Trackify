@@ -15,22 +15,24 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://horizon777.bitbucket.org/Software/BookingHelper/</InstallUrl>
+    <UpdateUrl>http://horizon777.bitbucket.org/Software/BookingHelper/</UpdateUrl>
     <ProductName>BookingHelper</ProductName>
     <PublisherName>Horizon777</PublisherName>
-    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>0.2.0.%2a</ApplicationVersion>
+    <WebPage>BookingHelper.html</WebPage>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.3.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -55,7 +57,7 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
@@ -238,7 +240,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon.ico" />
+    <Resource Include="Resources\Icon.ico" />
     <Content Include="Resources\Entypo-license.txt" />
     <Content Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
