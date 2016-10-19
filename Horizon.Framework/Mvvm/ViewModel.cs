@@ -12,6 +12,11 @@ namespace Horizon.Framework.Mvvm
     /// </summary>
     public abstract class ViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Event indicating that this dialog request a closure of itself.
+        /// </summary>
+        public event EventHandler ClosureRequested;
+
         /// <inheritdoc/>
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -69,6 +74,15 @@ namespace Horizon.Framework.Mvvm
             Throw.IfArgumentIsNull(execute, nameof(execute));
 
             return new Command<T>(execute, canExecute);
+        }
+
+        /// <summary>
+        /// Notifies a closure request.
+        /// </summary>
+        /// <param name="propertyName"> The name of the changed property (CallerMemberName) </param>
+        protected void OnClosureRequested()
+        {
+            ClosureRequested?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

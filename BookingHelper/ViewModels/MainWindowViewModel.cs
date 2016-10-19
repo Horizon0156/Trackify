@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookingHelper.DataModels;
+using Horizon.Framework.DialogService;
 using Horizon.Framework.Mvvm;
 using Horizon.Framework.Xaml.Collections;
 using System;
@@ -17,10 +18,13 @@ namespace BookingHelper.ViewModels
         private BookingModel _currentBooking;
         private IBookingsContext _databaseContext;
         private AttentiveCollection<Effort> _efforts;
+        private IDialogService _dialogService;
         private DateTime? _selectedDate;
 
-        public MainWindowViewModel(IBookingsContext bookingsContext)
+        public MainWindowViewModel(IBookingsContext bookingsContext, IDialogService dialogService)
         {
+            _dialogService = dialogService;
+
             SaveCommand = CreateCommand(SaveBooking, IsCurrentBookingValid);
             DeleteCommand = CreateCommand<BookingModel>(DeleteBooking);
 
@@ -32,6 +36,8 @@ namespace BookingHelper.ViewModels
             LoadBookingsForSelectedDate();
 
             InitializeBreakRegulations();
+            
+            _dialogService.ShowDialog(new MessageViewModel("Test", "Hallo"));
         }
 
         public AttentiveCollection<BookingModel> BookingContainer

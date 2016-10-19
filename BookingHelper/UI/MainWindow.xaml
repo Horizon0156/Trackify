@@ -22,6 +22,9 @@
     <i:Interaction.Behaviors>
         <b:MinimizeToTrayBehavior />
         <metroBehaviours:BorderlessWindowBehavior />
+        <metroBehaviours:BorderlessWindowBehavior />
+        <metroBehaviours:WindowsSettingBehaviour />
+        <metroBehaviours:GlowWindowBehavior />
     </i:Interaction.Behaviors>
     <Window.Resources>
         <ResourceDictionary>
