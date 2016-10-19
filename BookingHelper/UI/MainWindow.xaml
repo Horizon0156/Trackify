@@ -199,15 +199,32 @@
                       VerticalScrollBarVisibility="Visible">
             <StackPanel Margin="5" Orientation="Vertical">
                 <TextBlock Text="Bookings:" />
-                <DataGrid HorizontalAlignment="Stretch"
+                <DataGrid x:Name="EffortGrid" 
+                          HorizontalAlignment="Stretch"
                           AutoGenerateColumns="False"
                           HeadersVisibility="None"
                           IsReadOnly="True"
                           ItemsSource="{Binding Efforts}">
                     <DataGrid.Columns>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding MarkedAsBooked, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn Binding="{Binding EffortTimeInHours, StringFormat='{}{0:N2} h'}" />
-                        <DataGridTextColumn Binding="{Binding Description}" />
+                        <DataGridTextColumn Binding="{Binding Description}" />                        
                     </DataGrid.Columns>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MarkedAsBooked}" Value="True">
+                                    <Setter Property="FontWeight" Value="ExtraLight" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
                 </DataGrid>
             </StackPanel>
         </ScrollViewer>

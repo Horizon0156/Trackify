@@ -16,13 +16,14 @@ namespace BookingHelper.ViewModels
         private List<BreakRegulation> _breakRegulations;
         private BookingModel _currentBooking;
         private IBookingsContext _databaseContext;
-        private IEnumerable<Effort> _efforts;
+        private AttentiveCollection<Effort> _efforts;
         private DateTime? _selectedDate;
 
         public MainWindowViewModel(IBookingsContext bookingsContext)
         {
             SaveCommand = CreateCommand(SaveBooking, IsCurrentBookingValid);
             DeleteCommand = CreateCommand<BookingModel>(DeleteBooking);
+            ToggleBookedMarkCommand = CreateCommand<Effort>(ToggleBookedMark);
 
             _databaseContext = bookingsContext;
             _databaseContext.EnsureDatabaseIsCreated();
@@ -60,7 +61,9 @@ namespace BookingHelper.ViewModels
 
         public ICommand DeleteCommand { get; }
 
-        public IEnumerable<Effort> Efforts
+        public ICommand ToggleBookedMarkCommand { get; }
+
+        public AttentiveCollection<Effort> Efforts
         {
             get
             {
@@ -106,6 +109,11 @@ namespace BookingHelper.ViewModels
 
             _databaseContext.Bookings.Remove(_databaseContext.Bookings.First(b => b.Id == booking.Id));
             _databaseContext.SaveChanges();
+        }
+
+        private void ToggleBookedMark(Effort effort)
+        {
+            effort.MarkedAsBooked = !effort.MarkedAsBooked;
         }
 
         private double GetMandatoryBreakTime()
@@ -190,9 +198,41 @@ namespace BookingHelper.ViewModels
 
         private void UpdateEffort()
         {
-            Efforts = BookingContainer
+            var markedEfforts = MemorizeMarkedEfforts();            
+
+            Efforts = new AttentiveCollection<Effort>(BookingContainer
                 .GroupBy(b => b.Description)
-                .Select(g => new Effort(g.First().Description, g.Sum(b => b.Duration.TotalHours)).RoundEffort(0.25));
+                .Select(g => new Effort(g.First().Description, g.Sum(b => b.Duration.TotalHours)).RoundEffort(0.25)));
+
+            Efforts = PreserveMarkedEfforts(Efforts, markedEfforts);
+        }
+
+        private IEnumerable<Effort> MemorizeMarkedEfforts()
+        {
+            if (Efforts != null)
+            {
+                return Efforts.Where(e => e.MarkedAsBooked);
+            }
+            return null;
+        }
+
+        private AttentiveCollection<Effort> PreserveMarkedEfforts(AttentiveCollection<Effort> efforts, IEnumerable<Effort> markedEfforts)
+        {
+            if(markedEfforts == null || !markedEfforts.Any())
+            {
+                return efforts;
+            }
+
+            var comparer = new EffortComparer();
+            foreach(var markedEffort in markedEfforts)
+            {
+                for(int i=0; i<efforts.Count(); i++)
+                {
+                    efforts[i].MarkedAsBooked = efforts[i].MarkedAsBooked || comparer.Equals(efforts[i], markedEffort);
+                }
+            }
+
+            return efforts;
         }
 
         private void UpdateEffort(object sender, NotifyCollectionChangedEventArgs e)
