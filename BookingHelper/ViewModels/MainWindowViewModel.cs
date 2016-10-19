@@ -23,7 +23,6 @@ namespace BookingHelper.ViewModels
         {
             SaveCommand = CreateCommand(SaveBooking, IsCurrentBookingValid);
             DeleteCommand = CreateCommand<BookingModel>(DeleteBooking);
-            ToggleBookedMarkCommand = CreateCommand<Effort>(ToggleBookedMark);
 
             _databaseContext = bookingsContext;
             _databaseContext.EnsureDatabaseIsCreated();
@@ -60,8 +59,6 @@ namespace BookingHelper.ViewModels
         }
 
         public ICommand DeleteCommand { get; }
-
-        public ICommand ToggleBookedMarkCommand { get; }
 
         public AttentiveCollection<Effort> Efforts
         {
@@ -109,11 +106,6 @@ namespace BookingHelper.ViewModels
 
             _databaseContext.Bookings.Remove(_databaseContext.Bookings.First(b => b.Id == booking.Id));
             _databaseContext.SaveChanges();
-        }
-
-        private void ToggleBookedMark(Effort effort)
-        {
-            effort.MarkedAsBooked = !effort.MarkedAsBooked;
         }
 
         private double GetMandatoryBreakTime()

@@ -199,8 +199,7 @@
                       VerticalScrollBarVisibility="Visible">
             <StackPanel Margin="5" Orientation="Vertical">
                 <TextBlock Text="Bookings:" />
-                <DataGrid x:Name="EffortGrid" 
-                          HorizontalAlignment="Stretch"
+                <DataGrid HorizontalAlignment="Stretch"
                           AutoGenerateColumns="False"
                           HeadersVisibility="None"
                           IsReadOnly="True"
