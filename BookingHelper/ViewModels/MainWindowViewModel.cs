@@ -16,7 +16,7 @@ namespace BookingHelper.ViewModels
         private List<BreakRegulation> _breakRegulations;
         private BookingModel _currentBooking;
         private IBookingsContext _databaseContext;
-        private IEnumerable<Effort> _efforts;
+        private AttentiveCollection<Effort> _efforts;
         private DateTime? _selectedDate;
 
         public MainWindowViewModel(IBookingsContext bookingsContext)
@@ -63,7 +63,7 @@ namespace BookingHelper.ViewModels
 
         public ICommand ToggleBookedMarkCommand { get; }
 
-        public IEnumerable<Effort> Efforts
+        public AttentiveCollection<Effort> Efforts
         {
             get
             {
@@ -198,26 +198,37 @@ namespace BookingHelper.ViewModels
 
         private void UpdateEffort()
         {
-            var markedEfforts = Efforts.Where(e => e.MarkedAsBooked);
+            var markedEfforts = MemorizeMarkedEfforts();            
 
-            Efforts = BookingContainer
+            Efforts = new AttentiveCollection<Effort>(BookingContainer
                 .GroupBy(b => b.Description)
-                .Select(g => new Effort(g.First().Description, g.Sum(b => b.Duration.TotalHours)).RoundEffort(0.25));
+                .Select(g => new Effort(g.First().Description, g.Sum(b => b.Duration.TotalHours)).RoundEffort(0.25)));
 
-            if (markedEfforts != null && markedEfforts.Any())
-            {
-                Efforts = PreserveBookedMarks(Efforts.ToList(), markedEfforts);
-            }
+            Efforts = PreserveMarkedEfforts(Efforts, markedEfforts);
         }
 
-        private IEnumerable<Effort> PreserveBookedMarks(List<Effort> efforts, IEnumerable<Effort> oldEfforts)
+        private IEnumerable<Effort> MemorizeMarkedEfforts()
         {
+            if (Efforts != null)
+            {
+                return Efforts.Where(e => e.MarkedAsBooked);
+            }
+            return null;
+        }
+
+        private AttentiveCollection<Effort> PreserveMarkedEfforts(AttentiveCollection<Effort> efforts, IEnumerable<Effort> markedEfforts)
+        {
+            if(markedEfforts == null || !markedEfforts.Any())
+            {
+                return efforts;
+            }
+
             var comparer = new EffortComparer();
-            foreach(var oldEffort in oldEfforts)
+            foreach(var markedEffort in markedEfforts)
             {
                 for(int i=0; i<efforts.Count(); i++)
                 {
-                    efforts[i].MarkedAsBooked = comparer.Equals(efforts[i], oldEffort);
+                    efforts[i].MarkedAsBooked = efforts[i].MarkedAsBooked || comparer.Equals(efforts[i], markedEffort);
                 }
             }
 
