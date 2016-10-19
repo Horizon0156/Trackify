@@ -114,7 +114,7 @@
         </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="0"
                       Grid.RowSpan="2"
-                      HorizontalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Visible">
             <StackPanel>
                 <ItemsControl Focusable="False"
