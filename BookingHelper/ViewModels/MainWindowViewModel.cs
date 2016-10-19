@@ -23,6 +23,7 @@ namespace BookingHelper.ViewModels
         {
             SaveCommand = CreateCommand(SaveBooking, IsCurrentBookingValid);
             DeleteCommand = CreateCommand<BookingModel>(DeleteBooking);
+            ToggleBookedMarkCommand = CreateCommand<Effort>(ToggleBookedMark);
 
             _databaseContext = bookingsContext;
             _databaseContext.EnsureDatabaseIsCreated();
@@ -59,6 +60,8 @@ namespace BookingHelper.ViewModels
         }
 
         public ICommand DeleteCommand { get; }
+
+        public ICommand ToggleBookedMarkCommand { get; }
 
         public IEnumerable<Effort> Efforts
         {
@@ -106,6 +109,11 @@ namespace BookingHelper.ViewModels
 
             _databaseContext.Bookings.Remove(_databaseContext.Bookings.First(b => b.Id == booking.Id));
             _databaseContext.SaveChanges();
+        }
+
+        private void ToggleBookedMark(Effort effort)
+        {
+            effort.MarkedAsBooked = !effort.MarkedAsBooked;
         }
 
         private double GetMandatoryBreakTime()
@@ -190,9 +198,30 @@ namespace BookingHelper.ViewModels
 
         private void UpdateEffort()
         {
+            var markedEfforts = Efforts.Where(e => e.MarkedAsBooked);
+
             Efforts = BookingContainer
                 .GroupBy(b => b.Description)
                 .Select(g => new Effort(g.First().Description, g.Sum(b => b.Duration.TotalHours)).RoundEffort(0.25));
+
+            if (markedEfforts != null && markedEfforts.Any())
+            {
+                Efforts = PreserveBookedMarks(Efforts.ToList(), markedEfforts);
+            }
+        }
+
+        private IEnumerable<Effort> PreserveBookedMarks(List<Effort> efforts, IEnumerable<Effort> oldEfforts)
+        {
+            var comparer = new EffortComparer();
+            foreach(var oldEffort in oldEfforts)
+            {
+                for(int i=0; i<efforts.Count(); i++)
+                {
+                    efforts[i].MarkedAsBooked = comparer.Equals(efforts[i], oldEffort);
+                }
+            }
+
+            return efforts;
         }
 
         private void UpdateEffort(object sender, NotifyCollectionChangedEventArgs e)

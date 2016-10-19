@@ -199,7 +199,8 @@
                       VerticalScrollBarVisibility="Visible">
             <StackPanel Margin="5" Orientation="Vertical">
                 <TextBlock Text="Bookings:" />
-                <DataGrid HorizontalAlignment="Stretch"
+                <DataGrid x:Name="EffortGrid" 
+                          HorizontalAlignment="Stretch"
                           AutoGenerateColumns="False"
                           HeadersVisibility="None"
                           IsReadOnly="True"
@@ -208,6 +209,21 @@
                         <DataGridTextColumn Binding="{Binding EffortTimeInHours, StringFormat='{}{0:N2} h'}" />
                         <DataGridTextColumn Binding="{Binding Description}" />
                     </DataGrid.Columns>
+                    <DataGrid.InputBindings>
+                        <MouseBinding MouseAction="LeftClick"
+                                      Command="{Binding ElementName=Root, Path=DataContext.ToggleBookedMarkCommand}"
+                                      CommandParameter="{Binding ElementName=EffortGrid, Path=SelectedItem}" />
+                    </DataGrid.InputBindings>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="Black" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MarkedAsBooked}" Value="True">
+                                    <Setter Property="Background" Value="Green" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
                 </DataGrid>
             </StackPanel>
         </ScrollViewer>
