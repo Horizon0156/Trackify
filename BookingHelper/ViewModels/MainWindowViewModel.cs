@@ -196,7 +196,7 @@ namespace BookingHelper.ViewModels
                 .GroupBy(b => b.Description)
                 .Select(g => new Effort(g.First().Description, g.Sum(b => b.Duration.TotalHours)).RoundEffort(0.25)));
 
-            Efforts = PreserveMarkedEfforts(Efforts, markedEfforts);
+            Efforts = RestoreMarkedEfforts(Efforts, markedEfforts);
         }
 
         private IEnumerable<Effort> MemorizeMarkedEfforts()
@@ -208,7 +208,7 @@ namespace BookingHelper.ViewModels
             return null;
         }
 
-        private AttentiveCollection<Effort> PreserveMarkedEfforts(AttentiveCollection<Effort> efforts, IEnumerable<Effort> markedEfforts)
+        private AttentiveCollection<Effort> RestoreMarkedEfforts(AttentiveCollection<Effort> efforts, IEnumerable<Effort> markedEfforts)
         {
             if(markedEfforts == null || !markedEfforts.Any())
             {
