@@ -63,17 +63,17 @@
     <Compile Include="DialogService\WindowManager.cs" />
     <Compile Include="Exceptions\Throw.cs" />
     <Compile Include="Mvvm\Command.cs" />
+    <Compile Include="Mvvm\CommandFactory.cs" />
     <Compile Include="Mvvm\Command{T}.cs" />
-    <Compile Include="Mvvm\MessageResult.cs" />
-    <Compile Include="Mvvm\MessageType.cs" />
-    <Compile Include="Mvvm\MessageViewModel.cs" />
+    <Compile Include="Mvvm\ICommandFactory.cs" />
+    <Compile Include="Mvvm\ObserveableObject.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xaml\Behaviors\AutoScrollBehavior.cs" />
     <Compile Include="Xaml\Behaviors\InputRestrictionBehavior.cs" />
     <Compile Include="Xaml\Behaviors\MinimizeToTrayBehavior.cs" />
-    <Compile Include="Xaml\Collections\AttentiveCollection.cs" />
-    <Compile Include="Xaml\Collections\NotifyInnerElementChangedEventArgs.cs" />
+    <Compile Include="Collections\AttentiveCollection.cs" />
+    <Compile Include="Collections\NotifyInnerElementChangedEventArgs.cs" />
     <Compile Include="Xaml\Extensions\ApplicationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

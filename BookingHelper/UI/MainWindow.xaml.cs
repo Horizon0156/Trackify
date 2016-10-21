@@ -1,13 +1,16 @@
-﻿using System;
+﻿using BookingHelper.ViewModels;
+using System;
 using System.Windows.Controls;
 
 namespace BookingHelper.UI
 {
     internal partial class MainWindow
     {
-        public MainWindow()
+        public MainWindow(MainWindowViewModel dataContext)
         {
             InitializeComponent();
+
+            DataContext = dataContext;
         }
 
         private void PrefillWithCurrentTimeIfEmpty(object sender, System.Windows.RoutedEventArgs e)

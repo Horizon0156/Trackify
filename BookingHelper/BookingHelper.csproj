@@ -200,11 +200,6 @@
     <Compile Include="Converter\StringToTimespanConverter.cs" />
     <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\Booking.cs" />
-    <Compile Include="Deployment\ApplicationUpdater.cs" />
-    <Compile Include="Deployment\IApplicationUpdater.cs" />
-    <Compile Include="UI\MessageWindow.xaml.cs">
-      <DependentUpon>MessageWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\BreakRegulation.cs" />
     <Compile Include="DataModels\IBookingsContext.cs" />
     <Compile Include="DataModels\BookingsContext.cs" />
@@ -228,10 +223,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\MainWindow.xaml" />
-    <Page Include="UI\MessageWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

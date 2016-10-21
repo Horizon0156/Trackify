@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace Horizon.Framework.Xaml.Collections
+namespace Horizon.Framework.Collections
 {
     /// <summary>
     /// An observeable collection which also fires an update if an inner element changes.

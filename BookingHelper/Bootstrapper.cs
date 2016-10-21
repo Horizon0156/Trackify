@@ -21,9 +21,9 @@ namespace BookingHelper
         public static int Main()
         {
             var app = new Application();
-            InitializeMetroTheme(app);
             app.Startup += ShowMainWindow;
 
+            InitializeMetroTheme(app);
             InitializeMappings();
             InitializeDialogService();
             InitializeDependencyInjection();
@@ -34,20 +34,14 @@ namespace BookingHelper
         private static void InitializeDependencyInjection()
         {
             _container.RegisterSingleton<IDialogService>(_dialogService);
+            _container.RegisterSingleton<ICommandFactory, CommandFactory>();
             _container.Register<IBookingsContext, BookingsContext>();
-            _container.RegisterInitializer<MainWindow>(InitializeMainWindow);
         }
 
         private static void InitializeDialogService()
         {
             _dialogService.RegisterDialog<MessageViewModel, MessageWindow>();
             _dialogService.RegisterCustomWindowActivator(t => (Window)_container.GetInstance(t));
-        }
-
-        private static void InitializeMainWindow(MainWindow window)
-        {
-            _dialogService.RegisterMainWindow(window);
-            window.DataContext = _container.GetInstance<MainWindowViewModel>();
         }
 
         private static void InitializeMappings()
@@ -70,7 +64,10 @@ namespace BookingHelper
 
         private static void ShowMainWindow(object sender, StartupEventArgs e)
         {
-            _container.GetInstance<MainWindow>().Show();
+            var window = _container.GetInstance<MainWindow>();
+            window.Show();
+
+            _dialogService.RegisterMainWindow(window);
         }
     }
 }

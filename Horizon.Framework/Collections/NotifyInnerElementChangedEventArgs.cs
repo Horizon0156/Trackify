@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using System.ComponentModel;
 
-namespace Horizon.Framework.Xaml.Collections
+namespace Horizon.Framework.Collections
 {
     /// <summary>
     /// Event args for the InnerElementChanged event of the <see cref="AttentiveCollection{T}"/>.

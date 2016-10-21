@@ -2,7 +2,7 @@
 using BookingHelper.DataModels;
 using Horizon.Framework.DialogService;
 using Horizon.Framework.Mvvm;
-using Horizon.Framework.Xaml.Collections;
+using Horizon.Framework.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -15,18 +15,20 @@ namespace BookingHelper.ViewModels
     {
         private AttentiveCollection<BookingModel> _bookingContainer;
         private List<BreakRegulation> _breakRegulations;
+        private ICommandFactory _commandFactory;
         private BookingModel _currentBooking;
         private IBookingsContext _databaseContext;
         private AttentiveCollection<Effort> _efforts;
         private IDialogService _dialogService;
         private DateTime? _selectedDate;
 
-        public MainWindowViewModel(IBookingsContext bookingsContext, IDialogService dialogService)
+        public MainWindowViewModel(IBookingsContext bookingsContext, IDialogService dialogService, ICommandFactory commandFactory)
         {
             _dialogService = dialogService;
+            _commandFactory = commandFactory;
 
-            SaveCommand = CreateCommand(SaveBooking, IsCurrentBookingValid);
-            DeleteCommand = CreateCommand<BookingModel>(DeleteBooking);
+            SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
+            DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
 
             _databaseContext = bookingsContext;
             _databaseContext.EnsureDatabaseIsCreated();
@@ -37,7 +39,7 @@ namespace BookingHelper.ViewModels
 
             InitializeBreakRegulations();
             
-            _dialogService.ShowDialog(new MessageViewModel("Test", "Hallo"));
+            _dialogService.ShowDialog(new MessageViewModel("Test", "Hallo", _commandFactory));
         }
 
         public AttentiveCollection<BookingModel> BookingContainer

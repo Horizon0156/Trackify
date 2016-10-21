@@ -1,4 +1,5 @@
-﻿using Horizon.Framework.Mvvm;
+﻿using Horizon.Framework.Exceptions;
+using Horizon.Framework.Mvvm;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
@@ -34,24 +35,10 @@ namespace Horizon.Framework.DialogService
         }
 
         /// <summary>
-        /// Attaches this service to the main window.
-        /// Used for handling topmost vsiblity, closures of sub windows, etc.
-        /// </summary>
-        /// <param name="window"></param>
-        public void RegisterMainWindow([NotNull] Window window)
-        {
-            _mainWindow = window;
-            foreach (var windowManager in _activeWindowManager)
-            {
-                windowManager.AttachToMainWindow(window);
-            }
-        }
-
-        /// <summary>
         /// Registers a custom window activator (e.g. to use as DI container for window creation).
         /// </summary>
         /// <param name="windowActivator"> The window activator. </param>
-        public void RegisterCustomWindowActivator(Func<Type, Window> windowActivator)
+        public void RegisterCustomWindowActivator([CanBeNull] Func<Type, Window> windowActivator)
         {
             _customWindowActivator = windowActivator;
         }
@@ -69,20 +56,45 @@ namespace Horizon.Framework.DialogService
             _registeredWindowTypesByViewModelType.Add(vmType, windowType);
         }
 
-        /// <inheritdoc/>
-        public void ShowDialog(ViewModel viewModel)
+        /// <summary>
+        /// Attaches this service to the main window.
+        /// Used for handling topmost vsiblity, closures of sub windows, etc.
+        /// </summary>
+        /// <param name="window"></param>
+        public void RegisterMainWindow([NotNull] Window window)
         {
-            var manager = CreateWindowManager(viewModel);
-            manager.OpenBoundWindow();
+            Throw.IfArgumentIsNull(window, nameof(window));
+
+            _mainWindow = window;
+            AttachMainWindowToExistingManager();
         }
 
         /// <inheritdoc/>
-        public Task ShowModalDialog(ViewModel viewModel)
+        public void ShowDialog([NotNull] ViewModel viewModel)
         {
+            Throw.IfArgumentIsNull(viewModel, nameof(viewModel));
+
             var manager = CreateWindowManager(viewModel);
-            manager.OpenBoundWindow();
+            manager.ShowBoundWindow();
+        }
+
+        /// <inheritdoc/>
+        public Task ShowModalDialog([NotNull] ViewModel viewModel)
+        {
+            Throw.IfArgumentIsNull(viewModel, nameof(viewModel));
+
+            var manager = CreateWindowManager(viewModel);
+            manager.ShowBoundWindow();
 
             return manager.WindowPromise;
+        }
+
+        private void AttachMainWindowToExistingManager()
+        {
+            foreach (var windowManager in _activeWindowManager)
+            {
+                windowManager.AttachToMainWindow(_mainWindow);
+            }
         }
 
         [NotNull]

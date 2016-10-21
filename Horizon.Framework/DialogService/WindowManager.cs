@@ -44,7 +44,7 @@ namespace Horizon.Framework.DialogService
             }
         }
 
-        public void OpenBoundWindow()
+        public void ShowBoundWindow()
         {
             _responsibleWindow.DataContext = _responsibleViewModel;
             _responsibleWindow.Show();
