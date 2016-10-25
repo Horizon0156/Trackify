@@ -62,8 +62,11 @@
     <Compile Include="DialogService\IDialogService.cs" />
     <Compile Include="DialogService\WindowManager.cs" />
     <Compile Include="Exceptions\Throw.cs" />
+    <Compile Include="Mvvm\AsyncCommand.cs" />
     <Compile Include="Mvvm\Command.cs" />
+    <Compile Include="Mvvm\CommandBase.cs" />
     <Compile Include="Mvvm\CommandFactory.cs" />
+    <Compile Include="Mvvm\AsyncCommand{T}.cs" />
     <Compile Include="Mvvm\Command{T}.cs" />
     <Compile Include="Mvvm\ICommandFactory.cs" />
     <Compile Include="Mvvm\ObserveableObject.cs" />

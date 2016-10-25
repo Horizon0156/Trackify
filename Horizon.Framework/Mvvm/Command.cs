@@ -1,11 +1,10 @@
 ﻿using Horizon.Framework.Exceptions;
 using JetBrains.Annotations;
 using System;
-using System.Windows.Input;
 
 namespace Horizon.Framework.Mvvm
 {
-    internal class Command : ICommand
+    internal class Command : CommandBase
     {
         [CanBeNull]
         private readonly Func<bool> _canExecute;
@@ -19,38 +18,14 @@ namespace Horizon.Framework.Mvvm
             _canExecute = canExecute;
         }
 
-        public event EventHandler CanExecuteChanged
+        public override bool CanExecute(object parameter)
         {
-            add
-            {
-                CommandManager.RequerySuggested += value;
-            }
-            remove
-            {
-                CommandManager.RequerySuggested -= value;
-            }
+            return _canExecute?.Invoke() ?? true;
         }
 
-        bool ICommand.CanExecute(object parameter)
+        public override void Execute(object parameter)
         {
-            return CanExecute();
-        }
-
-        void ICommand.Execute(object parameter)
-        {
-            Execute();
-        }
-
-        private bool CanExecute()
-        {
-            return _canExecute != null
-                ? _canExecute.Invoke()
-                : true;
-        }
-
-        private void Execute()
-        {
-            Throw.IfOperationIsInvalid(isOperationInvalid: !CanExecute(), message: "The command can not execute");
+            Throw.IfOperationIsInvalid(isOperationInvalid: !CanExecute(parameter), message: "The command can not execute");
 
             _execute.Invoke();
         }
