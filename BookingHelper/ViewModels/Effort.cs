@@ -1,9 +1,8 @@
 ﻿using Horizon.Framework.Mvvm;
-using System.Collections.Generic;
 
 namespace BookingHelper.ViewModels
 {
-    public class Effort : ViewModel
+    public class Effort : ObserveableObject
     {
         private bool _markedAdBooked;
 
@@ -12,7 +11,7 @@ namespace BookingHelper.ViewModels
             EffortTimeInHours = effortTimeInHours;
             Description = description;
             MarkedAsBooked = false;
-        }        
+        }
 
         public string Description { get; }
 
@@ -41,22 +40,6 @@ namespace BookingHelper.ViewModels
                 : EffortTimeInHours - differenceToRound;
 
             return new Effort(Description, roundedEffort);
-        }
-    }
-
-    public class EffortComparer : IEqualityComparer<Effort>
-    {
-        public bool Equals(Effort x, Effort y)
-        {
-            if (x == null && y == null) { return true; }
-            if (x == null || y == null) { return false; }
-
-            return x.Description == y.Description && x.EffortTimeInHours == y.EffortTimeInHours;
-        }
-
-        public int GetHashCode(Effort obj)
-        {
-            return obj.GetHashCode();
         }
     }
 }

@@ -4,9 +4,9 @@ using System.Windows.Controls;
 
 namespace BookingHelper.UI
 {
-    internal partial class MainWindow
+    internal partial class BookingHelperWindow
     {
-        public MainWindow(MainWindowViewModel dataContext)
+        public BookingHelperWindow(BookingHelperViewModel dataContext)
         {
             InitializeComponent();
 

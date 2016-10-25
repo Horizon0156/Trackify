@@ -14,8 +14,8 @@ namespace BookingHelper
 {
     internal static class Bootstrapper
     {
-        private static Container _container = new Container();
-        private static DialogService _dialogService = new DialogService();
+        private static readonly Container _container = new Container();
+        private static readonly DialogService _dialogService = new DialogService();
 
         [STAThread]
         public static int Main()
@@ -40,7 +40,6 @@ namespace BookingHelper
 
         private static void InitializeDialogService()
         {
-            _dialogService.RegisterDialog<MessageViewModel, MessageWindow>();
             _dialogService.RegisterCustomWindowActivator(t => (Window)_container.GetInstance(t));
         }
 
@@ -64,7 +63,7 @@ namespace BookingHelper
 
         private static void ShowMainWindow(object sender, StartupEventArgs e)
         {
-            var window = _container.GetInstance<MainWindow>();
+            var window = _container.GetInstance<BookingHelperWindow>();
             window.Show();
 
             _dialogService.RegisterMainWindow(window);

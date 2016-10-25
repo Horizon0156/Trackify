@@ -1,4 +1,4 @@
-﻿<metro:MetroWindow x:Class="BookingHelper.UI.MainWindow"
+﻿<metro:MetroWindow x:Class="BookingHelper.UI.BookingHelperWindow"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:b="clr-namespace:Horizon.Framework.Xaml.Behaviors;assembly=Horizon.Framework"
@@ -21,7 +21,6 @@
                    SaveWindowPosition="True">
     <i:Interaction.Behaviors>
         <b:MinimizeToTrayBehavior />
-        <metroBehaviours:BorderlessWindowBehavior />
         <metroBehaviours:BorderlessWindowBehavior />
         <metroBehaviours:WindowsSettingBehaviour />
         <metroBehaviours:GlowWindowBehavior />
@@ -211,12 +210,12 @@
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding MarkedAsBooked, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <CheckBox IsChecked="{Binding MarkedAsBooked, UpdateSourceTrigger=PropertyChanged}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Binding="{Binding EffortTimeInHours, StringFormat='{}{0:N2} h'}" />
-                        <DataGridTextColumn Binding="{Binding Description}" />                        
+                        <DataGridTextColumn Binding="{Binding Description}" />
                     </DataGrid.Columns>
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
@@ -244,7 +243,7 @@
                        DockPanel.Dock="Right"
                        Fill="White">
                 <Rectangle.ToolTip>
-                    <TextBlock Text="{Binding HomeTime, StringFormat='Home time: {0:hh\\:mm}'}" />
+                    <TextBlock Text="{Binding HomeTime, StringFormat='Home time: {0:hh\\:mm}', TargetNullValue='Track a time first...'}" />
                 </Rectangle.ToolTip>
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_clock}" />

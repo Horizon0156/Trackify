@@ -205,13 +205,14 @@
     <Compile Include="DataModels\BookingsContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\WPFAssemblyInfo.cs" />
-    <Compile Include="UI\MainWindow.xaml.cs">
+    <Compile Include="UI\BookingHelperWindow.xaml.cs">
       <SubType>Code</SubType>
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <DependentUpon>BookingHelperWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\BookingModel.cs" />
     <Compile Include="ViewModels\Effort.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\BookingHelperViewModel.cs" />
+    <Compile Include="ViewModels\EffortComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Resources\Icons.xaml">
@@ -222,7 +223,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\MainWindow.xaml" />
+    <Page Include="UI\BookingHelperWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
