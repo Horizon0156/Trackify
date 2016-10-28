@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BookingHelper.DataModels;
+using BookingHelper.Deployment;
+using BookingHelper.Mocks;
 using BookingHelper.UI;
 using BookingHelper.ViewModels;
 using Horizon.Framework.DialogService;
@@ -36,6 +38,8 @@ namespace BookingHelper
             _container.RegisterSingleton<IDialogService>(_dialogService);
             _container.RegisterSingleton<ICommandFactory, CommandFactory>();
             _container.Register<IBookingsContext, BookingsContext>();
+            _container.Register<IProcess, Process>();
+            _container.Register<IUpdateChecker, ClickOnceUpdateChecker>();
         }
 
         private static void InitializeDialogService()

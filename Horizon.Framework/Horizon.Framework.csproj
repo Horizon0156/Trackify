@@ -68,6 +68,7 @@
     <Compile Include="DialogService\IDialogService.cs" />
     <Compile Include="DialogService\WindowManager.cs" />
     <Compile Include="Exceptions\Throw.cs" />
+    <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Mvvm\AsyncCommand.cs" />
     <Compile Include="Mvvm\Command.cs" />
     <Compile Include="Mvvm\CommandBase.cs" />

@@ -1,42 +1,46 @@
 ﻿using AutoMapper;
 using BookingHelper.DataModels;
+using BookingHelper.Deployment;
+using BookingHelper.Mocks;
 using Horizon.Framework.Collections;
+using Horizon.Framework.Extensions;
 using Horizon.Framework.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace BookingHelper.ViewModels
 {
     internal class BookingHelperViewModel : ViewModel
     {
-        private readonly IBookingsContext _databaseContext;
-
         private readonly ICommandFactory _commandFactory;
-
+        private readonly IBookingsContext _databaseContext;
+        private readonly IProcess _process;
+        private readonly IUpdateChecker _updateChecker;
         private AttentiveCollection<BookingModel> _bookingContainer;
         private List<BreakRegulation> _breakRegulations;
         private BookingModel _currentBooking;
         private AttentiveCollection<Effort> _efforts;
+        private bool _isUpdateAvailable;
         private DateTime? _selectedDate;
 
-        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory)
+        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IUpdateChecker updateChecker, IProcess process)
         {
             _databaseContext = bookingsContext;
             _commandFactory = commandFactory;
+            _updateChecker = updateChecker;
+            _process = process;
             _databaseContext.EnsureDatabaseIsCreated();
 
             SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
             DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
+            GetUpdateCommand = commandFactory.CreateCommand(RedirectToApplicationWebsite);
 
-            CurrentBooking = new BookingModel();
-            SelectedDate = DateTime.Today;
-            LoadBookingsForSelectedDate();
-
-            InitializeBreakRegulations();
+            InitializeAsync().OnUnobservedException(ShutdownApplication);
         }
 
         public AttentiveCollection<BookingModel> BookingContainer
@@ -84,7 +88,21 @@ namespace BookingHelper.ViewModels
             }
         }
 
+        public ICommand GetUpdateCommand { get; }
+
         public TimeSpan? HomeTime => CalculateEstimatedHomeTime();
+
+        public bool IsUpdateAvailable
+        {
+            get
+            {
+                return _isUpdateAvailable;
+            }
+            set
+            {
+                SetProperty(ref _isUpdateAvailable, value);
+            }
+        }
 
         public double MandatoryBreakTime => GetMandatoryBreakTime();
 
@@ -107,6 +125,17 @@ namespace BookingHelper.ViewModels
 
         public double TotalEffortGrossToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
 
+        public async Task InitializeAsync()
+        {
+            CurrentBooking = new BookingModel();
+
+            SelectedDate = DateTime.Today;
+            LoadBookingsForSelectedDate();
+
+            InitializeBreakRegulations();
+            await CheckForUpdates().ConfigureAwait(false);
+        }
+
         private TimeSpan? CalculateEstimatedHomeTime()
         {
             var startTime = BookingContainer.Min(b => b.StartTime);
@@ -114,6 +143,13 @@ namespace BookingHelper.ViewModels
             return startTime.HasValue
                 ? startTime.Value + TimeSpan.FromHours(8 - TotalEffortClearToday)
                 : (TimeSpan?)null;
+        }
+
+        private async Task CheckForUpdates()
+        {
+            IsUpdateAvailable = await _updateChecker
+                .IsUpdateAvailable()
+                .ConfigureAwait(true);
         }
 
         private void DeleteBooking(BookingModel booking)
@@ -184,6 +220,16 @@ namespace BookingHelper.ViewModels
             return Efforts?.Where(e => e.MarkedAsBooked);
         }
 
+        private void RedirectToApplicationWebsite()
+        {
+            var appWebsite = _updateChecker.ApplicationProductPage;
+
+            if (appWebsite != null)
+            {
+                _process.Start(appWebsite.AbsoluteUri);
+            }
+        }
+
         private AttentiveCollection<Effort> RestoreMarkedEfforts(AttentiveCollection<Effort> efforts, IEnumerable<Effort> markedEfforts)
         {
             if (markedEfforts == null)
@@ -229,6 +275,11 @@ namespace BookingHelper.ViewModels
                 Mapper.Map(booking, bookingToEdit);
                 _databaseContext.SaveChanges();
             }
+        }
+
+        private void ShutdownApplication(AggregateException obj)
+        {
+            OnClosureRequested();
         }
 
         private void UpdateEffort()

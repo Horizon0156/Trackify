@@ -80,7 +80,7 @@
     <ManifestCertificateThumbprint>E70DC4AB7B9E991E6DE324C61CC7402EC7A60571</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Horizon777.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Properties\Horizon777.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
@@ -177,6 +177,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.0.0\lib\portable-net45+win8+wpa81\System.Diagnostics.DiagnosticSource.dll</HintPath>
       <Private>True</Private>
@@ -207,6 +208,10 @@
     <Compile Include="Converter\StringToTimespanConverter.cs" />
     <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\Booking.cs" />
+    <Compile Include="Deployment\ClickOnceUpdateChecker.cs" />
+    <Compile Include="Deployment\IUpdateChecker.cs" />
+    <Compile Include="Mocks\IProcess.cs" />
+    <Compile Include="Mocks\Process.cs" />
     <Compile Include="ViewModels\BreakRegulation.cs" />
     <Compile Include="DataModels\IBookingsContext.cs" />
     <Compile Include="DataModels\BookingsContext.cs" />

@@ -29,7 +29,7 @@ namespace Horizon.Framework.Mvvm
         /// <param name="property"> A reference to the property. </param>
         /// <param name="value"> The value which will be assigned to the property. </param>
         /// <param name="propertyName"> The name of the property (CallerMemberName) </param>
-        protected void SetProperty<T>([NotNull] ref T property, [CanBeNull] T value, [CallerMemberName][CanBeNull] string propertyName = null)
+        protected void SetProperty<T>([CanBeNull] ref T property, [CanBeNull] T value, [CallerMemberName][CanBeNull] string propertyName = null)
         {
             if (!AreEqual(value, property))
             {
@@ -38,9 +38,9 @@ namespace Horizon.Framework.Mvvm
             }
         }
 
-        private bool AreEqual([CanBeNull] object value1, [CanBeNull] object value2)
+        private static bool AreEqual([CanBeNull] object value1, [CanBeNull] object value2)
         {
-            return value1.Equals(value2);
+            return value1?.Equals(value2) ?? value2 == null;
         }
     }
 }
