@@ -19,4 +19,4 @@ using System.Runtime.InteropServices;
 
 // The assembly version has following format :
 // Major.Minor.0.0
-[assembly: AssemblyVersion("0.3.0.0")]
+[assembly: AssemblyVersion("0.4.0.0")]
