@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
 using BookingHelper.DataModels;
+using BookingHelper.Deployment;
+using BookingHelper.Mocks;
 using BookingHelper.UI;
 using BookingHelper.ViewModels;
+using Horizon.Framework.DialogService;
+using Horizon.Framework.Mvvm;
 using Horizon.Framework.Xaml.Extensions;
 using MahApps.Metro;
 using SimpleInjector;
@@ -12,30 +16,35 @@ namespace BookingHelper
 {
     internal static class Bootstrapper
     {
-        private static Container _container = new Container();
+        private static readonly Container _container = new Container();
+        private static readonly DialogService _dialogService = new DialogService();
 
         [STAThread]
         public static int Main()
-        { 
+        {
             var app = new Application();
-            InitializeMetroTheme(app);
             app.Startup += ShowMainWindow;
 
+            InitializeMetroTheme(app);
             InitializeMappings();
+            InitializeDialogService();
             InitializeDependencyInjection();
 
             return app.Run();
         }
 
-        private static void BindDataContextToMainWindow(MainWindow window)
-        {
-            window.DataContext = _container.GetInstance<MainWindowViewModel>();
-        }
-
         private static void InitializeDependencyInjection()
         {
+            _container.RegisterSingleton<IDialogService>(_dialogService);
+            _container.RegisterSingleton<ICommandFactory, CommandFactory>();
             _container.Register<IBookingsContext, BookingsContext>();
-            _container.RegisterInitializer<MainWindow>(BindDataContextToMainWindow);
+            _container.Register<IProcess, Process>();
+            _container.Register<IUpdateChecker, ClickOnceUpdateChecker>();
+        }
+
+        private static void InitializeDialogService()
+        {
+            _dialogService.RegisterCustomWindowActivator(t => (Window)_container.GetInstance(t));
         }
 
         private static void InitializeMappings()
@@ -58,7 +67,10 @@ namespace BookingHelper
 
         private static void ShowMainWindow(object sender, StartupEventArgs e)
         {
-            _container.GetInstance<MainWindow>().Show();
+            var window = _container.GetInstance<BookingHelperWindow>();
+            window.Show();
+
+            _dialogService.RegisterMainWindow(window);
         }
     }
 }

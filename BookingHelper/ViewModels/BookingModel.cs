@@ -3,7 +3,7 @@ using System;
 
 namespace BookingHelper.ViewModels
 {
-    internal class BookingModel : ViewModel
+    internal class BookingModel : ObserveableObject
     {
         private string _description;
         private TimeSpan? _endTime;
