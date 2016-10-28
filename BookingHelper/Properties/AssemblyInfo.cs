@@ -18,5 +18,5 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The assembly version has following format :
-// Major.Minor.0.0
-[assembly: AssemblyVersion("0.4.0.0")]
+// Major.Minor
+[assembly: AssemblyVersion("0.5")]
