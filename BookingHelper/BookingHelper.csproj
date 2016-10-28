@@ -19,7 +19,7 @@
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
@@ -31,6 +31,7 @@
     <ProductName>BookingHelper</ProductName>
     <PublisherName>Horizon777</PublisherName>
     <WebPage>BookingHelper.html</WebPage>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>0.3.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
@@ -76,13 +77,19 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>CD7C2AA3D30717C8AAA2BA14A19A1DF4C9A50170</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>E70DC4AB7B9E991E6DE324C61CC7402EC7A60571</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Properties\BookingHelper.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Horizon777.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Properties\Horizon777.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=5.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
@@ -228,10 +235,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\Horizon777.pfx" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Properties\BookingHelper.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Resources\Entypo.ttf" />
