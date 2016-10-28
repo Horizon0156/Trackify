@@ -28,7 +28,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/Icons.xaml" />
+                <ResourceDictionary Source="/Resources/UsedIcons.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <converter:TimeToStringConverter x:Key="TimeToStringConverter" />
