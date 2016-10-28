@@ -1,4 +1,4 @@
-﻿<metro:MetroWindow x:Class="BookingHelper.UI.MainWindow"
+﻿<metro:MetroWindow x:Class="BookingHelper.UI.BookingHelperWindow"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:b="clr-namespace:Horizon.Framework.Xaml.Behaviors;assembly=Horizon.Framework"
@@ -22,6 +22,8 @@
     <i:Interaction.Behaviors>
         <b:MinimizeToTrayBehavior />
         <metroBehaviours:BorderlessWindowBehavior />
+        <metroBehaviours:WindowsSettingBehaviour />
+        <metroBehaviours:GlowWindowBehavior />
     </i:Interaction.Behaviors>
     <Window.Resources>
         <ResourceDictionary>
@@ -30,8 +32,67 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converter:TimeToStringConverter x:Key="TimeToStringConverter" />
-            <system:Double x:Key="DAILY_WORK_HOURS">8.00</system:Double>
+            <system:Double x:Key="DailyWorkHours">8.00</system:Double>
             <converter:TotalEffortToColorConverter x:Key="TotalEffortToColorConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+            <DataTemplate x:Key="EffortTemplate" DataType="{x:Type vm:Effort}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="TimeGroup" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.InputBindings>
+                        <MouseBinding Command="{Binding MarkedAsBookedCommand}" Gesture="LeftClick" />
+                    </Grid.InputBindings>
+                    <Grid.Resources>
+                        <Style x:Key="BookedEffortStlye"
+                               BasedOn="{StaticResource {x:Type TextBlock}}"
+                               TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MarkedAsBooked}" Value="True">
+                                    <Setter Property="Foreground" Value="DimGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
+                    <Rectangle Grid.Column="3"
+                               Width="10"
+                               Height="10"
+                               Margin="5 0 0 0"
+                               VerticalAlignment="Center"
+                               Fill="DimGray"
+                               Visibility="{Binding MarkedAsBooked,
+                                                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_check}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Style="{StaticResource BookedEffortStlye}"
+                               Text="{Binding EffortTimeInHours,
+                                              StringFormat='{}{0:N2} h'}" />
+                    <TextBlock Grid.Column="2"
+                               VerticalAlignment="Center"
+                               Style="{StaticResource BookedEffortStlye}"
+                               Text="{Binding Description}" />
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush3}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                </Grid>
+            </DataTemplate>
 
             <DataTemplate x:Key="BookingEntryTemplate" DataType="{x:Type vm:BookingModel}">
                 <Grid>
@@ -85,7 +146,7 @@
                             <localBehavior:UpdateableTextBoxBehavior />
                         </i:Interaction.Behaviors>
                     </TextBox>
-                    <Button Grid.Column="5"
+                    <Button Grid.Column="4"
                             Width="30"
                             Height="30"
                             Margin="5"
@@ -199,32 +260,10 @@
                       VerticalScrollBarVisibility="Visible">
             <StackPanel Margin="5" Orientation="Vertical">
                 <TextBlock Text="Bookings:" />
-                <DataGrid HorizontalAlignment="Stretch"
-                          AutoGenerateColumns="False"
-                          HeadersVisibility="None"
-                          IsReadOnly="True"
-                          ItemsSource="{Binding Efforts}">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding MarkedAsBooked, UpdateSourceTrigger=PropertyChanged}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Binding="{Binding EffortTimeInHours, StringFormat='{}{0:N2} h'}" />
-                        <DataGridTextColumn Binding="{Binding Description}" />                        
-                    </DataGrid.Columns>
-                    <DataGrid.RowStyle>
-                        <Style TargetType="DataGridRow">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding MarkedAsBooked}" Value="True">
-                                    <Setter Property="FontWeight" Value="ExtraLight" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.RowStyle>
-                </DataGrid>
+                <ItemsControl Focusable="False"
+                              Grid.IsSharedSizeScope="True"
+                              ItemTemplate="{StaticResource EffortTemplate}"
+                              ItemsSource="{Binding Efforts}" />
             </StackPanel>
         </ScrollViewer>
         <DockPanel Grid.Row="3"
@@ -239,9 +278,27 @@
                        Margin="5 0 0 0"
                        VerticalAlignment="Center"
                        DockPanel.Dock="Right"
+                       Fill="White"
+                       Visibility="{Binding IsUpdateAvailable,
+                                            Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Rectangle.ToolTip>
+                    <TextBlock Text="A newer version is available for download." />
+                </Rectangle.ToolTip>
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_globe}" />
+                </Rectangle.OpacityMask>
+                <Rectangle.InputBindings>
+                    <MouseBinding Command="{Binding GetUpdateCommand}" Gesture="LeftClick" />
+                </Rectangle.InputBindings>
+            </Rectangle>
+            <Rectangle Width="15"
+                       Height="15"
+                       Margin="5 0 0 0"
+                       VerticalAlignment="Center"
+                       DockPanel.Dock="Right"
                        Fill="White">
                 <Rectangle.ToolTip>
-                    <TextBlock Text="{Binding HomeTime, StringFormat='Home time: {0:hh\\:mm}'}" />
+                    <TextBlock Text="{Binding HomeTime, StringFormat='Home time: {0:hh\\:mm}', TargetNullValue='Track a time first...'}" />
                 </Rectangle.ToolTip>
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_clock}" />
@@ -272,7 +329,7 @@
                        DockPanel.Dock="Right"
                        Foreground="{Binding TotalEffortClearToday,
                                             Converter={StaticResource TotalEffortToColorConverter},
-                                            ConverterParameter={StaticResource DAILY_WORK_HOURS}}"
+                                            ConverterParameter={StaticResource DailyWorkHours}}"
                        Text="{Binding TotalEffortClearToday,
                                       StringFormat='{}{0:N2} h'}"
                        TextAlignment="Right" />

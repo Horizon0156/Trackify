@@ -19,7 +19,7 @@
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
@@ -31,6 +31,7 @@
     <ProductName>BookingHelper</ProductName>
     <PublisherName>Horizon777</PublisherName>
     <WebPage>BookingHelper.html</WebPage>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>0.3.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
@@ -76,13 +77,19 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>CD7C2AA3D30717C8AAA2BA14A19A1DF4C9A50170</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>E70DC4AB7B9E991E6DE324C61CC7402EC7A60571</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Properties\BookingHelper.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Properties\Horizon777.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Properties\Horizon777.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=5.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
@@ -170,6 +177,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.0.0\lib\portable-net45+win8+wpa81\System.Diagnostics.DiagnosticSource.dll</HintPath>
       <Private>True</Private>
@@ -200,18 +208,23 @@
     <Compile Include="Converter\StringToTimespanConverter.cs" />
     <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\Booking.cs" />
+    <Compile Include="Deployment\ClickOnceUpdateChecker.cs" />
+    <Compile Include="Deployment\IUpdateChecker.cs" />
+    <Compile Include="Mocks\IProcess.cs" />
+    <Compile Include="Mocks\Process.cs" />
     <Compile Include="ViewModels\BreakRegulation.cs" />
     <Compile Include="DataModels\IBookingsContext.cs" />
     <Compile Include="DataModels\BookingsContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\WPFAssemblyInfo.cs" />
-    <Compile Include="UI\MainWindow.xaml.cs">
+    <Compile Include="UI\BookingHelperWindow.xaml.cs">
       <SubType>Code</SubType>
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <DependentUpon>BookingHelperWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\BookingModel.cs" />
     <Compile Include="ViewModels\Effort.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\BookingHelperViewModel.cs" />
+    <Compile Include="ViewModels\EffortComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Resources\Icons.xaml">
@@ -222,13 +235,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\MainWindow.xaml" />
+    <Page Include="UI\BookingHelperWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\Horizon777.pfx" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Properties\BookingHelper.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Resources\Entypo.ttf" />
