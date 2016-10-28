@@ -14,6 +14,9 @@ namespace BookingHelper.ViewModels
     internal class BookingHelperViewModel : ViewModel
     {
         private readonly IBookingsContext _databaseContext;
+
+        private readonly ICommandFactory _commandFactory;
+
         private AttentiveCollection<BookingModel> _bookingContainer;
         private List<BreakRegulation> _breakRegulations;
         private BookingModel _currentBooking;
@@ -22,11 +25,12 @@ namespace BookingHelper.ViewModels
 
         public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory)
         {
+            _databaseContext = bookingsContext;
+            _commandFactory = commandFactory;
+            _databaseContext.EnsureDatabaseIsCreated();
+
             SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
             DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
-
-            _databaseContext = bookingsContext;
-            _databaseContext.EnsureDatabaseIsCreated();
 
             CurrentBooking = new BookingModel();
             SelectedDate = DateTime.Today;
@@ -233,7 +237,7 @@ namespace BookingHelper.ViewModels
 
             Efforts = new AttentiveCollection<Effort>(BookingContainer
                 .GroupBy(b => b.Description)
-                .Select(g => new Effort(g.First().Description, g.Sum(b => b.Duration.TotalHours)).RoundEffort(0.25)));
+                .Select(g => new Effort(_commandFactory, g.First().Description, g.Sum(b => b.Duration.TotalHours)).RoundEffort(0.25)));
 
             Efforts = RestoreMarkedEfforts(Efforts, markedEfforts);
         }

@@ -2,15 +2,28 @@
 
 namespace BookingHelper.ViewModels
 {
+    using System.Windows.Input;
+
     public class Effort : ObserveableObject
     {
         private bool _markedAdBooked;
 
-        public Effort(string description, double effortTimeInHours)
+        private ICommandFactory _commandFactory;
+
+        public Effort(ICommandFactory commandFactory, string description, double effortTimeInHours)
         {
+            _commandFactory = commandFactory;
+            MarkedAsBookedCommand = _commandFactory.CreateCommand(MarkedEffortAsBooked);
             EffortTimeInHours = effortTimeInHours;
             Description = description;
             MarkedAsBooked = false;
+        }
+
+        public ICommand MarkedAsBookedCommand { get; }
+
+        private void MarkedEffortAsBooked()
+        {
+            MarkedAsBooked = !MarkedAsBooked;
         }
 
         public string Description { get; }
@@ -39,7 +52,7 @@ namespace BookingHelper.ViewModels
                 ? EffortTimeInHours - differenceToRound + intervalTimeInHours
                 : EffortTimeInHours - differenceToRound;
 
-            return new Effort(Description, roundedEffort);
+            return new Effort(_commandFactory, Description, roundedEffort);
         }
     }
 }
