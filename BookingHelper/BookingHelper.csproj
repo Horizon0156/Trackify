@@ -33,7 +33,7 @@
     <WebPage>BookingHelper.html</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.4.0.0</ApplicationVersion>
+    <ApplicationVersion>0.5.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -62,10 +62,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DefineConstants />
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -227,14 +230,14 @@
     <Compile Include="ViewModels\EffortComparer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Resources\Icons.xaml">
+    <Page Include="Resources\UsedIcons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\IconsNonShared.xaml">
+    <None Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
+    </None>
     <Page Include="UI\BookingHelperWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -246,7 +249,6 @@
     </None>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
-    <None Include="Resources\Entypo.ttf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Horizon.Framework\Horizon.Framework.csproj">
@@ -256,8 +258,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icon.ico" />
-    <Content Include="Resources\Entypo-license.txt" />
-    <Content Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
