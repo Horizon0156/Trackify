@@ -4,7 +4,6 @@ using BookingHelper.Deployment;
 using BookingHelper.Mocks;
 using BookingHelper.UI;
 using BookingHelper.ViewModels;
-using Horizon.Framework.DialogService;
 using Horizon.Framework.Mvvm;
 using MahApps.Metro;
 using SimpleInjector;
@@ -12,6 +11,7 @@ using System;
 using System.Reflection;
 using System.Windows;
 using Horizon.Framework.Extensions;
+using Horizon.Framework.Services;
 using log4net;
 
 namespace BookingHelper

@@ -48,12 +48,12 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Expression.Blend.Sdk.WPF.1.0.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -64,9 +64,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DialogService\DialogService.cs" />
-    <Compile Include="DialogService\IDialogService.cs" />
-    <Compile Include="DialogService\WindowManager.cs" />
+    <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\IMessageService.cs" />
+    <Compile Include="Services\MessageButtonSetup.cs" />
+    <Compile Include="Services\MessageEventArgs.cs" />
+    <Compile Include="Services\MessageResult.cs" />
+    <Compile Include="Services\MessageServiceEventManager.cs" />
+    <Compile Include="Services\WindowManager.cs" />
     <Compile Include="Exceptions\Throw.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Mvvm\AsyncCommand.cs" />

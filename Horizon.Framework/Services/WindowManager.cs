@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-
 using Horizon.Framework.Mvvm;
-
 using JetBrains.Annotations;
 
-namespace Horizon.Framework.DialogService
+namespace Horizon.Framework.Services
 {
     internal class WindowManager
     {

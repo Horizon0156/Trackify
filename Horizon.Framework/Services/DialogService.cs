@@ -1,13 +1,13 @@
-﻿using Horizon.Framework.Exceptions;
-using Horizon.Framework.Mvvm;
-using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using Horizon.Framework.Exceptions;
+using Horizon.Framework.Mvvm;
+using JetBrains.Annotations;
 
-namespace Horizon.Framework.DialogService
+namespace Horizon.Framework.Services
 {
     /// <summary>
     /// Implementation of a dialog service.

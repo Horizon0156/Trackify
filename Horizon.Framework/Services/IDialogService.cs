@@ -1,7 +1,7 @@
-﻿using Horizon.Framework.Mvvm;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Horizon.Framework.Mvvm;
 
-namespace Horizon.Framework.DialogService
+namespace Horizon.Framework.Services
 {
     /// <summary>
     /// Interface for a Dialog service to show dialogs from a ViewModel.
