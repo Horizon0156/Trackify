@@ -6,22 +6,22 @@ namespace BookingHelper.ViewModels
 
     public class Effort : ObserveableObject
     {
-        private bool _markedAdBooked;
+        private bool _markedAsBooked;
 
         private ICommandFactory _commandFactory;
 
         public Effort(ICommandFactory commandFactory, string description, double effortTimeInHours)
         {
             _commandFactory = commandFactory;
-            MarkedAsBookedCommand = _commandFactory.CreateCommand(MarkedEffortAsBooked);
+            MarkAsBookedCommand = _commandFactory.CreateCommand(MarkEffortAsBooked);
             EffortTimeInHours = effortTimeInHours;
             Description = description;
             MarkedAsBooked = false;
         }
 
-        public ICommand MarkedAsBookedCommand { get; }
+        public ICommand MarkAsBookedCommand { get; }
 
-        private void MarkedEffortAsBooked()
+        private void MarkEffortAsBooked()
         {
             MarkedAsBooked = !MarkedAsBooked;
         }
@@ -34,11 +34,11 @@ namespace BookingHelper.ViewModels
         {
             get
             {
-                return _markedAdBooked;
+                return _markedAsBooked;
             }
             set
             {
-                SetProperty(ref _markedAdBooked, value);
+                SetProperty(ref _markedAsBooked, value);
             }
         }
 
