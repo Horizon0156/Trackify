@@ -64,6 +64,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\DataContextInitializationBehavior.cs" />
+    <Compile Include="Mvvm\IInitializeable.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IMessageService.cs" />
