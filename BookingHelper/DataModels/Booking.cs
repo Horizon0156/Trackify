@@ -13,5 +13,7 @@ namespace BookingHelper.DataModels
         public int Id { get; set; }
 
         public TimeSpan? StartTime { get; set; }
+
+        public BookingState State { get; set; }
     }
 }

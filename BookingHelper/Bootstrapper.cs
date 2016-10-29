@@ -13,6 +13,7 @@ using System.Windows;
 using Horizon.Framework.Extensions;
 using Horizon.Framework.Services;
 using log4net;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace BookingHelper
 {
@@ -20,6 +21,7 @@ namespace BookingHelper
     {
         private static readonly Container _container = new Container();
         private static readonly DialogService _dialogService = new DialogService();
+        private static readonly MessageServiceEventManager _messageService = new MessageServiceEventManager();
 
         [STAThread]
         public static int Main()
@@ -38,6 +40,7 @@ namespace BookingHelper
         private static void InitializeDependencyInjection()
         {
             _container.RegisterSingleton<IDialogService>(_dialogService);
+            _container.RegisterSingleton<IMessageService>(_messageService);
             _container.RegisterSingleton<ICommandFactory, CommandFactory>();
             _container.Register<IBookingsContext, BookingsContext>();
             _container.Register<IProcess, Process>();
@@ -72,9 +75,11 @@ namespace BookingHelper
         private static void ShowMainWindow(object sender, StartupEventArgs e)
         {
             var window = _container.GetInstance<BookingHelperWindow>();
-            window.Show();
 
             _dialogService.RegisterMainWindow(window);
+            _messageService.MessageAnnouncement += window.HandleMessageAnnouncement;
+
+            window.Show();
         }
     }
 }

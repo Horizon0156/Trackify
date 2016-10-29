@@ -1,34 +1,30 @@
 ﻿using Horizon.Framework.Mvvm;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Input;
 
 namespace BookingHelper.ViewModels
 {
-    using System.Windows.Input;
-
-    public class Effort : ObserveableObject
+    internal class Effort : ObserveableObject
     {
+        private readonly ICommandFactory _commandFactory;
         private bool _markedAdBooked;
 
-        private readonly ICommandFactory _commandFactory;
-
-        public Effort(ICommandFactory commandFactory, string description, double effortTimeInHours)
+        public Effort(ICommandFactory commandFactory, ICollection<BookingModel> desisiveBookings)
         {
             _commandFactory = commandFactory;
+            DesisiveBookings = desisiveBookings;
             MarkedAsBookedCommand = _commandFactory.CreateCommand(MarkedEffortAsBooked);
-            EffortTimeInHours = effortTimeInHours;
-            Description = description;
-            MarkedAsBooked = false;
+            EffortTimeInHours = desisiveBookings.Sum(b => b.Duration.TotalHours);
+            Description = desisiveBookings.First().Description;
+            MarkedAsBooked = desisiveBookings.All(b => b.State == BookingModelState.Booked);
         }
 
-        public ICommand MarkedAsBookedCommand { get; }
-
-        private void MarkedEffortAsBooked()
-        {
-            MarkedAsBooked = !MarkedAsBooked;
-        }
+        public ICollection<BookingModel> DesisiveBookings { get; set; }
 
         public string Description { get; }
 
-        public double EffortTimeInHours { get; private set; }
+        public double EffortTimeInHours { get; private set;  }
 
         public bool MarkedAsBooked
         {
@@ -42,17 +38,30 @@ namespace BookingHelper.ViewModels
             }
         }
 
+        public ICommand MarkedAsBookedCommand { get; }
+
         public Effort RoundEffort(double intervalTimeInHours)
         {
             var differenceToRound = EffortTimeInHours % intervalTimeInHours;
-
             var roundUp = differenceToRound >= intervalTimeInHours / 2;
 
             var roundedEffort = roundUp
                 ? EffortTimeInHours - differenceToRound + intervalTimeInHours
                 : EffortTimeInHours - differenceToRound;
+            
+            return new Effort(_commandFactory, DesisiveBookings) { EffortTimeInHours = roundedEffort };
+        }
 
-            return new Effort(_commandFactory, Description, roundedEffort);
+        private void MarkedEffortAsBooked()
+        {
+            MarkedAsBooked = !MarkedAsBooked;
+
+            foreach (var booking in DesisiveBookings)
+            {
+                booking.State = MarkedAsBooked
+                    ? BookingModelState.Booked
+                    : BookingModelState.Recorded;
+            }
         }
     }
 }

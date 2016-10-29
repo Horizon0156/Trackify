@@ -20,6 +20,7 @@
                    BorderThickness="1"
                    SaveWindowPosition="True">
     <i:Interaction.Behaviors>
+        <behaviors:DataContextInitializationBehavior UnhandledException="LogExceptionAndTerminateApplication" />
         <behaviors:MinimizeToTrayBehavior />
         <metroBehaviours:BorderlessWindowBehavior />
         <metroBehaviours:WindowsSettingBehaviour />

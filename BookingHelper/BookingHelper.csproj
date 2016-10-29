@@ -215,6 +215,7 @@
     <Compile Include="Converter\StringToTimespanConverter.cs" />
     <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\Booking.cs" />
+    <Compile Include="DataModels\BookingState.cs" />
     <Compile Include="Deployment\ClickOnceUpdateChecker.cs" />
     <Compile Include="Deployment\IUpdateChecker.cs" />
     <Compile Include="Mocks\IProcess.cs" />
@@ -224,6 +225,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CultureDependedTexts.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\BookingModelState.cs" />
     <Compile Include="ViewModels\BreakRegulation.cs" />
     <Compile Include="DataModels\IBookingsContext.cs" />
     <Compile Include="DataModels\BookingsContext.cs" />

@@ -121,4 +121,8 @@
     <value>Pause|Break</value>
     <comment>Booking description which will be identified as a break. Reg. expressions are allowed. Case will be ignored</comment>
   </data>
+  <data name="InitializationFailure" xml:space="preserve">
+    <value>Failed to initialize application. Please have a look at the logs to get further information.</value>
+    <comment>&amp;#x0a; -&gt; Line break</comment>
+  </data>
 </root>

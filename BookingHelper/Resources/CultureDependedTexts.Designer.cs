@@ -68,5 +68,14 @@ namespace BookingHelper.Resources {
                 return ResourceManager.GetString("BreakDescritption", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to initialize application. Please have a look at the logs to get further information..
+        /// </summary>
+        internal static string InitializationFailure {
+            get {
+                return ResourceManager.GetString("InitializationFailure", resourceCulture);
+            }
+        }
     }
 }

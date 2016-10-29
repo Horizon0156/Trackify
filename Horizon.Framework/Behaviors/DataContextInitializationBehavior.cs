@@ -38,7 +38,9 @@ namespace Horizon.Framework.Behaviors
             {
                 try
                 {
-                    await initializeableDataContext.InitializeAsync();
+                    await initializeableDataContext
+                        .InitializeAsync()
+                        .ConfigureAwait(true);
                 }
                 catch (Exception ex)
                 {

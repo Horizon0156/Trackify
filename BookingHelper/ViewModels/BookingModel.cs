@@ -8,6 +8,7 @@ namespace BookingHelper.ViewModels
         private string _description;
         private TimeSpan? _endTime;
         private TimeSpan? _startTime;
+        private BookingModelState _state;
 
         public DateTime Date { get; set; }
 
@@ -48,6 +49,18 @@ namespace BookingHelper.ViewModels
             set
             {
                 SetProperty(ref _startTime, value);
+            }
+        }
+
+        public BookingModelState State
+        {
+            get
+            {
+                return _state;
+            }
+            set
+            {
+                SetProperty(ref _state, value);
             }
         }
 
