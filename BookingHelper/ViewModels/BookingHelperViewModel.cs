@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using log4net;
 
 namespace BookingHelper.ViewModels
 {
@@ -20,6 +21,7 @@ namespace BookingHelper.ViewModels
         private readonly ICommandFactory _commandFactory;
         private readonly IBookingsContext _databaseContext;
         private readonly IProcess _process;
+        private readonly ILog _logger;
         private readonly IUpdateChecker _updateChecker;
         private AttentiveCollection<BookingModel> _bookingContainer;
         private List<BreakRegulation> _breakRegulations;
@@ -28,19 +30,20 @@ namespace BookingHelper.ViewModels
         private bool _isUpdateAvailable;
         private DateTime? _selectedDate;
 
-        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IUpdateChecker updateChecker, IProcess process)
+        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IUpdateChecker updateChecker, IProcess process, ILog logger)
         {
             _databaseContext = bookingsContext;
             _commandFactory = commandFactory;
             _updateChecker = updateChecker;
             _process = process;
+            _logger = logger;
             _databaseContext.EnsureDatabaseIsCreated();
 
             SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
             DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
             GetUpdateCommand = commandFactory.CreateCommand(RedirectToApplicationWebsite);
 
-            InitializeAsync().OnUnobservedException(ShutdownApplication);
+            InitializeAsync().OnUnobservedException(LogExceptionAndShutdownApplication);
         }
 
         public AttentiveCollection<BookingModel> BookingContainer
@@ -131,7 +134,7 @@ namespace BookingHelper.ViewModels
 
             SelectedDate = DateTime.Today;
             LoadBookingsForSelectedDate();
-
+            throw new InvalidOperationException("Oha! That shouldn't happen!");
             InitializeBreakRegulations();
             await CheckForUpdates().ConfigureAwait(false);
         }
@@ -277,9 +280,10 @@ namespace BookingHelper.ViewModels
             }
         }
 
-        private void ShutdownApplication(AggregateException obj)
+        private void LogExceptionAndShutdownApplication(AggregateException exception)
         {
-            OnClosureRequested();
+            _logger.Fatal("An unobserved exception occured while initializing the application", exception);
+            Environment.Exit(-1);
         }
 
         private void UpdateEffort()

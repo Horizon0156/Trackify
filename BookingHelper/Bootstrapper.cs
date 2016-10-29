@@ -10,7 +10,9 @@ using Horizon.Framework.Xaml.Extensions;
 using MahApps.Metro;
 using SimpleInjector;
 using System;
+using System.Reflection;
 using System.Windows;
+using log4net;
 
 namespace BookingHelper
 {
@@ -40,6 +42,8 @@ namespace BookingHelper
             _container.Register<IBookingsContext, BookingsContext>();
             _container.Register<IProcess, Process>();
             _container.Register<IUpdateChecker, ClickOnceUpdateChecker>();
+
+            _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
         }
 
         private static void InitializeDialogService()
