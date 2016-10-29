@@ -48,7 +48,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Grid.InputBindings>
-                        <MouseBinding Command="{Binding MarkedAsBookedCommand}" Gesture="LeftClick" />
+                        <MouseBinding Command="{Binding MarkAsBookedCommand}" Gesture="LeftClick" />
                     </Grid.InputBindings>
                     <Grid.Resources>
                         <Style x:Key="BookedEffortStlye"
