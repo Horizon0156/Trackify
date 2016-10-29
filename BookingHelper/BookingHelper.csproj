@@ -219,6 +219,11 @@
     <Compile Include="Deployment\IUpdateChecker.cs" />
     <Compile Include="Mocks\IProcess.cs" />
     <Compile Include="Mocks\Process.cs" />
+    <Compile Include="Resources\CultureDependedTexts.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CultureDependedTexts.resx</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\BreakRegulation.cs" />
     <Compile Include="DataModels\IBookingsContext.cs" />
     <Compile Include="DataModels\BookingsContext.cs" />
@@ -273,6 +278,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\CultureDependedTexts.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CultureDependedTexts.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

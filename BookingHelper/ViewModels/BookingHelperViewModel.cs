@@ -10,8 +10,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using BookingHelper.Resources;
 using log4net;
 
 namespace BookingHelper.ViewModels
@@ -84,7 +86,7 @@ namespace BookingHelper.ViewModels
 
                 // ReSharper disable ExplicitCallerInfoArgument, an update of foreign props is desired.
                 OnPropertyChanged(nameof(TotalEffortGrossToday));
-                OnPropertyChanged(nameof(TotalEffortClearToday));
+                OnPropertyChanged(nameof(TotalEffortNetToday));
                 OnPropertyChanged(nameof(MandatoryBreakTime));
                 OnPropertyChanged(nameof(HomeTime));
                 // ReSharper restore ExplicitCallerInfoArgument
@@ -124,7 +126,18 @@ namespace BookingHelper.ViewModels
             }
         }
 
-        public double TotalEffortClearToday => Efforts?.Where(e => !e.Description.ToLower().Contains("pause")).Sum(e => e.EffortTimeInHours) ?? 0;
+        public double TotalEffortNetToday => CalculateNetEffortForToday();
+
+        private double CalculateNetEffortForToday()
+        {
+            var breakDeterminationExpression = new Regex($"^({CultureDependedTexts.BreakDescritption})$", RegexOptions.IgnoreCase);
+
+            var netEffort = Efforts?
+                .Where(e => !breakDeterminationExpression.IsMatch(e.Description))
+                .Sum(e => e.EffortTimeInHours);
+
+            return netEffort ?? 0;
+        }
 
         public double TotalEffortGrossToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
 
@@ -143,7 +156,7 @@ namespace BookingHelper.ViewModels
             var startTime = BookingContainer.Min(b => b.StartTime);
 
             return startTime.HasValue
-                ? startTime.Value + TimeSpan.FromHours(8 - TotalEffortClearToday)
+                ? startTime.Value + TimeSpan.FromHours(8 - TotalEffortNetToday)
                 : (TimeSpan?)null;
         }
 
@@ -167,7 +180,7 @@ namespace BookingHelper.ViewModels
             double breakTime = 0;
             foreach (var breakRegulation in _breakRegulations.OrderBy(br => br.WorkEffortLimit).ToList())
             {
-                if (TotalEffortClearToday > breakRegulation.WorkEffortLimit)
+                if (TotalEffortNetToday > breakRegulation.WorkEffortLimit)
                 {
                     breakTime = breakRegulation.MandatoryBreakTime;
                 }

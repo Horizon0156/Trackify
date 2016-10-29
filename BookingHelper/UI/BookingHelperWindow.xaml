@@ -315,7 +315,7 @@
                             <MultiBinding StringFormat="Vorgeschriebene Pausenzeit: {0:N2} h&#x0a;Summe inkl. Pause: {1:N2} h&#x0a;Summe exkl. Pause: {2:N2} h">
                                 <Binding Path="MandatoryBreakTime" />
                                 <Binding Path="TotalEffortGrossToday" />
-                                <Binding Path="TotalEffortClearToday" />
+                                <Binding Path="TotalEffortNetToday" />
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
@@ -327,10 +327,10 @@
             <TextBlock Margin="0,0,10,0"
                        VerticalAlignment="Center"
                        DockPanel.Dock="Right"
-                       Foreground="{Binding TotalEffortClearToday,
+                       Foreground="{Binding TotalEffortNetToday,
                                             Converter={StaticResource TotalEffortToColorConverter},
                                             ConverterParameter={StaticResource DailyWorkHours}}"
-                       Text="{Binding TotalEffortClearToday,
+                       Text="{Binding TotalEffortNetToday,
                                       StringFormat='{}{0:N2} h'}"
                        TextAlignment="Right" />
 
