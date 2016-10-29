@@ -8,7 +8,7 @@ namespace BookingHelper.ViewModels
     {
         private bool _markedAdBooked;
 
-        private ICommandFactory _commandFactory;
+        private readonly ICommandFactory _commandFactory;
 
         public Effort(ICommandFactory commandFactory, string description, double effortTimeInHours)
         {
