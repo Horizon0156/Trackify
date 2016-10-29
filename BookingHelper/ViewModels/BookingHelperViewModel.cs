@@ -43,7 +43,7 @@ namespace BookingHelper.ViewModels
             DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
             GetUpdateCommand = commandFactory.CreateCommand(RedirectToApplicationWebsite);
 
-            InitializeAsync().OnUnobservedException(LogExceptionAndShutdownApplication);
+            InitializeBookingHelperAsync().OnUnobservedException(LogExceptionAndShutdownApplication);
         }
 
         public AttentiveCollection<BookingModel> BookingContainer
@@ -128,13 +128,12 @@ namespace BookingHelper.ViewModels
 
         public double TotalEffortGrossToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
 
-        public async Task InitializeAsync()
+        public async Task InitializeBookingHelperAsync()
         {
             CurrentBooking = new BookingModel();
 
             SelectedDate = DateTime.Today;
             LoadBookingsForSelectedDate();
-            throw new InvalidOperationException("Oha! That shouldn't happen!");
             InitializeBreakRegulations();
             await CheckForUpdates().ConfigureAwait(false);
         }
