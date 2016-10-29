@@ -1,4 +1,5 @@
-﻿using Horizon.Framework.Exceptions;
+﻿using System;
+using Horizon.Framework.Exceptions;
 using JetBrains.Annotations;
 using System.ComponentModel;
 
@@ -10,7 +11,7 @@ namespace Horizon.Framework.Collections
     public class NotifyInnerElementChangedEventArgs : PropertyChangedEventArgs
     {
         /// <summary>
-        /// Creates a new instance of the <see cref="NotifyCollectionItemChangedEventArgs"/> class.
+        /// Creates a new instance of the <see cref="NotifyInnerElementChangedEventArgs"/> class.
         /// </summary>
         /// <param name="changedItem"> Reference to the changed item. </param>
         /// <param name="propertyName"> Name of the property of the changed item, which changed its value. </param>

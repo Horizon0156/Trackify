@@ -1,9 +1,9 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
+using JetBrains.Annotations;
 
-namespace Horizon.Framework.Xaml.Behaviors
+namespace Horizon.Framework.Behaviors
 {
     /// <summary>
     /// Behaviour which enables Auto scrolling for a scroll viewer.

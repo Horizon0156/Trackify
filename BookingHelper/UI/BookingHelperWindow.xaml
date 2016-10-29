@@ -1,7 +1,7 @@
 ﻿<metro:MetroWindow x:Class="BookingHelper.UI.BookingHelperWindow"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:b="clr-namespace:Horizon.Framework.Xaml.Behaviors;assembly=Horizon.Framework"
+                   xmlns:behaviors="clr-namespace:Horizon.Framework.Behaviors;assembly=Horizon.Framework"
                    xmlns:converter="clr-namespace:BookingHelper.Converter"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                    xmlns:localBehavior="clr-namespace:BookingHelper.Behavior"
@@ -20,7 +20,7 @@
                    BorderThickness="1"
                    SaveWindowPosition="True">
     <i:Interaction.Behaviors>
-        <b:MinimizeToTrayBehavior />
+        <behaviors:MinimizeToTrayBehavior />
         <metroBehaviours:BorderlessWindowBehavior />
         <metroBehaviours:WindowsSettingBehaviour />
         <metroBehaviours:GlowWindowBehavior />
@@ -113,7 +113,7 @@
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=Explicit}">
                         <i:Interaction.Behaviors>
-                            <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
+                            <behaviors:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
                             <localBehavior:UpdateableTextBoxBehavior />
                         </i:Interaction.Behaviors>
                     </TextBox>
@@ -130,7 +130,7 @@
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=Explicit}">
                         <i:Interaction.Behaviors>
-                            <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
+                            <behaviors:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
                             <localBehavior:UpdateableTextBoxBehavior />
                         </i:Interaction.Behaviors>
                     </TextBox>
@@ -201,7 +201,7 @@
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=LostFocus}">
                         <i:Interaction.Behaviors>
-                            <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
+                            <behaviors:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
                         </i:Interaction.Behaviors>
                     </TextBox>
                     <TextBlock Grid.Column="1"
@@ -219,7 +219,7 @@
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=LostFocus}">
                         <i:Interaction.Behaviors>
-                            <b:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
+                            <behaviors:InputRestrictionBehavior InputExpression="^[0-2]?[0-9]?:?[0-5]?[0-9]?$" />
                         </i:Interaction.Behaviors>
                     </TextBox>
                     <TextBox Grid.Column="3"
@@ -252,7 +252,7 @@
                 </Grid>
             </StackPanel>
             <i:Interaction.Behaviors>
-                <b:AutoScrollBehavior />
+                <behaviors:AutoScrollBehavior />
             </i:Interaction.Behaviors>
         </ScrollViewer>
         <ScrollViewer Grid.Row="2"

@@ -6,12 +6,12 @@ using BookingHelper.UI;
 using BookingHelper.ViewModels;
 using Horizon.Framework.DialogService;
 using Horizon.Framework.Mvvm;
-using Horizon.Framework.Xaml.Extensions;
 using MahApps.Metro;
 using SimpleInjector;
 using System;
 using System.Reflection;
 using System.Windows;
+using Horizon.Framework.Extensions;
 using log4net;
 
 namespace BookingHelper
