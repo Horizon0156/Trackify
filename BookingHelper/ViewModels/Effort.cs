@@ -8,13 +8,13 @@ namespace BookingHelper.ViewModels
     internal class Effort : ObserveableObject
     {
         private readonly ICommandFactory _commandFactory;
-        private bool _markedAdBooked;
+        private bool _markedAsBooked;
 
         public Effort(ICommandFactory commandFactory, ICollection<BookingModel> desisiveBookings)
         {
             _commandFactory = commandFactory;
             DesisiveBookings = desisiveBookings;
-            MarkedAsBookedCommand = _commandFactory.CreateCommand(MarkedEffortAsBooked);
+            MarkAsBookedCommand = _commandFactory.CreateCommand(MarkedEffortAsBooked);
             EffortTimeInHours = desisiveBookings.Sum(b => b.Duration.TotalHours);
             Description = desisiveBookings.First().Description;
             MarkedAsBooked = desisiveBookings.All(b => b.State == BookingModelState.Booked);
@@ -30,15 +30,15 @@ namespace BookingHelper.ViewModels
         {
             get
             {
-                return _markedAdBooked;
+                return _markedAsBooked;
             }
             set
             {
-                SetProperty(ref _markedAdBooked, value);
+                SetProperty(ref _markedAsBooked, value);
             }
         }
 
-        public ICommand MarkedAsBookedCommand { get; }
+        public ICommand MarkAsBookedCommand { get; }
 
         public Effort RoundEffort(double intervalTimeInHours)
         {
