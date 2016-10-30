@@ -8,8 +8,8 @@ namespace BookingHelper.Deployment
     {
         private TaskCompletionSource<bool> _updateOperationTask;
 
-        public Uri ApplicationProductPage => ApplicationDeployment.IsNetworkDeployed ?
-            ApplicationDeployment.CurrentDeployment.UpdateLocation
+        public Uri ApplicationProductPage => ApplicationDeployment.IsNetworkDeployed
+            ? new Uri(ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri.Replace(".application", ".html"))
             : null;
 
         public Task<bool> IsUpdateAvailable()
