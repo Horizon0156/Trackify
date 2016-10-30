@@ -66,6 +66,10 @@ namespace BookingHelper
             app.InjectResourceDictionary("MahApps.Metro", "Styles/Fonts.xaml");
             app.InjectResourceDictionary("MahApps.Metro", "Styles/Colors.xaml");
 
+            // Setting unused Accents is required to theme the message box properly
+            app.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/Blue.xaml");
+            app.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/BaseLight.xaml");
+
             ThemeManager.ChangeAppStyle(
                 app,
                 ThemeManager.GetAccent("Red"),

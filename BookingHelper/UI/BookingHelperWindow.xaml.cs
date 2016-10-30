@@ -1,5 +1,6 @@
 ﻿using BookingHelper.ViewModels;
 using System;
+using System.Windows;
 using System.Windows.Controls;
 using BookingHelper.Resources;
 using Horizon.Framework.Services;
@@ -20,7 +21,7 @@ namespace BookingHelper.UI
             DataContext = dataContext;
         }
 
-        private void PrefillWithCurrentTimeIfEmpty(object sender, System.Windows.RoutedEventArgs e)
+        private void PrefillWithCurrentTimeIfEmpty(object sender, RoutedEventArgs e)
         {
             var textbox = (TextBox) sender;
 
@@ -45,7 +46,8 @@ namespace BookingHelper.UI
         private async void LogExceptionAndTerminateApplication(object sender, UnhandledExceptionEventArgs e)
         {
             _logger.Fatal("Failed to initialize application", e.ExceptionObject as Exception);
-            await this.ShowMessageAsync(null, CultureDependedTexts.InitializationFailure);
+            
+            await this.ShowMessageAsync("(╯°□°）╯︵ ┻━┻", CultureDependedTexts.InitializationFailure);
             Environment.Exit(-1);
         }
     }
