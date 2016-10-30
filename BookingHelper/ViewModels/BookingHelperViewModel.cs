@@ -2,20 +2,21 @@
 using BookingHelper.DataModels;
 using BookingHelper.Deployment;
 using BookingHelper.Mocks;
+using BookingHelper.Resources;
 using Horizon.Framework.Collections;
-using Horizon.Framework.Extensions;
 using Horizon.Framework.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace BookingHelper.ViewModels
 {
-    internal class BookingHelperViewModel : ViewModel
+    internal class BookingHelperViewModel : ViewModel, IInitializeable
     {
         private readonly ICommandFactory _commandFactory;
         private readonly IBookingsContext _databaseContext;
@@ -24,23 +25,21 @@ namespace BookingHelper.ViewModels
         private AttentiveCollection<BookingModel> _bookingContainer;
         private List<BreakRegulation> _breakRegulations;
         private BookingModel _currentBooking;
-        private AttentiveCollection<Effort> _efforts;
+        private IEnumerable<Effort> _efforts;
         private bool _isUpdateAvailable;
         private DateTime? _selectedDate;
 
-        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IUpdateChecker updateChecker, IProcess process)
+        public BookingHelperViewModel(
+            IBookingsContext bookingsContext, ICommandFactory commandFactory, IUpdateChecker updateChecker, IProcess process)
         {
             _databaseContext = bookingsContext;
             _commandFactory = commandFactory;
             _updateChecker = updateChecker;
             _process = process;
-            _databaseContext.EnsureDatabaseIsCreated();
 
             SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
             DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
             GetUpdateCommand = commandFactory.CreateCommand(RedirectToApplicationWebsite);
-
-            InitializeAsync().OnUnobservedException(ShutdownApplication);
         }
 
         public AttentiveCollection<BookingModel> BookingContainer
@@ -69,7 +68,7 @@ namespace BookingHelper.ViewModels
 
         public ICommand DeleteCommand { get; }
 
-        public AttentiveCollection<Effort> Efforts
+        public IEnumerable<Effort> Efforts
         {
             get
             {
@@ -81,7 +80,7 @@ namespace BookingHelper.ViewModels
 
                 // ReSharper disable ExplicitCallerInfoArgument, an update of foreign props is desired.
                 OnPropertyChanged(nameof(TotalEffortGrossToday));
-                OnPropertyChanged(nameof(TotalEffortClearToday));
+                OnPropertyChanged(nameof(TotalEffortNetToday));
                 OnPropertyChanged(nameof(MandatoryBreakTime));
                 OnPropertyChanged(nameof(HomeTime));
                 // ReSharper restore ExplicitCallerInfoArgument
@@ -121,17 +120,18 @@ namespace BookingHelper.ViewModels
             }
         }
 
-        public double TotalEffortClearToday => Efforts?.Where(e => !e.Description.ToLower().Contains("pause")).Sum(e => e.EffortTimeInHours) ?? 0;
-
         public double TotalEffortGrossToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
+
+        public double TotalEffortNetToday => CalculateNetEffortForToday();
 
         public async Task InitializeAsync()
         {
+            _databaseContext.EnsureDatabaseIsCreated();
+
             CurrentBooking = new BookingModel();
 
             SelectedDate = DateTime.Today;
             LoadBookingsForSelectedDate();
-
             InitializeBreakRegulations();
             await CheckForUpdates().ConfigureAwait(false);
         }
@@ -141,8 +141,19 @@ namespace BookingHelper.ViewModels
             var startTime = BookingContainer.Min(b => b.StartTime);
 
             return startTime.HasValue
-                ? startTime.Value + TimeSpan.FromHours(8 - TotalEffortClearToday)
+                ? startTime.Value + TimeSpan.FromHours(8 - TotalEffortNetToday)
                 : (TimeSpan?)null;
+        }
+
+        private double CalculateNetEffortForToday()
+        {
+            var breakDeterminationExpression = new Regex($"^({CultureDependedTexts.BreakDescritption})$", RegexOptions.IgnoreCase);
+
+            var netEffort = Efforts?
+                .Where(e => !breakDeterminationExpression.IsMatch(e.Description))
+                .Sum(e => e.EffortTimeInHours);
+
+            return netEffort ?? 0;
         }
 
         private async Task CheckForUpdates()
@@ -165,7 +176,7 @@ namespace BookingHelper.ViewModels
             double breakTime = 0;
             foreach (var breakRegulation in _breakRegulations.OrderBy(br => br.WorkEffortLimit).ToList())
             {
-                if (TotalEffortClearToday > breakRegulation.WorkEffortLimit)
+                if (TotalEffortNetToday > breakRegulation.WorkEffortLimit)
                 {
                     breakTime = breakRegulation.MandatoryBreakTime;
                 }
@@ -215,11 +226,6 @@ namespace BookingHelper.ViewModels
             }
         }
 
-        private IEnumerable<Effort> MemorizeMarkedEfforts()
-        {
-            return Efforts?.Where(e => e.MarkedAsBooked);
-        }
-
         private void RedirectToApplicationWebsite()
         {
             var appWebsite = _updateChecker.ApplicationProductPage;
@@ -228,26 +234,6 @@ namespace BookingHelper.ViewModels
             {
                 _process.Start(appWebsite.AbsoluteUri);
             }
-        }
-
-        private AttentiveCollection<Effort> RestoreMarkedEfforts(AttentiveCollection<Effort> efforts, IEnumerable<Effort> markedEfforts)
-        {
-            if (markedEfforts == null)
-            {
-                return efforts;
-            }
-
-            var comparer = new EffortComparer();
-            foreach (var markedEffort in markedEfforts)
-            {
-                foreach (var effort in efforts)
-                {
-                    effort.MarkedAsBooked = effort.MarkedAsBooked
-                        || comparer.Equals(effort, markedEffort);
-                }
-            }
-
-            return efforts;
         }
 
         private void SaveBooking()
@@ -277,20 +263,11 @@ namespace BookingHelper.ViewModels
             }
         }
 
-        private void ShutdownApplication(AggregateException obj)
-        {
-            OnClosureRequested();
-        }
-
         private void UpdateEffort()
         {
-            var markedEfforts = MemorizeMarkedEfforts();
-
-            Efforts = new AttentiveCollection<Effort>(BookingContainer
-                .GroupBy(b => b.Description)
-                .Select(g => new Effort(_commandFactory, g.First().Description, g.Sum(b => b.Duration.TotalHours)).RoundEffort(0.25)));
-
-            Efforts = RestoreMarkedEfforts(Efforts, markedEfforts);
+            Efforts = BookingContainer
+                    .GroupBy(b => b.Description)
+                    .Select(g => new Effort(_commandFactory, g.ToList()).RoundEffort(0.25));
         }
 
         private void UpdateEffort(object sender, NotifyCollectionChangedEventArgs e)
