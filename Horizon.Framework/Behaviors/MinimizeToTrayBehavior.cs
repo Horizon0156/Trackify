@@ -1,12 +1,12 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interactivity;
+using JetBrains.Annotations;
 
-namespace Horizon.Framework.Xaml.Behaviors
+namespace Horizon.Framework.Behaviors
 {
     /// <summary>
     /// Behavior which minimizes a window into the system's tray.

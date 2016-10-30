@@ -15,7 +15,6 @@ namespace Horizon.Framework.Mvvm
         /// <summary>
         /// Notifies a closure request.
         /// </summary>
-        /// <param name="propertyName"> The name of the changed property (CallerMemberName) </param>
         protected void OnClosureRequested()
         {
             ClosureRequested?.Invoke(this, EventArgs.Empty);

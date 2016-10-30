@@ -33,7 +33,7 @@ namespace Horizon.Framework.Exceptions
         /// /// <exception cref="ArgumentException">If the argument is not valid. </exception>
         public static void IfArgumentIsNotValid(bool isArgumentValid, [NotNull] string message, [CanBeNull] string argumentName)
         {
-            Throw.IfArgumentIsNull(message, nameof(message));
+            IfArgumentIsNull(message, nameof(message));
 
             if (!isArgumentValid)
             {
@@ -50,7 +50,7 @@ namespace Horizon.Framework.Exceptions
         /// /// <exception cref="InvalidOperationException">If the operation is not valid. </exception>
         public static void IfOperationIsInvalid(bool isOperationInvalid, [NotNull] string message)
         {
-            Throw.IfArgumentIsNull(message, nameof(message));
+            IfArgumentIsNull(message, nameof(message));
 
             if (isOperationInvalid)
             {

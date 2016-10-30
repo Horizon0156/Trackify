@@ -4,13 +4,15 @@ using BookingHelper.Deployment;
 using BookingHelper.Mocks;
 using BookingHelper.UI;
 using BookingHelper.ViewModels;
-using Horizon.Framework.DialogService;
 using Horizon.Framework.Mvvm;
-using Horizon.Framework.Xaml.Extensions;
 using MahApps.Metro;
 using SimpleInjector;
 using System;
+using System.Reflection;
 using System.Windows;
+using Horizon.Framework.Extensions;
+using Horizon.Framework.Services;
+using log4net;
 
 namespace BookingHelper
 {
@@ -18,6 +20,7 @@ namespace BookingHelper
     {
         private static readonly Container _container = new Container();
         private static readonly DialogService _dialogService = new DialogService();
+        private static readonly MessageServiceEventManager _messageService = new MessageServiceEventManager();
 
         [STAThread]
         public static int Main()
@@ -36,10 +39,13 @@ namespace BookingHelper
         private static void InitializeDependencyInjection()
         {
             _container.RegisterSingleton<IDialogService>(_dialogService);
+            _container.RegisterSingleton<IMessageService>(_messageService);
             _container.RegisterSingleton<ICommandFactory, CommandFactory>();
             _container.Register<IBookingsContext, BookingsContext>();
             _container.Register<IProcess, Process>();
             _container.Register<IUpdateChecker, ClickOnceUpdateChecker>();
+
+            _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
         }
 
         private static void InitializeDialogService()
@@ -59,6 +65,10 @@ namespace BookingHelper
             app.InjectResourceDictionary("MahApps.Metro", "Styles/Fonts.xaml");
             app.InjectResourceDictionary("MahApps.Metro", "Styles/Colors.xaml");
 
+            // Setting unused Accents is required to theme the message box properly
+            app.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/Blue.xaml");
+            app.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/BaseLight.xaml");
+
             ThemeManager.ChangeAppStyle(
                 app,
                 ThemeManager.GetAccent("Red"),
@@ -68,9 +78,11 @@ namespace BookingHelper
         private static void ShowMainWindow(object sender, StartupEventArgs e)
         {
             var window = _container.GetInstance<BookingHelperWindow>();
-            window.Show();
 
             _dialogService.RegisterMainWindow(window);
+            _messageService.MessageAnnouncement += window.HandleMessageAnnouncement;
+
+            window.Show();
         }
     }
 }

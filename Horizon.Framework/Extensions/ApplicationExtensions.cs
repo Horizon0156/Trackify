@@ -1,9 +1,9 @@
-﻿using Horizon.Framework.Exceptions;
-using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Windows;
+using Horizon.Framework.Exceptions;
+using JetBrains.Annotations;
 
-namespace Horizon.Framework.Xaml.Extensions
+namespace Horizon.Framework.Extensions
 {
     /// <summary>
     /// Extensiosn for a WPF application.

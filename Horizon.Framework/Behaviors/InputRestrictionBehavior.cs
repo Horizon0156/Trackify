@@ -1,11 +1,11 @@
-﻿using JetBrains.Annotations;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interactivity;
+using JetBrains.Annotations;
 
-namespace Horizon.Framework.Xaml.Behaviors
+namespace Horizon.Framework.Behaviors
 {
     /// <summary>
     /// Behavior which restricts the input of a <see cref="TextBox"/>
