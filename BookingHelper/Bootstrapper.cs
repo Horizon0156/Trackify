@@ -13,7 +13,6 @@ using System.Windows;
 using Horizon.Framework.Extensions;
 using Horizon.Framework.Services;
 using log4net;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace BookingHelper
 {
