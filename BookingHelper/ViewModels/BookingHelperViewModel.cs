@@ -115,7 +115,7 @@ namespace BookingHelper.ViewModels
             }
             set
             {
-                _selectedDate = value;
+                SetProperty(ref _selectedDate, value);
                 LoadBookingsForSelectedDate();
             }
         }
