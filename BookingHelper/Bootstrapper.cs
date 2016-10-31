@@ -43,7 +43,7 @@ namespace BookingHelper
             _container.RegisterSingleton<ICommandFactory, CommandFactory>();
             _container.Register<IBookingsContext, BookingsContext>();
             _container.Register<IProcess, Process>();
-            _container.Register<IUpdateChecker, ClickOnceUpdateChecker>();
+            _container.Register<IUpdateChecker, DummyUpdateChecker>();
 
             _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
         }
