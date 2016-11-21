@@ -22,7 +22,7 @@ namespace BookingHelper.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class CultureDependedTexts {
+    public class CultureDependedTexts {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace BookingHelper.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BookingHelper.Resources.CultureDependedTexts", typeof(CultureDependedTexts).Assembly);
@@ -51,7 +51,7 @@ namespace BookingHelper.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,20 +61,76 @@ namespace BookingHelper.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bookings:.
+        /// </summary>
+        public static string Bookings {
+            get {
+                return ResourceManager.GetString("Bookings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pause|Break.
         /// </summary>
-        internal static string BreakDescritption {
+        public static string BreakDescritption {
             get {
                 return ResourceManager.GetString("BreakDescritption", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Legal break time: {0:N2} h
+        ///Sum incl. breaks: {1:N2} h
+        ///Sum excl. breaks: {2:N2} h.
+        /// </summary>
+        public static string BreakTimeSnippet {
+            get {
+                return ResourceManager.GetString("BreakTimeSnippet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Track a time first....
+        /// </summary>
+        public static string HomeTimePlaceholder {
+            get {
+                return ResourceManager.GetString("HomeTimePlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home time: {0:hh\\:mm}.
+        /// </summary>
+        public static string HomeTimeSnippet {
+            get {
+                return ResourceManager.GetString("HomeTimeSnippet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to initialize application. Please have a look at the logs to get further information..
         /// </summary>
-        internal static string InitializationFailure {
+        public static string InitializationFailure {
             get {
                 return ResourceManager.GetString("InitializationFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Booking Helper.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
     }
