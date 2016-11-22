@@ -181,8 +181,7 @@
     <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\Booking.cs" />
     <Compile Include="DataModels\BookingState.cs" />
-    <Compile Include="Deployment\IUpdateChecker.cs" />
-    <Compile Include="Deployment\DummyUpdateChecker.cs" />
+    <Compile Include="Messages\PrepareNewEntryMessage.cs" />
     <Compile Include="Mocks\IProcess.cs" />
     <Compile Include="Mocks\Process.cs" />
     <Compile Include="Resources\CultureDependedTexts.Designer.cs">
@@ -235,7 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\CultureDependedTexts.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CultureDependedTexts.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

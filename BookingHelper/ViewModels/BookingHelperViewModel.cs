@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BookingHelper.DataModels;
-using BookingHelper.Deployment;
 using BookingHelper.Mocks;
 using BookingHelper.Resources;
 using Horizon.Framework.Collections;
@@ -13,6 +12,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using BookingHelper.Messages;
+using Horizon.Framework.Services;
 
 namespace BookingHelper.ViewModels
 {
@@ -21,25 +22,22 @@ namespace BookingHelper.ViewModels
         private readonly ICommandFactory _commandFactory;
         private readonly IBookingsContext _databaseContext;
         private readonly IProcess _process;
-        private readonly IUpdateChecker _updateChecker;
+        private readonly IMessenger _messenger;
         private AttentiveCollection<BookingModel> _bookingContainer;
         private List<BreakRegulation> _breakRegulations;
         private BookingModel _currentBooking;
         private IEnumerable<Effort> _efforts;
-        private bool _isUpdateAvailable;
         private DateTime? _selectedDate;
 
-        public BookingHelperViewModel(
-            IBookingsContext bookingsContext, ICommandFactory commandFactory, IUpdateChecker updateChecker, IProcess process)
+        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IProcess process, IMessenger messenger)
         {
             _databaseContext = bookingsContext;
             _commandFactory = commandFactory;
-            _updateChecker = updateChecker;
             _process = process;
+            _messenger = messenger;
 
             SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
             DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
-            GetUpdateCommand = commandFactory.CreateCommand(RedirectToApplicationWebsite);
         }
 
         public AttentiveCollection<BookingModel> BookingContainer
@@ -87,21 +85,7 @@ namespace BookingHelper.ViewModels
             }
         }
 
-        public ICommand GetUpdateCommand { get; }
-
         public TimeSpan? HomeTime => CalculateEstimatedHomeTime();
-
-        public bool IsUpdateAvailable
-        {
-            get
-            {
-                return _isUpdateAvailable;
-            }
-            set
-            {
-                SetProperty(ref _isUpdateAvailable, value);
-            }
-        }
 
         public double MandatoryBreakTime => GetMandatoryBreakTime();
 
@@ -124,7 +108,7 @@ namespace BookingHelper.ViewModels
 
         public double TotalEffortNetToday => CalculateNetEffortForToday();
 
-        public async Task InitializeAsync()
+        public Task InitializeAsync()
         {
             _databaseContext.EnsureDatabaseIsCreated();
 
@@ -133,7 +117,9 @@ namespace BookingHelper.ViewModels
             SelectedDate = DateTime.Today;
             LoadBookingsForSelectedDate();
             InitializeBreakRegulations();
-            await CheckForUpdates().ConfigureAwait(false);
+
+            _messenger.Send(new PrepareNewEntryMessage());
+            return Task.FromResult<object>(null);
         }
 
         private TimeSpan? CalculateEstimatedHomeTime()
@@ -141,7 +127,7 @@ namespace BookingHelper.ViewModels
             var startTime = BookingContainer.Min(b => b.StartTime);
 
             return startTime.HasValue
-                ? startTime.Value + TimeSpan.FromHours(8 - TotalEffortNetToday)
+                ? startTime.Value + TimeSpan.FromHours(8 - (TotalEffortGrossToday - TotalEffortNetToday))
                 : (TimeSpan?)null;
         }
 
@@ -154,13 +140,6 @@ namespace BookingHelper.ViewModels
                 .Sum(e => e.EffortTimeInHours);
 
             return netEffort ?? 0;
-        }
-
-        private async Task CheckForUpdates()
-        {
-            IsUpdateAvailable = await _updateChecker
-                .IsUpdateAvailable()
-                .ConfigureAwait(true);
         }
 
         private void DeleteBooking(BookingModel booking)
@@ -226,16 +205,6 @@ namespace BookingHelper.ViewModels
             }
         }
 
-        private void RedirectToApplicationWebsite()
-        {
-            var appWebsite = _updateChecker.ApplicationProductPage;
-
-            if (appWebsite != null)
-            {
-                _process.Start(appWebsite.AbsoluteUri);
-            }
-        }
-
         private void SaveBooking()
         {
             Debug.Assert(SelectedDate.HasValue, "A valid date is a precondition for the command execution.");
@@ -249,6 +218,8 @@ namespace BookingHelper.ViewModels
 
             BookingContainer.Add(CurrentBooking);
             CurrentBooking = new BookingModel();
+
+            _messenger.Send(new PrepareNewEntryMessage());
         }
 
         private void SaveChangedBooking(object sender, NotifyInnerElementChangedEventArgs e)

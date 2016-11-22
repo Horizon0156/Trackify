@@ -7,10 +7,11 @@
                    xmlns:localBehavior="clr-namespace:BookingHelper.Behavior"
                    xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                    xmlns:metroBehaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+                   xmlns:resx="clr-namespace:BookingHelper.Resources"
                    xmlns:system="clr-namespace:System;assembly=mscorlib"
                    xmlns:vm="clr-namespace:BookingHelper.ViewModels"
                    x:Name="Root"
-                   Title="Booking Helper"
+                   Title="{x:Static resx:CultureDependedTexts.Title}"
                    Width="300"
                    Height="380"
                    MinWidth="280"
@@ -36,7 +37,6 @@
             <system:Double x:Key="DailyWorkHours">8.00</system:Double>
             <converter:TotalEffortToColorConverter x:Key="TotalEffortToColorConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-
             <DataTemplate x:Key="EffortTemplate" DataType="{x:Type vm:Effort}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -190,7 +190,8 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0"
+                    <TextBox x:Name="StartTimeBox"
+                             Grid.Column="0"
                              Width="45"
                              Margin="5"
                              VerticalContentAlignment="Center"
@@ -228,7 +229,7 @@
                              HorizontalAlignment="Stretch"
                              VerticalContentAlignment="Center"
                              metro:TextBoxHelper.SelectAllOnFocus="True"
-                             metro:TextBoxHelper.Watermark="Description"
+                             metro:TextBoxHelper.Watermark="{x:Static resx:CultureDependedTexts.Description}"
                              Text="{Binding CurrentBooking.Description,
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=PropertyChanged}">
@@ -260,7 +261,7 @@
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Visible">
             <StackPanel Margin="5" Orientation="Vertical">
-                <TextBlock Text="Bookings:" />
+                <TextBlock Text="{x:Static resx:CultureDependedTexts.Bookings}" />
                 <ItemsControl Focusable="False"
                               Grid.IsSharedSizeScope="True"
                               ItemTemplate="{StaticResource EffortTemplate}"
@@ -279,27 +280,9 @@
                        Margin="5 0 0 0"
                        VerticalAlignment="Center"
                        DockPanel.Dock="Right"
-                       Fill="White"
-                       Visibility="{Binding IsUpdateAvailable,
-                                            Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Rectangle.ToolTip>
-                    <TextBlock Text="A newer version is available for download." />
-                </Rectangle.ToolTip>
-                <Rectangle.OpacityMask>
-                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_globe}" />
-                </Rectangle.OpacityMask>
-                <Rectangle.InputBindings>
-                    <MouseBinding Command="{Binding GetUpdateCommand}" Gesture="LeftClick" />
-                </Rectangle.InputBindings>
-            </Rectangle>
-            <Rectangle Width="15"
-                       Height="15"
-                       Margin="5 0 0 0"
-                       VerticalAlignment="Center"
-                       DockPanel.Dock="Right"
                        Fill="White">
                 <Rectangle.ToolTip>
-                    <TextBlock Text="{Binding HomeTime, StringFormat='Home time: {0:hh\\:mm}', TargetNullValue='Track a time first...'}" />
+                    <TextBlock Text="{Binding HomeTime, StringFormat={x:Static resx:CultureDependedTexts.HomeTimeSnippet}}" />
                 </Rectangle.ToolTip>
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_clock}" />
@@ -313,7 +296,7 @@
                 <Rectangle.ToolTip>
                     <TextBlock>
                         <TextBlock.Text>
-                            <MultiBinding StringFormat="Vorgeschriebene Pausenzeit: {0:N2} h&#x0a;Summe inkl. Pause: {1:N2} h&#x0a;Summe exkl. Pause: {2:N2} h">
+                            <MultiBinding StringFormat="{x:Static resx:CultureDependedTexts.BreakTimeSnippet}">
                                 <Binding Path="MandatoryBreakTime" />
                                 <Binding Path="TotalEffortGrossToday" />
                                 <Binding Path="TotalEffortNetToday" />

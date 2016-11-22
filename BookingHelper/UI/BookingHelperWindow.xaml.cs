@@ -1,11 +1,11 @@
-﻿using BookingHelper.ViewModels;
+﻿using BookingHelper.Messages;
+using BookingHelper.Resources;
+using BookingHelper.ViewModels;
+using log4net;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using BookingHelper.Resources;
-using Horizon.Framework.Services;
-using log4net;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace BookingHelper.UI
 {
@@ -21,34 +21,27 @@ namespace BookingHelper.UI
             DataContext = dataContext;
         }
 
-        private void PrefillWithCurrentTimeIfEmpty(object sender, RoutedEventArgs e)
+        public void PrepareNewEntry(PrepareNewEntryMessage message)
         {
-            var textbox = (TextBox) sender;
-
-            if (string.IsNullOrEmpty(textbox.Text))
-            {
-                textbox.Text = DateTime.Now.TimeOfDay.ToString(@"hh\:mm");
-            }
-        }
-
-        public async void HandleMessageAnnouncement(object sender, MessageEventArgs e)
-        {
-            var style = e.ButtonSetup == MessageButtonSetup.Affirmitive
-                ? MessageDialogStyle.Affirmative
-                : MessageDialogStyle.AffirmativeAndNegative;
-
-            var result = await this.ShowMessageAsync(e.Title, e.Message, style);
-            e.Result = result == MessageDialogResult.Affirmative
-                ? MessageResult.Affirmitive
-                : MessageResult.Negative;
+            StartTimeBox.Focus();
         }
 
         private async void LogExceptionAndTerminateApplication(object sender, UnhandledExceptionEventArgs e)
         {
             _logger.Fatal("Failed to initialize application", e.ExceptionObject as Exception);
-            
+
             await this.ShowMessageAsync("(╯°□°）╯︵ ┻━┻", CultureDependedTexts.InitializationFailure);
             Environment.Exit(-1);
+        }
+
+        private void PrefillWithCurrentTimeIfEmpty(object sender, RoutedEventArgs e)
+        {
+            var textbox = (TextBox)sender;
+
+            if (string.IsNullOrEmpty(textbox.Text))
+            {
+                textbox.Text = DateTime.Now.TimeOfDay.ToString(@"hh\:mm");
+            }
         }
     }
 }

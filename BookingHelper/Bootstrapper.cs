@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BookingHelper.DataModels;
-using BookingHelper.Deployment;
 using BookingHelper.Mocks;
 using BookingHelper.UI;
 using BookingHelper.ViewModels;
@@ -10,6 +9,7 @@ using SimpleInjector;
 using System;
 using System.Reflection;
 using System.Windows;
+using BookingHelper.Messages;
 using Horizon.Framework.Extensions;
 using Horizon.Framework.Services;
 using log4net;
@@ -19,8 +19,7 @@ namespace BookingHelper
     internal static class Bootstrapper
     {
         private static readonly Container _container = new Container();
-        private static readonly DialogService _dialogService = new DialogService();
-        private static readonly MessageServiceEventManager _messageService = new MessageServiceEventManager();
+        private static readonly MessageHub _messageHub = new MessageHub();
 
         [STAThread]
         public static int Main()
@@ -30,7 +29,6 @@ namespace BookingHelper
 
             InitializeMetroTheme(app);
             InitializeMappings();
-            InitializeDialogService();
             InitializeDependencyInjection();
 
             return app.Run();
@@ -38,19 +36,12 @@ namespace BookingHelper
 
         private static void InitializeDependencyInjection()
         {
-            _container.RegisterSingleton<IDialogService>(_dialogService);
-            _container.RegisterSingleton<IMessageService>(_messageService);
+            _container.RegisterSingleton<IMessenger>(_messageHub);
             _container.RegisterSingleton<ICommandFactory, CommandFactory>();
             _container.Register<IBookingsContext, BookingsContext>();
             _container.Register<IProcess, Process>();
-            _container.Register<IUpdateChecker, DummyUpdateChecker>();
 
             _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
-        }
-
-        private static void InitializeDialogService()
-        {
-            _dialogService.RegisterCustomWindowActivator(t => (Window)_container.GetInstance(t));
         }
 
         private static void InitializeMappings()
@@ -78,9 +69,7 @@ namespace BookingHelper
         private static void ShowMainWindow(object sender, StartupEventArgs e)
         {
             var window = _container.GetInstance<BookingHelperWindow>();
-
-            _dialogService.RegisterMainWindow(window);
-            _messageService.MessageAnnouncement += window.HandleMessageAnnouncement;
+            _messageHub.Register<PrepareNewEntryMessage>(window.PrepareNewEntry);
 
             window.Show();
         }
