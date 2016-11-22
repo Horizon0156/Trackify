@@ -190,7 +190,8 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0"
+                    <TextBox x:Name="StartTimeBox"
+                             Grid.Column="0"
                              Width="45"
                              Margin="5"
                              VerticalContentAlignment="Center"
@@ -274,24 +275,6 @@
                         BorderThickness="0"
                         DockPanel.Dock="Left"
                         SelectedDate="{Binding SelectedDate}" />
-            <Rectangle Width="15"
-                       Height="15"
-                       Margin="5 0 0 0"
-                       VerticalAlignment="Center"
-                       DockPanel.Dock="Right"
-                       Fill="White"
-                       Visibility="{Binding IsUpdateAvailable,
-                                            Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Rectangle.ToolTip>
-                    <TextBlock Text="A newer version is available for download." />
-                </Rectangle.ToolTip>
-                <Rectangle.OpacityMask>
-                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_globe}" />
-                </Rectangle.OpacityMask>
-                <Rectangle.InputBindings>
-                    <MouseBinding Command="{Binding GetUpdateCommand}" Gesture="LeftClick" />
-                </Rectangle.InputBindings>
-            </Rectangle>
             <Rectangle Width="15"
                        Height="15"
                        Margin="5 0 0 0"

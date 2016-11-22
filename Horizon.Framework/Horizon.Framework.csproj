@@ -56,14 +56,7 @@
   <ItemGroup>
     <Compile Include="Behaviors\DataContextInitializationBehavior.cs" />
     <Compile Include="Mvvm\IInitializeable.cs" />
-    <Compile Include="Services\DialogService.cs" />
-    <Compile Include="Services\IDialogService.cs" />
-    <Compile Include="Services\IMessageService.cs" />
-    <Compile Include="Services\MessageButtonSetup.cs" />
-    <Compile Include="Services\MessageEventArgs.cs" />
-    <Compile Include="Services\MessageResult.cs" />
-    <Compile Include="Services\MessageServiceEventManager.cs" />
-    <Compile Include="Services\WindowManager.cs" />
+    <Compile Include="Services\IMessenger.cs" />
     <Compile Include="Exceptions\Throw.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Mvvm\AsyncCommand.cs" />
@@ -82,6 +75,7 @@
     <Compile Include="Collections\AttentiveCollection.cs" />
     <Compile Include="Collections\NotifyInnerElementChangedEventArgs.cs" />
     <Compile Include="Extensions\ApplicationExtensions.cs" />
+    <Compile Include="Services\MessageHub.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Horizon777.pfx" />
