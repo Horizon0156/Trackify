@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using BookingHelper.DataModels;
+using BookingHelper.Messages;
 using BookingHelper.Mocks;
 using BookingHelper.Resources;
 using Horizon.Framework.Collections;
 using Horizon.Framework.Mvvm;
+using Horizon.Framework.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -12,8 +14,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using BookingHelper.Messages;
-using Horizon.Framework.Services;
 
 namespace BookingHelper.ViewModels
 {
@@ -21,8 +21,8 @@ namespace BookingHelper.ViewModels
     {
         private readonly ICommandFactory _commandFactory;
         private readonly IBookingsContext _databaseContext;
-        private readonly IProcess _process;
         private readonly IMessenger _messenger;
+        private readonly IProcess _process;
         private AttentiveCollection<BookingModel> _bookingContainer;
         private List<BreakRegulation> _breakRegulations;
         private BookingModel _currentBooking;
@@ -209,6 +209,7 @@ namespace BookingHelper.ViewModels
         {
             Debug.Assert(SelectedDate.HasValue, "A valid date is a precondition for the command execution.");
 
+            // ReSharper disable once PossibleInvalidOperationException Value is availbale
             CurrentBooking.Date = SelectedDate.Value;
             var bookingDto = Mapper.Map<Booking>(CurrentBooking);
 

@@ -3,8 +3,10 @@
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:behaviors="clr-namespace:Horizon.Framework.Behaviors;assembly=Horizon.Framework"
                    xmlns:converter="clr-namespace:BookingHelper.Converter"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                    xmlns:localBehavior="clr-namespace:BookingHelper.Behavior"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                    xmlns:metroBehaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                    xmlns:resx="clr-namespace:BookingHelper.Resources"
@@ -16,10 +18,12 @@
                    Height="380"
                    MinWidth="280"
                    MinHeight="300"
+                   d:DataContext="{d:DesignInstance vm:BookingHelperViewModel}"
                    x:ClassModifier="internal"
                    BorderBrush="{DynamicResource AccentColorBrush}"
                    BorderThickness="1"
-                   SaveWindowPosition="True">
+                   SaveWindowPosition="True"
+                   mc:Ignorable="d">
     <i:Interaction.Behaviors>
         <behaviors:DataContextInitializationBehavior UnhandledException="LogExceptionAndTerminateApplication" />
         <behaviors:MinimizeToTrayBehavior />
