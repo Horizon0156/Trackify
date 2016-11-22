@@ -99,6 +99,15 @@ namespace BookingHelper.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go home!!!.
+        /// </summary>
+        public static string GoHome {
+            get {
+                return ResourceManager.GetString("GoHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Track a time first....
         /// </summary>
         public static string HomeTimePlaceholder {
@@ -108,7 +117,7 @@ namespace BookingHelper.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Home time: {0:hh\\:mm}.
+        ///   Looks up a localized string similar to Home time: {0:hh\:mm}.
         /// </summary>
         public static string HomeTimeSnippet {
             get {
@@ -117,7 +126,8 @@ namespace BookingHelper.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to initialize application. Please have a look at the logs to get further information..
+        ///   Looks up a localized string similar to Failed to initialize application.
+        ///Please have a look at the logs to get further information..
         /// </summary>
         public static string InitializationFailure {
             get {

@@ -141,7 +141,7 @@ namespace BookingHelper.ViewModels
             var startTime = BookingContainer.Min(b => b.StartTime);
 
             return startTime.HasValue
-                ? startTime.Value + TimeSpan.FromHours(8 - TotalEffortNetToday)
+                ? startTime.Value + TimeSpan.FromHours(8 - (TotalEffortGrossToday - TotalEffortNetToday))
                 : (TimeSpan?)null;
         }
 

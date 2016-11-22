@@ -37,7 +37,6 @@
             <system:Double x:Key="DailyWorkHours">8.00</system:Double>
             <converter:TotalEffortToColorConverter x:Key="TotalEffortToColorConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-
             <DataTemplate x:Key="EffortTemplate" DataType="{x:Type vm:Effort}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -300,7 +299,7 @@
                        DockPanel.Dock="Right"
                        Fill="White">
                 <Rectangle.ToolTip>
-                    <TextBlock Text="{Binding HomeTime, StringFormat={x:Static resx:CultureDependedTexts.HomeTimeSnippet}, TargetNullValue={x:Static resx:CultureDependedTexts.HomeTimePlaceholder}}" />
+                    <TextBlock Text="{Binding HomeTime, StringFormat={x:Static resx:CultureDependedTexts.HomeTimeSnippet}}" />
                 </Rectangle.ToolTip>
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_clock}" />
