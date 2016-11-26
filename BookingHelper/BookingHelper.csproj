@@ -74,6 +74,18 @@
       <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Horizon.MvvmFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2596b24509c660de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Horizon.MvvmFramework.1.0.0\lib\portable45-net45+win8\Horizon.MvvmFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Horizon.MvvmFramework.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2596b24509c660de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Horizon.MvvmFramework.Wpf.1.0.0\lib\net452\Horizon.MvvmFramework.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\net\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -222,12 +234,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Horizon.Framework\Horizon.Framework.csproj">
-      <Project>{0cfa19f2-cb92-49c3-a37a-6858875d7412}</Project>
-      <Name>Horizon.Framework</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icon.ico" />

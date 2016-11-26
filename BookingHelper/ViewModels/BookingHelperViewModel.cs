@@ -3,9 +3,6 @@ using BookingHelper.DataModels;
 using BookingHelper.Messages;
 using BookingHelper.Mocks;
 using BookingHelper.Resources;
-using Horizon.Framework.Collections;
-using Horizon.Framework.Mvvm;
-using Horizon.Framework.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -14,6 +11,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Horizon.MvvmFramework.Collections;
+using Horizon.MvvmFramework.Commands;
+using Horizon.MvvmFramework.Components;
+using Horizon.MvvmFramework.Services;
 
 namespace BookingHelper.ViewModels
 {

@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "targets": {
+    ".NETPortable,Version=v4.5,Profile=Profile7": {
+      "JetBrains.Annotations/10.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/JetBrains.Annotations.PCL328.dll": {}
+        },
+        "runtime": {
+          "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/JetBrains.Annotations.PCL328.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "JetBrains.Annotations/10.1.5": {
+      "sha512": "KiXBIMNAnxXGNygFeBh81ncTXEqf/8U7o76gbYCdtfx6W6XDLUBKNOTUlE0HakPqCf4FBEx9YPq7gm5O5Eb1Vg==",
+      "type": "package",
+      "path": "jetbrains.annotations/10.1.5",
+      "files": [
+        "jetbrains.annotations.10.1.5.nupkg.sha512",
+        "jetbrains.annotations.nuspec",
+        "lib/dotnet/JetBrains.Annotations.Dotnet.dll",
+        "lib/net/JetBrains.Annotations.dll",
+        "lib/net/JetBrains.Annotations.xml",
+        "lib/portable-net4+sl4+wp7+netcore45/JetBrains.Annotations.PCL1.dll",
+        "lib/portable-net4+sl4+wp7+netcore45/JetBrains.Annotations.PCL1.xml",
+        "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/JetBrains.Annotations.PCL328.dll",
+        "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/JetBrains.Annotations.PCL328.xml"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "JetBrains.Annotations >= 10.1.5"
+    ],
+    ".NETPortable,Version=v4.5,Profile=Profile7": []
+  },
+  "tools": {},
+  "projectFileToolGroups": {},
+  "packageFolders": {
+    "C:\\Users\\Stefan\\.nuget\\packages\\": {}
+  }
+}

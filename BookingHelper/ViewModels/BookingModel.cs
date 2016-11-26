@@ -1,4 +1,4 @@
-﻿using Horizon.Framework.Mvvm;
+﻿using Horizon.MvvmFramework.Components;
 using System;
 
 namespace BookingHelper.ViewModels

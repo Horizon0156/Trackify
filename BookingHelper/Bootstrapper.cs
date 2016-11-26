@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
 using BookingHelper.DataModels;
+using BookingHelper.Messages;
 using BookingHelper.Mocks;
 using BookingHelper.UI;
 using BookingHelper.ViewModels;
-using Horizon.Framework.Mvvm;
+using Horizon.MvvmFramework.Commands;
+using Horizon.MvvmFramework.Services;
+using Horizon.MvvmFramework.Wpf.Extensions;
+using log4net;
 using MahApps.Metro;
 using SimpleInjector;
 using System;
 using System.Reflection;
 using System.Windows;
-using BookingHelper.Messages;
-using Horizon.Framework.Extensions;
-using Horizon.Framework.Services;
-using log4net;
 
 namespace BookingHelper
 {

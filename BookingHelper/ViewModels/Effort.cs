@@ -1,7 +1,8 @@
-﻿using Horizon.Framework.Mvvm;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using Horizon.MvvmFramework.Commands;
+using Horizon.MvvmFramework.Components;
 
 namespace BookingHelper.ViewModels
 {
