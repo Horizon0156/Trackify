@@ -25,7 +25,7 @@
                    SaveWindowPosition="True"
                    mc:Ignorable="d">
     <i:Interaction.Behaviors>
-        <behaviors:DataContextInitializationBehavior UnhandledException="LogExceptionAndTerminateApplication" />
+        <behaviors:ViewModelBehavior UnhandledException="LogExceptionAndTerminateApplication" />
         <behaviors:MinimizeToTrayBehavior />
         <metroBehaviours:BorderlessWindowBehavior />
         <metroBehaviours:WindowsSettingBehaviour />
@@ -171,6 +171,19 @@
             </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
+    <metro:MetroWindow.RightWindowCommands>
+        <metro:WindowCommands>
+            <Button Command="{Binding SettingsCommand}">
+                <Rectangle Width="15"
+                           Height="15"
+                           Fill="White">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_settings}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+        </metro:WindowCommands>
+    </metro:MetroWindow.RightWindowCommands>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

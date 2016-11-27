@@ -3,22 +3,22 @@ using BookingHelper.DataModels;
 using BookingHelper.Messages;
 using BookingHelper.Mocks;
 using BookingHelper.Resources;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Horizon.MvvmFramework.Collections;
 using Horizon.MvvmFramework.Commands;
 using Horizon.MvvmFramework.Components;
 using Horizon.MvvmFramework.Services;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Input;
 
 namespace BookingHelper.ViewModels
 {
-    internal class BookingHelperViewModel : ViewModel, IInitializeable
+    internal class BookingHelperViewModel : ViewModel
     {
         private readonly ICommandFactory _commandFactory;
         private readonly IBookingsContext _databaseContext;
@@ -29,16 +29,21 @@ namespace BookingHelper.ViewModels
         private BookingModel _currentBooking;
         private IEnumerable<Effort> _efforts;
         private DateTime? _selectedDate;
+        private ISettings _settings;
 
-        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IProcess process, IMessenger messenger)
+        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IProcess process, IMessenger messenger, ISettings settings)
         {
             _databaseContext = bookingsContext;
             _commandFactory = commandFactory;
             _process = process;
             _messenger = messenger;
+            _settings = settings;
 
             SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
+            SettingsCommand = commandFactory.CreateCommand(OpenSettings);
             DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
+
+            InitializeContent();
         }
 
         public AttentiveCollection<BookingModel> BookingContainer
@@ -105,11 +110,13 @@ namespace BookingHelper.ViewModels
             }
         }
 
+        public ICommand SettingsCommand { get; }
+
         public double TotalEffortGrossToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
 
         public double TotalEffortNetToday => CalculateNetEffortForToday();
 
-        public Task InitializeAsync()
+        public void InitializeContent()
         {
             _databaseContext.EnsureDatabaseIsCreated();
 
@@ -120,7 +127,6 @@ namespace BookingHelper.ViewModels
             InitializeBreakRegulations();
 
             _messenger.Send(new PrepareNewEntryMessage());
-            return Task.FromResult<object>(null);
         }
 
         private TimeSpan? CalculateEstimatedHomeTime()
@@ -128,7 +134,7 @@ namespace BookingHelper.ViewModels
             var startTime = BookingContainer.Min(b => b.StartTime);
 
             return startTime.HasValue
-                ? startTime.Value + TimeSpan.FromHours(8 - (TotalEffortGrossToday - TotalEffortNetToday))
+                ? startTime.Value + TimeSpan.FromHours(8 + (TotalEffortGrossToday - TotalEffortNetToday))
                 : (TimeSpan?)null;
         }
 
@@ -206,6 +212,14 @@ namespace BookingHelper.ViewModels
             }
         }
 
+        private void OpenSettings()
+        {
+            var settingsModel = new SettingsViewModel(_messenger, _settings);
+            settingsModel.BreakRegulations = new ObservableCollection<BreakRegulation>(_breakRegulations);
+
+            _messenger.Send(settingsModel);
+        }
+
         private void SaveBooking()
         {
             Debug.Assert(SelectedDate.HasValue, "A valid date is a precondition for the command execution.");
@@ -240,7 +254,7 @@ namespace BookingHelper.ViewModels
         {
             Efforts = BookingContainer
                     .GroupBy(b => b.Description)
-                    .Select(g => new Effort(_commandFactory, g.ToList()).RoundEffort(0.25));
+                    .Select(g => new Effort(_commandFactory, g.ToList()).RoundEffort(_settings.BookingTimeInterval));
         }
 
         private void UpdateEffort(object sender, NotifyCollectionChangedEventArgs e)

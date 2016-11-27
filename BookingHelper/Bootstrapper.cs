@@ -13,65 +13,75 @@ using SimpleInjector;
 using System;
 using System.Reflection;
 using System.Windows;
+using BookingHelper.Properties;
 
 namespace BookingHelper
 {
-    internal static class Bootstrapper
+    internal class Bootstrapper : Application
     {
-        private static readonly Container _container = new Container();
-        private static readonly MessageHub _messageHub = new MessageHub();
+        private readonly Container _container;
+        private readonly MessageHub _messageHub;
+
+        private Bootstrapper()
+        {
+            _container = new Container();
+            _messageHub = new MessageHub();
+        }
 
         [STAThread]
         public static int Main()
         {
-            var app = new Application();
-            app.Startup += ShowMainWindow;
-
-            InitializeMetroTheme(app);
-            InitializeMappings();
-            InitializeDependencyInjection();
+            var app = new Bootstrapper();
+            app.InitializeDependencyInjection();
+            app.InitializeMetroTheme();
+            app.InitializeMappings();
 
             return app.Run();
         }
 
-        private static void InitializeDependencyInjection()
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            _container.GetInstance<BookingHelperWindow>().Show();
+        }
+
+        private void ChangeAppStyle(AccentColorChangedMessage message)
+        {
+            ThemeManager.ChangeAppStyle(
+                this,
+                ThemeManager.GetAccent(message.NewAccentColor),
+                ThemeManager.GetAppTheme("BaseDark"));
+        }
+
+        private void InitializeDependencyInjection()
         {
             _container.RegisterSingleton<IMessenger>(_messageHub);
             _container.RegisterSingleton<ICommandFactory, CommandFactory>();
+            _container.RegisterSingleton<ISettings, UserSettings>();
             _container.Register<IBookingsContext, BookingsContext>();
             _container.Register<IProcess, Process>();
-
             _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
         }
 
-        private static void InitializeMappings()
+        private void InitializeMappings()
         {
             Mapper.Initialize(config => config.CreateMap<Booking, BookingModel>().ReverseMap());
             Mapper.AssertConfigurationIsValid();
         }
 
-        private static void InitializeMetroTheme(Application app)
+        private void InitializeMetroTheme()
         {
-            app.InjectResourceDictionary("MahApps.Metro", "Styles/Controls.xaml");
-            app.InjectResourceDictionary("MahApps.Metro", "Styles/Fonts.xaml");
-            app.InjectResourceDictionary("MahApps.Metro", "Styles/Colors.xaml");
+            this.InjectResourceDictionary("MahApps.Metro", "Styles/Controls.xaml");
+            this.InjectResourceDictionary("MahApps.Metro", "Styles/Fonts.xaml");
+            this.InjectResourceDictionary("MahApps.Metro", "Styles/Colors.xaml");
 
             // Setting unused Accents is required to theme the message box properly
-            app.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/Blue.xaml");
-            app.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/BaseLight.xaml");
+            this.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/Blue.xaml");
+            this.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/BaseLight.xaml");
 
-            ThemeManager.ChangeAppStyle(
-                app,
-                ThemeManager.GetAccent("Red"),
-                ThemeManager.GetAppTheme("BaseDark"));
-        }
-
-        private static void ShowMainWindow(object sender, StartupEventArgs e)
-        {
-            var window = _container.GetInstance<BookingHelperWindow>();
-            _messageHub.Register<PrepareNewEntryMessage>(window.PrepareNewEntry);
-
-            window.Show();
+            var settings = _container.GetInstance<ISettings>();
+            _messageHub.Register<AccentColorChangedMessage>(ChangeAppStyle);
+            ChangeAppStyle(new AccentColorChangedMessage(settings.AccentColor));
         }
     }
 }

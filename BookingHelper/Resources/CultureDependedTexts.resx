@@ -145,6 +145,9 @@ Sum excl. breaks: {2:N2} h</value>
     <value>Failed to initialize application.
 Please have a look at the logs to get further information.</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
   <data name="Title" xml:space="preserve">
     <value>Booking Helper</value>
   </data>
