@@ -2,7 +2,7 @@
 Name "Booking Helper"
 
 ; The file to write
-OutFile "BookingHelper0.8_Setup.exe"
+OutFile "BookingHelper0.9_Setup.exe"
 
 ; The default installation directory
 InstallDir "$PROGRAMFILES\Booking Helper"
@@ -43,7 +43,7 @@ Section "Booking Helper (required)"
   
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\BookingHelper" "DisplayName" "Booking Helper"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\BookingHelper" "DisplayVersion" "0.8"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\BookingHelper" "DisplayVersion" "0.9"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\BookingHelper" "Publisher" "Horizon777"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\BookingHelper" "UninstallString" '"$INSTDIR\Uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\BookingHelper" "NoModify" 1
