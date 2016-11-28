@@ -20,6 +20,8 @@
                    BorderBrush="{DynamicResource AccentColorBrush}"
                    BorderThickness="1"
                    SaveWindowPosition="True"
+                   ShowMinButton="False"
+                   ShowMaxRestoreButton="False"
                    mc:Ignorable="d">
     <i:Interaction.Behaviors>
         <behaviors:ViewModelBehavior />
@@ -61,7 +63,7 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    VerticalAlignment="Center"
-                   Text="Accent color: " />
+                   Text="{x:Static resx:CultureDependedTexts.AccentColor}" />
 
         <ComboBox Grid.Row="0"
                   Grid.Column="2"
@@ -71,7 +73,7 @@
         <TextBlock Grid.Row="2"
                    Grid.Column="0"
                    VerticalAlignment="Center"
-                   Text="Booking time interval: " />
+                   Text="{x:Static resx:CultureDependedTexts.BookingTimeInterval}" />
 
         <metro:NumericUpDown Grid.Row="2"
                              Grid.Column="2"
@@ -81,33 +83,33 @@
         <TextBlock Grid.Row="4"
                    Grid.Column="0"
                    Grid.ColumnSpan="3"
-                   Text="Database: " />
+                   Text="{x:Static resx:CultureDependedTexts.Database}" />
         <TextBlock Grid.Row="6"
                    Grid.Column="0"
                    Margin="10 0 0 0"
-                   Text="Bookings: " />
+                   Text="{x:Static resx:CultureDependedTexts.Bookings}" />
         <TextBlock Grid.Row="6"
                    Grid.Column="2"
                    Text="{Binding NumberOfBookings}" />
         <TextBlock Grid.Row="8"
                    Grid.Column="0"
                    Margin="10 0 0 0"
-                   Text="Backup: " />
+                   Text="{x:Static resx:CultureDependedTexts.Backup}" />
         <Button Grid.Row="8"
                 Grid.Column="2"
                 Command="{Binding LocateDatabaseCommand}"
-                Content="Locate in explorer" />
+                Content="{x:Static resx:CultureDependedTexts.LocateInExplorer}" />
         <Button Grid.Row="10"
                 Grid.Column="2"
                 Command="{Binding ReloadDatabaseCommand}"
-                Content="Reload" />
+                Content="{x:Static resx:CultureDependedTexts.Reload}" />
         <TextBlock Grid.Row="12"
                    Grid.Column="0"
                    Margin="10 0 0 0"
-                   Text="Reset: " />
+                   Text="{x:Static resx:CultureDependedTexts.Reset}" />
         <Button Grid.Row="12"
                 Grid.Column="2"
                 Command="{Binding ResetDatabaseCommand}"
-                Content="Reset data" />
+                Content="{x:Static resx:CultureDependedTexts.ResetData}" />
     </Grid>
 </metro:MetroWindow>

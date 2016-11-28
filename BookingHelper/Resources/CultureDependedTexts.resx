@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccentColor" xml:space="preserve">
+    <value>Accent color:</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Backup:</value>
+  </data>
   <data name="Bookings" xml:space="preserve">
     <value>Bookings:</value>
+  </data>
+  <data name="BookingTimeInterval" xml:space="preserve">
+    <value>Booking time interval:</value>
   </data>
   <data name="BreakDescritption" xml:space="preserve">
     <value>Pause|Break</value>
@@ -127,6 +136,9 @@
   <data name="BreakTimeSnippet" xml:space="preserve">
     <value>Sum incl. breaks: {1:N2} h
 Sum excl. breaks: {2:N2} h</value>
+  </data>
+  <data name="Database" xml:space="preserve">
+    <value>Database:</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
@@ -143,6 +155,18 @@ Sum excl. breaks: {2:N2} h</value>
   <data name="InitializationFailure" xml:space="preserve">
     <value>Failed to initialize application.
 Please have a look at the logs to get further information.</value>
+  </data>
+  <data name="LocateInExplorer" xml:space="preserve">
+    <value>Locate in Explorer</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset:</value>
+  </data>
+  <data name="ResetData" xml:space="preserve">
+    <value>Reset data</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
