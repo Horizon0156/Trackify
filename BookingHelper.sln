@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.25618.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingHelper", "BookingHelper\BookingHelper.csproj", "{EFDA66A3-071C-403E-8C0D-06522D295759}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horizon.Framework", "Horizon.Framework\Horizon.Framework.csproj", "{0CFA19F2-CB92-49C3-A37A-6858875D7412}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingHelper.Setup", "BookingHelper.Setup\BookingHelper.Setup.csproj", "{FBC68039-CD21-4B0B-B2A5-FC251DF20D8C}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{EFDA66A3-071C-403E-8C0D-06522D295759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFDA66A3-071C-403E-8C0D-06522D295759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFDA66A3-071C-403E-8C0D-06522D295759}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0CFA19F2-CB92-49C3-A37A-6858875D7412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0CFA19F2-CB92-49C3-A37A-6858875D7412}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0CFA19F2-CB92-49C3-A37A-6858875D7412}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0CFA19F2-CB92-49C3-A37A-6858875D7412}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FBC68039-CD21-4B0B-B2A5-FC251DF20D8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FBC68039-CD21-4B0B-B2A5-FC251DF20D8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBC68039-CD21-4B0B-B2A5-FC251DF20D8C}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.IO;
-using System.Net.Mime;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingHelper.DataModels
 {
@@ -9,17 +8,30 @@ namespace BookingHelper.DataModels
     {
         public DbSet<Booking> Bookings { get; set; }
 
+        public string StorageLocation { get; private set; }
+
         public void EnsureDatabaseIsCreated()
         {
             Database.EnsureCreated();
         }
 
+        void IBookingsContext.SaveChanges()
+        {
+            SaveChanges();
+        }
+
+        public void ResetBookings()
+        {
+            Bookings.RemoveRange(Bookings);
+            SaveChanges();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BookingHelper", "Data");
-            Directory.CreateDirectory(path);
+            StorageLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BookingHelper", "Data");
+            Directory.CreateDirectory(StorageLocation);
 
-            var databasePath = Path.Combine(path, "Bookings.db");
+            var databasePath = Path.Combine(StorageLocation, "Bookings.db");
             optionsBuilder.UseSqlite($"Filename={databasePath}");
         }
     }

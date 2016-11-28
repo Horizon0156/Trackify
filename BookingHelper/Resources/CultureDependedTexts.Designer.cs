@@ -61,11 +61,38 @@ namespace BookingHelper.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accent color:.
+        /// </summary>
+        public static string AccentColor {
+            get {
+                return ResourceManager.GetString("AccentColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup:.
+        /// </summary>
+        public static string Backup {
+            get {
+                return ResourceManager.GetString("Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bookings:.
         /// </summary>
         public static string Bookings {
             get {
                 return ResourceManager.GetString("Bookings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Booking time interval:.
+        /// </summary>
+        public static string BookingTimeInterval {
+            get {
+                return ResourceManager.GetString("BookingTimeInterval", resourceCulture);
             }
         }
         
@@ -79,13 +106,21 @@ namespace BookingHelper.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Legal break time: {0:N2} h
-        ///Sum incl. breaks: {1:N2} h
-        ///Sum excl. breaks: {2:N2} h.
+        ///   Looks up a localized string similar to Sum incl. breaks: {0:N2} h
+        ///Sum excl. breaks: {1:N2} h.
         /// </summary>
         public static string BreakTimeSnippet {
             get {
                 return ResourceManager.GetString("BreakTimeSnippet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Database:.
+        /// </summary>
+        public static string Database {
+            get {
+                return ResourceManager.GetString("Database", resourceCulture);
             }
         }
         
@@ -132,6 +167,51 @@ namespace BookingHelper.Resources {
         public static string InitializationFailure {
             get {
                 return ResourceManager.GetString("InitializationFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locate in Explorer.
+        /// </summary>
+        public static string LocateInExplorer {
+            get {
+                return ResourceManager.GetString("LocateInExplorer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reload.
+        /// </summary>
+        public static string Reload {
+            get {
+                return ResourceManager.GetString("Reload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset:.
+        /// </summary>
+        public static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset data.
+        /// </summary>
+        public static string ResetData {
+            get {
+                return ResourceManager.GetString("ResetData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
             }
         }
         

@@ -1,5 +1,4 @@
-﻿using BookingHelper.ViewModels;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace BookingHelper.DataModels
 {
@@ -9,6 +8,10 @@ namespace BookingHelper.DataModels
 
         void EnsureDatabaseIsCreated();
 
-        int SaveChanges();
+        void SaveChanges();
+
+        void ResetBookings();
+
+        string StorageLocation { get; }
     }
 }

@@ -74,6 +74,18 @@
       <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Horizon.MvvmFramework, Version=1.0.3.0, Culture=neutral, PublicKeyToken=2596b24509c660de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Horizon.MvvmFramework.1.0.3\lib\portable45-net45+win8\Horizon.MvvmFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Horizon.MvvmFramework.Wpf, Version=1.0.1.0, Culture=neutral, PublicKeyToken=2596b24509c660de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Horizon.MvvmFramework.Wpf.1.0.1\lib\net452\Horizon.MvvmFramework.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\net\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -181,16 +193,28 @@
     <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\Booking.cs" />
     <Compile Include="DataModels\BookingState.cs" />
+    <Compile Include="Messages\AccentColorChangedMessage.cs" />
+    <Compile Include="Messages\BookingTimeIntervalChangedMessage.cs" />
     <Compile Include="Messages\PrepareNewEntryMessage.cs" />
+    <Compile Include="Messages\DatabaseChangedMessage.cs" />
     <Compile Include="Mocks\IProcess.cs" />
+    <Compile Include="Mocks\ISettings.cs" />
     <Compile Include="Mocks\Process.cs" />
+    <Compile Include="Mocks\UserSettings.cs" />
     <Compile Include="Resources\CultureDependedTexts.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CultureDependedTexts.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\BookingModelState.cs" />
-    <Compile Include="ViewModels\BreakRegulation.cs" />
     <Compile Include="DataModels\IBookingsContext.cs" />
     <Compile Include="DataModels\BookingsContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -202,8 +226,13 @@
     <Compile Include="ViewModels\Effort.cs" />
     <Compile Include="ViewModels\BookingHelperViewModel.cs" />
     <Compile Include="ViewModels\EffortComparer.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <Page Include="Resources\UsedIcons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -212,6 +241,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </None>
+    <Page Include="Resources\AccentColors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\BookingHelperWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -224,18 +260,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Horizon.Framework\Horizon.Framework.csproj">
-      <Project>{0cfa19f2-cb92-49c3-a37a-6858875d7412}</Project>
-      <Name>Horizon.Framework</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\CultureDependedTexts.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CultureDependedTexts.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +281,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

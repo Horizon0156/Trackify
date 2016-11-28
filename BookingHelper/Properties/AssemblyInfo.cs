@@ -16,5 +16,5 @@ using System.Windows;
 [assembly: log4net.Config.XmlConfigurator]
 
 // The assembly version has following format : Major.Minor
-[assembly: AssemblyVersion("0.8")]
+[assembly: AssemblyVersion("0.9")]
 

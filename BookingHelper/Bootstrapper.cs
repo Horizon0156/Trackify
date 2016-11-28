@@ -1,77 +1,89 @@
 ﻿using AutoMapper;
 using BookingHelper.DataModels;
+using BookingHelper.Messages;
 using BookingHelper.Mocks;
 using BookingHelper.UI;
 using BookingHelper.ViewModels;
-using Horizon.Framework.Mvvm;
+using Horizon.MvvmFramework.Commands;
+using Horizon.MvvmFramework.Services;
+using Horizon.MvvmFramework.Wpf.Extensions;
+using log4net;
 using MahApps.Metro;
 using SimpleInjector;
 using System;
 using System.Reflection;
 using System.Windows;
-using BookingHelper.Messages;
-using Horizon.Framework.Extensions;
-using Horizon.Framework.Services;
-using log4net;
 
 namespace BookingHelper
 {
-    internal static class Bootstrapper
+    internal class Bootstrapper : Application
     {
-        private static readonly Container _container = new Container();
-        private static readonly MessageHub _messageHub = new MessageHub();
+        private readonly Container _container;
+        private readonly MessageHub _messageHub;
+
+        private Bootstrapper()
+        {
+            _container = new Container();
+            _messageHub = new MessageHub();
+        }
 
         [STAThread]
         public static int Main()
         {
-            var app = new Application();
-            app.Startup += ShowMainWindow;
-
-            InitializeMetroTheme(app);
-            InitializeMappings();
-            InitializeDependencyInjection();
+            var app = new Bootstrapper();
+            app.InitializeDependencyInjection();
+            app.InitializeMetroTheme();
+            app.InitializeMappings();
 
             return app.Run();
         }
 
-        private static void InitializeDependencyInjection()
+        protected override void OnStartup(StartupEventArgs e)
         {
-            _container.RegisterSingleton<IMessenger>(_messageHub);
-            _container.RegisterSingleton<ICommandFactory, CommandFactory>();
-            _container.Register<IBookingsContext, BookingsContext>();
-            _container.Register<IProcess, Process>();
-
-            _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
+            base.OnStartup(e);
+            _container.GetInstance<BookingHelperWindow>().Show();
         }
 
-        private static void InitializeMappings()
+        private void ChangeAppStyle(AccentColorChangedMessage message)
         {
-            Mapper.Initialize(config => config.CreateMap<Booking, BookingModel>().ReverseMap());
-            Mapper.AssertConfigurationIsValid();
-        }
-
-        private static void InitializeMetroTheme(Application app)
-        {
-            app.InjectResourceDictionary("MahApps.Metro", "Styles/Controls.xaml");
-            app.InjectResourceDictionary("MahApps.Metro", "Styles/Fonts.xaml");
-            app.InjectResourceDictionary("MahApps.Metro", "Styles/Colors.xaml");
-
-            // Setting unused Accents is required to theme the message box properly
-            app.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/Blue.xaml");
-            app.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/BaseLight.xaml");
-
             ThemeManager.ChangeAppStyle(
-                app,
-                ThemeManager.GetAccent("Red"),
+                this,
+                ThemeManager.GetAccent(message.NewAccentColor),
                 ThemeManager.GetAppTheme("BaseDark"));
         }
 
-        private static void ShowMainWindow(object sender, StartupEventArgs e)
+        private void InitializeDependencyInjection()
         {
-            var window = _container.GetInstance<BookingHelperWindow>();
-            _messageHub.Register<PrepareNewEntryMessage>(window.PrepareNewEntry);
+            _container.RegisterSingleton<IMessenger>(_messageHub);
+            _container.RegisterSingleton<ICommandFactory, CommandFactory>();
+            _container.RegisterSingleton<ISettings, UserSettings>();
+            _container.Register<IBookingsContext, BookingsContext>();
+            _container.Register<IProcess, Process>();
+            _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
+            _container.RegisterSingleton<Func<SettingsViewModel>>(() => _container.GetInstance<SettingsViewModel>());
+        }
 
-            window.Show();
+        private void InitializeMappings()
+        {
+            Mapper.Initialize(config => config.CreateMap<Booking, BookingModel>().ReverseMap());
+#if DEBUG
+            Mapper.AssertConfigurationIsValid();
+#endif
+        }
+
+        private void InitializeMetroTheme()
+        {
+            this.InjectResourceDictionary("MahApps.Metro", "Styles/Controls.xaml");
+            this.InjectResourceDictionary("MahApps.Metro", "Styles/Fonts.xaml");
+            this.InjectResourceDictionary("MahApps.Metro", "Styles/Colors.xaml");
+
+            // Setting unused Accents is required to theme the message box properly
+            this.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/Blue.xaml");
+            this.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/BaseLight.xaml");
+
+            var settings = _container.GetInstance<ISettings>();
+            _messageHub.Register<AccentColorChangedMessage>(ChangeAppStyle);
+            ChangeAppStyle(new AccentColorChangedMessage(settings.AccentColor));
         }
     }
 }
