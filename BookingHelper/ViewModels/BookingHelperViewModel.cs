@@ -9,7 +9,6 @@ using Horizon.MvvmFramework.Components;
 using Horizon.MvvmFramework.Services;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
@@ -25,7 +24,6 @@ namespace BookingHelper.ViewModels
         private readonly IMessenger _messenger;
         private readonly IProcess _process;
         private AttentiveCollection<BookingModel> _bookingContainer;
-        private List<BreakRegulation> _breakRegulations;
         private BookingModel _currentBooking;
         private IEnumerable<Effort> _efforts;
         private DateTime? _selectedDate;
@@ -85,15 +83,12 @@ namespace BookingHelper.ViewModels
                 // ReSharper disable ExplicitCallerInfoArgument, an update of foreign props is desired.
                 OnPropertyChanged(nameof(TotalEffortGrossToday));
                 OnPropertyChanged(nameof(TotalEffortNetToday));
-                OnPropertyChanged(nameof(MandatoryBreakTime));
                 OnPropertyChanged(nameof(HomeTime));
                 // ReSharper restore ExplicitCallerInfoArgument
             }
         }
 
         public TimeSpan? HomeTime => CalculateEstimatedHomeTime();
-
-        public double MandatoryBreakTime => GetMandatoryBreakTime();
 
         public ICommand SaveCommand { get; }
 
@@ -124,7 +119,6 @@ namespace BookingHelper.ViewModels
 
             SelectedDate = DateTime.Today;
             LoadBookingsForSelectedDate();
-            InitializeBreakRegulations();
 
             _messenger.Send(new PrepareNewEntryMessage());
         }
@@ -155,32 +149,6 @@ namespace BookingHelper.ViewModels
 
             _databaseContext.Bookings.Remove(_databaseContext.Bookings.First(b => b.Id == booking.Id));
             _databaseContext.SaveChanges();
-        }
-
-        private double GetMandatoryBreakTime()
-        {
-            double breakTime = 0;
-            foreach (var breakRegulation in _breakRegulations.OrderBy(br => br.WorkEffortLimit).ToList())
-            {
-                if (TotalEffortNetToday > breakRegulation.WorkEffortLimit)
-                {
-                    breakTime = breakRegulation.MandatoryBreakTime;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            return breakTime;
-        }
-
-        private void InitializeBreakRegulations()
-        {
-            _breakRegulations = new List<BreakRegulation>
-            {
-                new BreakRegulation(6, 0.5),
-                new BreakRegulation(9, 0.75)
-            };
         }
 
         private bool IsCurrentBookingValid()
@@ -215,8 +183,6 @@ namespace BookingHelper.ViewModels
         private void OpenSettings()
         {
             var settingsModel = new SettingsViewModel(_messenger, _settings);
-            settingsModel.BreakRegulations = new ObservableCollection<BreakRegulation>(_breakRegulations);
-
             _messenger.Send(settingsModel);
         }
 

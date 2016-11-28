@@ -74,27 +74,6 @@
         <TextBlock Grid.Row="4"
                    Grid.Column="0"
                    Grid.ColumnSpan="3"
-                   Text="Break regulations: " />
-        <DataGrid Grid.Row="6"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="3"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="True"
-                  CanUserDeleteRows="True"
-                  BorderBrush="{DynamicResource AccentColorBrush}"
-                  ItemsSource="{Binding BreakRegulations}">
-            <DataGrid.Columns>
-                <metro:DataGridNumericUpDownColumn d:DataContext="{d:DesignInstance vm:BreakRegulation}"
-                                                   Binding="{Binding WorkEffortLimit}"
-                                                   Header="Work Time"
-                                                   Interval="0.01"
-                                                   Minimum="0"/>
-                <metro:DataGridNumericUpDownColumn d:DataContext="{d:DesignInstance vm:BreakRegulation}"
-                                                   Binding="{Binding MandatoryBreakTime}"
-                                                   Header="Minimal break"
-                                                   Interval="0.01"
-                                                   Minimum="0"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                   Text="Database: " />
     </Grid>
 </metro:MetroWindow>

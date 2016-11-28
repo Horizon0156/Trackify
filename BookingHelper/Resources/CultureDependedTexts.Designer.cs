@@ -79,8 +79,7 @@ namespace BookingHelper.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Legal break time: {0:N2} h
-        ///Sum incl. breaks: {1:N2} h
+        ///   Looks up a localized string similar to Sum incl. breaks: {1:N2} h
         ///Sum excl. breaks: {2:N2} h.
         /// </summary>
         public static string BreakTimeSnippet {

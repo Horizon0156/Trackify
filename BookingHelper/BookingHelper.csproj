@@ -213,7 +213,6 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\BookingModelState.cs" />
-    <Compile Include="ViewModels\BreakRegulation.cs" />
     <Compile Include="DataModels\IBookingsContext.cs" />
     <Compile Include="DataModels\BookingsContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -265,6 +264,7 @@
     <EmbeddedResource Include="Resources\CultureDependedTexts.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CultureDependedTexts.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

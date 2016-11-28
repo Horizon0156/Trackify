@@ -314,7 +314,6 @@
                     <TextBlock>
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{x:Static resx:CultureDependedTexts.BreakTimeSnippet}">
-                                <Binding Path="MandatoryBreakTime" />
                                 <Binding Path="TotalEffortGrossToday" />
                                 <Binding Path="TotalEffortNetToday" />
                             </MultiBinding>
