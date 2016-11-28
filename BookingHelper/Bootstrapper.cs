@@ -13,7 +13,6 @@ using SimpleInjector;
 using System;
 using System.Reflection;
 using System.Windows;
-using BookingHelper.Properties;
 
 namespace BookingHelper
 {
@@ -61,12 +60,17 @@ namespace BookingHelper
             _container.Register<IBookingsContext, BookingsContext>();
             _container.Register<IProcess, Process>();
             _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
+#if DEBUG
+            _container.Verify();
+#endif
         }
 
         private void InitializeMappings()
         {
             Mapper.Initialize(config => config.CreateMap<Booking, BookingModel>().ReverseMap());
+#if DEBUG
             Mapper.AssertConfigurationIsValid();
+#endif
         }
 
         private void InitializeMetroTheme()
