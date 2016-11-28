@@ -1,5 +1,6 @@
 ﻿using Horizon.MvvmFramework.Components;
 using System;
+using JetBrains.Annotations;
 
 namespace BookingHelper.ViewModels
 {
@@ -10,7 +11,7 @@ namespace BookingHelper.ViewModels
         private TimeSpan? _startTime;
         private BookingModelState _state;
 
-        public DateTime Date { get; set; }
+        public DateTime Date { [UsedImplicitly] get; set; }
 
         public string Description
         {

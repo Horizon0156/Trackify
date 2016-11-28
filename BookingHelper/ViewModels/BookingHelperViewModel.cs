@@ -23,11 +23,11 @@ namespace BookingHelper.ViewModels
         private readonly IBookingsContext _databaseContext;
         private readonly IMessenger _messenger;
         private readonly IProcess _process;
+        private readonly ISettings _settings;
         private AttentiveCollection<BookingModel> _bookingContainer;
         private BookingModel _currentBooking;
         private IEnumerable<Effort> _efforts;
         private DateTime? _selectedDate;
-        private ISettings _settings;
 
         public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IProcess process, IMessenger messenger, ISettings settings)
         {

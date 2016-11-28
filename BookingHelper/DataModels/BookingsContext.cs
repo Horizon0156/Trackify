@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.IO;
-using System.Net.Mime;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookingHelper.DataModels
 {
@@ -12,6 +11,11 @@ namespace BookingHelper.DataModels
         public void EnsureDatabaseIsCreated()
         {
             Database.EnsureCreated();
+        }
+
+        void IBookingsContext.SaveChanges()
+        {
+            SaveChanges();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
