@@ -74,8 +74,8 @@
       <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Horizon.MvvmFramework, Version=1.0.1.0, Culture=neutral, PublicKeyToken=2596b24509c660de, processorArchitecture=MSIL">
-      <HintPath>..\packages\Horizon.MvvmFramework.1.0.1\lib\portable45-net45+win8\Horizon.MvvmFramework.dll</HintPath>
+    <Reference Include="Horizon.MvvmFramework, Version=1.0.3.0, Culture=neutral, PublicKeyToken=2596b24509c660de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Horizon.MvvmFramework.1.0.3\lib\portable45-net45+win8\Horizon.MvvmFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Horizon.MvvmFramework.Wpf, Version=1.0.1.0, Culture=neutral, PublicKeyToken=2596b24509c660de, processorArchitecture=MSIL">

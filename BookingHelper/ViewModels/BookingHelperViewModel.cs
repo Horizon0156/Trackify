@@ -10,6 +10,7 @@ using Horizon.MvvmFramework.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -40,10 +41,11 @@ namespace BookingHelper.ViewModels
             SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
             SettingsCommand = commandFactory.CreateCommand(OpenSettings);
             DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
-
-            InitializeContent();
+            
             _messenger.Register<DatabaseChangedMessage>(msg => LoadBookingsForSelectedDate());
             _messenger.Register<BookingTimeIntervalChangedMessage>(msg => UpdateEffort());
+
+            InitializeContent();
         }
 
         public AttentiveCollection<BookingModel> BookingContainer
@@ -70,7 +72,7 @@ namespace BookingHelper.ViewModels
             }
         }
 
-        public ICommand DeleteCommand { get; }
+        public INotifiableCommand DeleteCommand { get; }
 
         public IEnumerable<Effort> Efforts
         {
@@ -92,7 +94,7 @@ namespace BookingHelper.ViewModels
 
         public TimeSpan? HomeTime => CalculateEstimatedHomeTime();
 
-        public ICommand SaveCommand { get; }
+        public INotifiableCommand SaveCommand { get; }
 
         public DateTime? SelectedDate
         {
@@ -117,12 +119,10 @@ namespace BookingHelper.ViewModels
         {
             _databaseContext.EnsureDatabaseIsCreated();
 
-            CurrentBooking = new BookingModel();
-
             SelectedDate = DateTime.Today;
             LoadBookingsForSelectedDate();
 
-            _messenger.Send(new PrepareNewEntryMessage());
+            PrepareNewBooking();
         }
 
         private TimeSpan? CalculateEstimatedHomeTime()
@@ -201,9 +201,24 @@ namespace BookingHelper.ViewModels
             CurrentBooking.Id = bookingDto.Id;
 
             BookingContainer.Add(CurrentBooking);
-            CurrentBooking = new BookingModel();
+            PrepareNewBooking();
+        }
 
+        private void PrepareNewBooking()
+        {
+            if (CurrentBooking != null)
+            {
+                CurrentBooking.PropertyChanged -= NotifySaveCommand;
+            }
+
+            CurrentBooking = new BookingModel();
+            CurrentBooking.PropertyChanged += NotifySaveCommand;
             _messenger.Send(new PrepareNewEntryMessage());
+        }
+
+        private void NotifySaveCommand(object sender, PropertyChangedEventArgs e)
+        {
+            SaveCommand.NotifyChange();
         }
 
         private void SaveChangedBooking(object sender, NotifyInnerElementChangedEventArgs e)
