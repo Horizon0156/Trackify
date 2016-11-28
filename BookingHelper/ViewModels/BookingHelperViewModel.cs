@@ -22,26 +22,28 @@ namespace BookingHelper.ViewModels
         private readonly ICommandFactory _commandFactory;
         private readonly IBookingsContext _databaseContext;
         private readonly IMessenger _messenger;
-        private readonly IProcess _process;
         private readonly ISettings _settings;
+        private readonly Func<SettingsViewModel> _settingsFactory;
         private AttentiveCollection<BookingModel> _bookingContainer;
         private BookingModel _currentBooking;
         private IEnumerable<Effort> _efforts;
         private DateTime? _selectedDate;
 
-        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IProcess process, IMessenger messenger, ISettings settings)
+        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IMessenger messenger, ISettings settings, Func<SettingsViewModel> settingsFactory)
         {
             _databaseContext = bookingsContext;
             _commandFactory = commandFactory;
-            _process = process;
             _messenger = messenger;
             _settings = settings;
+            _settingsFactory = settingsFactory;
 
             SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
             SettingsCommand = commandFactory.CreateCommand(OpenSettings);
             DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
 
             InitializeContent();
+            _messenger.Register<DatabaseChangedMessage>(msg => LoadBookingsForSelectedDate());
+            _messenger.Register<BookingTimeIntervalChangedMessage>(msg => UpdateEffort());
         }
 
         public AttentiveCollection<BookingModel> BookingContainer
@@ -182,7 +184,7 @@ namespace BookingHelper.ViewModels
 
         private void OpenSettings()
         {
-            var settingsModel = new SettingsViewModel(_messenger, _settings);
+            var settingsModel = _settingsFactory.Invoke();
             _messenger.Send(settingsModel);
         }
 

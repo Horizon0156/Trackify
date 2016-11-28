@@ -2,6 +2,6 @@
 {
     internal interface IProcess
     {
-        void Start(string processPath);
+        void Start(string processPath, string arguments);
     }
 }

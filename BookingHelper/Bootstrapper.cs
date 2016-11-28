@@ -60,9 +60,10 @@ namespace BookingHelper
             _container.Register<IBookingsContext, BookingsContext>();
             _container.Register<IProcess, Process>();
             _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
-#if DEBUG
-            _container.Verify();
-#endif
+            _container.RegisterSingleton<Func<SettingsViewModel>>(() => _container.GetInstance<SettingsViewModel>());
+//#if DEBUG
+//            _container.Verify();
+//#endif
         }
 
         private void InitializeMappings()

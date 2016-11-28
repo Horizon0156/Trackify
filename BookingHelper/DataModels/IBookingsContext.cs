@@ -9,5 +9,9 @@ namespace BookingHelper.DataModels
         void EnsureDatabaseIsCreated();
 
         void SaveChanges();
+
+        void ResetBookings();
+
+        string StorageLocation { get; }
     }
 }

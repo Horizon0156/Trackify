@@ -1,7 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using BookingHelper.ViewModels;
-using MahApps.Metro;
+﻿using BookingHelper.ViewModels;
 
 namespace BookingHelper.UI
 {
@@ -12,16 +9,6 @@ namespace BookingHelper.UI
             InitializeComponent();
 
             DataContext = dataContext;
-        }
-
-        private void ChangeTheme(object sender, SelectionChangedEventArgs e)
-        {
-            var box = (ComboBox) sender;
-
-            ThemeManager.ChangeAppStyle(
-                Application.Current, 
-                ThemeManager.GetAccent(box.SelectedItem as string),
-                ThemeManager.GetAppTheme("BaseDark"));
         }
     }
 }

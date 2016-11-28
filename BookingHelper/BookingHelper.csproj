@@ -194,7 +194,9 @@
     <Compile Include="DataModels\Booking.cs" />
     <Compile Include="DataModels\BookingState.cs" />
     <Compile Include="Messages\AccentColorChangedMessage.cs" />
+    <Compile Include="Messages\BookingTimeIntervalChangedMessage.cs" />
     <Compile Include="Messages\PrepareNewEntryMessage.cs" />
+    <Compile Include="Messages\DatabaseChangedMessage.cs" />
     <Compile Include="Mocks\IProcess.cs" />
     <Compile Include="Mocks\ISettings.cs" />
     <Compile Include="Mocks\Process.cs" />
