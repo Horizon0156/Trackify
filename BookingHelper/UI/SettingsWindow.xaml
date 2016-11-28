@@ -20,8 +20,8 @@
                    BorderBrush="{DynamicResource AccentColorBrush}"
                    BorderThickness="1"
                    SaveWindowPosition="True"
-                   ShowMinButton="False"
                    ShowMaxRestoreButton="False"
+                   ShowMinButton="False"
                    mc:Ignorable="d">
     <i:Interaction.Behaviors>
         <behaviors:ViewModelBehavior />

@@ -134,8 +134,8 @@
     <comment>Booking description which will be identified as a break. Reg. expressions are allowed. Case will be ignored</comment>
   </data>
   <data name="BreakTimeSnippet" xml:space="preserve">
-    <value>Sum incl. breaks: {1:N2} h
-Sum excl. breaks: {2:N2} h</value>
+    <value>Sum incl. breaks: {0:N2} h
+Sum excl. breaks: {1:N2} h</value>
   </data>
   <data name="Database" xml:space="preserve">
     <value>Database:</value>
