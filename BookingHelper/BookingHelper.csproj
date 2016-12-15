@@ -86,8 +86,8 @@
       <HintPath>..\packages\Horizon.MvvmFramework.1.0.3\lib\portable45-net45+win8\Horizon.MvvmFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Horizon.MvvmFramework.Wpf, Version=1.0.1.0, Culture=neutral, PublicKeyToken=2596b24509c660de, processorArchitecture=MSIL">
-      <HintPath>..\packages\Horizon.MvvmFramework.Wpf.1.0.1\lib\net452\Horizon.MvvmFramework.Wpf.dll</HintPath>
+    <Reference Include="Horizon.MvvmFramework.Wpf, Version=1.0.2.0, Culture=neutral, PublicKeyToken=2596b24509c660de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Horizon.MvvmFramework.Wpf.1.0.2\lib\net452\Horizon.MvvmFramework.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">

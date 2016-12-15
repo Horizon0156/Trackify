@@ -25,7 +25,7 @@ namespace BookingHelper.UI
             messenger.Register<SettingsViewModel>(OpenSettingsWindow);
         }
 
-        public void PrepareNewEntry(PrepareNewEntryMessage message)
+        private void PrepareNewEntry(PrepareNewEntryMessage message)
         {
             StartTimeBox.Focus();
         }
