@@ -135,7 +135,8 @@
   </data>
   <data name="BreakTimeSnippet" xml:space="preserve">
     <value>Sum incl. breaks: {0:N2} h
-Sum excl. breaks: {1:N2} h</value>
+Sum excl. breaks: {1:N2} h
+Est. home time: {2:hh\:mm}</value>
   </data>
   <data name="Database" xml:space="preserve">
     <value>Database:</value>
@@ -145,12 +146,6 @@ Sum excl. breaks: {1:N2} h</value>
   </data>
   <data name="GoHome" xml:space="preserve">
     <value>Go home!!!</value>
-  </data>
-  <data name="HomeTimePlaceholder" xml:space="preserve">
-    <value>Track a time first...</value>
-  </data>
-  <data name="HomeTimeSnippet" xml:space="preserve">
-    <value>Home time: {0:hh\:mm}</value>
   </data>
   <data name="InitializationFailure" xml:space="preserve">
     <value>Failed to initialize application.

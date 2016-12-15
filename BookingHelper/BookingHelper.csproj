@@ -219,6 +219,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="UI\EditTimeEntryWindow.xaml.cs">
+      <DependentUpon>EditTimeEntryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -252,6 +255,9 @@
     </None>
     <Page Include="Resources\AccentColors.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\EditTimeEntryWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\SettingsWindow.xaml">

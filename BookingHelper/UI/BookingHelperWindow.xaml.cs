@@ -27,7 +27,7 @@ namespace BookingHelper.UI
 
         private void PrepareNewEntry(PrepareNewEntryMessage message)
         {
-            StartTimeBox.Focus();
+            // Todo
         }
 
         private async void LogExceptionAndTerminateApplication(object sender, UnhandledExceptionEventArgs e)
@@ -53,6 +53,13 @@ namespace BookingHelper.UI
             {
                 textbox.Text = DateTime.Now.TimeOfDay.ToString(@"hh\:mm");
             }
+        }
+
+        private void OpenTestWindow(object sender, RoutedEventArgs e)
+        {
+            var editWindow = new EditTimeEntryWindow();
+            editWindow.Owner = this;
+            editWindow.ShowDialog();
         }
     }
 }

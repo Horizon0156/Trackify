@@ -107,7 +107,8 @@ namespace BookingHelper.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Sum incl. breaks: {0:N2} h
-        ///Sum excl. breaks: {1:N2} h.
+        ///Sum excl. breaks: {1:N2} h
+        ///Est. home time: {2:hh\:mm}.
         /// </summary>
         public static string BreakTimeSnippet {
             get {
@@ -139,24 +140,6 @@ namespace BookingHelper.Resources {
         public static string GoHome {
             get {
                 return ResourceManager.GetString("GoHome", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Track a time first....
-        /// </summary>
-        public static string HomeTimePlaceholder {
-            get {
-                return ResourceManager.GetString("HomeTimePlaceholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Home time: {0:hh\:mm}.
-        /// </summary>
-        public static string HomeTimeSnippet {
-            get {
-                return ResourceManager.GetString("HomeTimeSnippet", resourceCulture);
             }
         }
         
