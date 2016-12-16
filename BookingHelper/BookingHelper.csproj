@@ -197,6 +197,7 @@
   <ItemGroup>
     <Compile Include="Behavior\UpdateableTextBoxBehavior.cs" />
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Controls\TimeTracker.cs" />
     <Compile Include="Converter\StringToTimespanConverter.cs" />
     <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\Booking.cs" />

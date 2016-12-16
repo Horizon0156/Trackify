@@ -30,6 +30,8 @@ namespace BookingHelper.ViewModels
         private IEnumerable<Effort> _efforts;
         private DateTime? _selectedDate;
 
+        private bool _isTrackingActive;
+
         public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IMessenger messenger, ISettings settings, Func<SettingsViewModel> settingsFactory)
         {
             _databaseContext = bookingsContext;
@@ -38,7 +40,8 @@ namespace BookingHelper.ViewModels
             _settings = settings;
             _settingsFactory = settingsFactory;
 
-            SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
+            //SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
+            SaveCommand = commandFactory.CreateCommand(StartOrStopTimer);
             SettingsCommand = commandFactory.CreateCommand(OpenSettings);
             DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
             
@@ -46,6 +49,23 @@ namespace BookingHelper.ViewModels
             _messenger.Register<BookingTimeIntervalChangedMessage>(msg => UpdateEffort());
 
             InitializeContent();
+        }
+
+        public bool IsTrackingActive
+        {
+            get
+            {
+                return _isTrackingActive;
+            }
+            private set
+            {
+                SetProperty(ref _isTrackingActive, value);
+            }
+        }
+
+        private void StartOrStopTimer()
+        {
+            IsTrackingActive = !IsTrackingActive;
         }
 
         public AttentiveCollection<BookingModel> BookingContainer

@@ -12,6 +12,7 @@
                    xmlns:resx="clr-namespace:BookingHelper.Resources"
                    xmlns:system="clr-namespace:System;assembly=mscorlib"
                    xmlns:vm="clr-namespace:BookingHelper.ViewModels"
+                   xmlns:controls="clr-namespace:BookingHelper.Controls"
                    x:Name="Root"
                    Title="Trackify"
                    Width="300"
@@ -192,10 +193,10 @@
                             <KeyBinding Key="Enter" Command="{Binding SaveCommand}" />
                         </TextBox.InputBindings>
                     </TextBox>
-                    <TextBlock Grid.Column="1"
+                    <controls:TimeTracker Grid.Column="1"
                                Margin="5"
-                               VerticalAlignment="Center"
-                               Text="00:00:00" />
+                                IsRunning="{Binding IsTrackingActive}"
+                               VerticalAlignment="Center"/>
                     <Button Grid.Column="2"
                             Width="35"
                             Height="35"
