@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Horizon.MvvmFramework.Commands;
@@ -11,17 +12,17 @@ namespace BookingHelper.ViewModels
         private readonly ICommandFactory _commandFactory;
         private bool _markedAsBooked;
 
-        public Effort(ICommandFactory commandFactory, ICollection<BookingModel> desisiveBookings)
+        public Effort(ICommandFactory commandFactory, ICollection<TimeAcquisitionModel> desisiveBookings)
         {
             _commandFactory = commandFactory;
             DesisiveBookings = desisiveBookings;
             MarkAsBookedCommand = _commandFactory.CreateCommand(MarkedEffortAsBooked);
-            EffortTimeInHours = desisiveBookings.Sum(b => b.Duration.TotalHours);
+            EffortTimeInHours = desisiveBookings.Sum(b => b.Duration?.TotalHours ?? 0);
             Description = desisiveBookings.First().Description;
-            MarkedAsBooked = desisiveBookings.All(b => b.State == BookingModelState.Booked);
+            MarkedAsBooked = desisiveBookings.All(b => b.State == TimeAcquisitionStateModel.Booked);
         }
 
-        public ICollection<BookingModel> DesisiveBookings { get; set; }
+        public ICollection<TimeAcquisitionModel> DesisiveBookings { get; set; }
 
         public string Description { get; }
 
@@ -60,8 +61,8 @@ namespace BookingHelper.ViewModels
             foreach (var booking in DesisiveBookings)
             {
                 booking.State = MarkedAsBooked
-                    ? BookingModelState.Booked
-                    : BookingModelState.Recorded;
+                    ? TimeAcquisitionStateModel.Booked
+                    : TimeAcquisitionStateModel.Recorded;
             }
         }
     }

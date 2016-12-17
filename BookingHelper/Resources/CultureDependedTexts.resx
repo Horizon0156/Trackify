@@ -124,7 +124,7 @@
     <value>Backup:</value>
   </data>
   <data name="Bookings" xml:space="preserve">
-    <value>Bookings:</value>
+    <value>TimeAcquisitions:</value>
   </data>
   <data name="BookingTimeInterval" xml:space="preserve">
     <value>Booking time interval:</value>

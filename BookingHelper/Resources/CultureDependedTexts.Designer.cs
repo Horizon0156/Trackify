@@ -79,7 +79,7 @@ namespace BookingHelper.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bookings:.
+        ///   Looks up a localized string similar to TimeAcquisitions:.
         /// </summary>
         public static string Bookings {
             get {

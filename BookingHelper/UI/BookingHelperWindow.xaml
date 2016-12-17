@@ -6,7 +6,6 @@
                    xmlns:converter="clr-namespace:BookingHelper.Converter"
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                   xmlns:localBehavior="clr-namespace:BookingHelper.Behavior"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                    xmlns:metroBehaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
@@ -38,7 +37,6 @@
                 <ResourceDictionary Source="/Resources/UsedIcons.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <converter:TimeToStringConverter x:Key="TimeToStringConverter" />
             <system:Double x:Key="DailyWorkHours">8.00</system:Double>
             <converter:TotalEffortToColorConverter x:Key="TotalEffortToColorConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -100,7 +98,7 @@
                 </Grid>
             </DataTemplate>
 
-            <DataTemplate x:Key="BookingEntryTemplate" DataType="{x:Type vm:BookingModel}">
+            <DataTemplate x:Key="BookingEntryTemplate" DataType="{x:Type vm:TimeAcquisitionModel}">
                 <Border BorderBrush="DimGray" BorderThickness="0 1 0 0">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -113,16 +111,16 @@
                                    Margin="10"
                                    VerticalAlignment="Center"
                                    Text="{Binding Description}" />
-                        <TextBlock Grid.Column="1"
+                        <controls:TimeTracker Grid.Column="1"
                                    Margin="5"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Center"
-                                   Text="00:00:00" />
+                                   StartTime="{Binding StartTime}" 
+                                   StopTime="{Binding StopTime}"/>
                         <Button Grid.Column="2"
                                 Width="35"
                                 Height="35"
                                 Margin="5"
-                                Command="{Binding SaveCommand}"
                                 FocusVisualStyle="{x:Null}">
 
                             <Button.Style>
@@ -186,22 +184,28 @@
                              metro:TextBoxHelper.SelectAllOnFocus="True"
                              metro:TextBoxHelper.Watermark="What are you working on?"
                              BorderThickness="0"
-                             Text="{Binding CurrentBooking.Description,
+                             Text="{Binding CurrentAcquisition.Description,
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding SaveCommand}" />
+                            <KeyBinding Key="Enter" Command="{Binding ToggleTrackingCommand}" />
                         </TextBox.InputBindings>
                     </TextBox>
                     <controls:TimeTracker Grid.Column="1"
                                           Margin="5"
                                           VerticalAlignment="Center"
-                                          IsRunning="{Binding IsTrackingActive}" />
+                                          IsRunning="{Binding IsTrackingActive}"
+                                          StartTime="{Binding CurrentAcquisition.StartTime,
+                                                              Mode=TwoWay,
+                                                              UpdateSourceTrigger=PropertyChanged}"
+                                          StopTime="{Binding CurrentAcquisition.StopTime,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged}" />
                     <Button Grid.Column="2"
                             Width="35"
                             Height="35"
                             Margin="5"
-                            Command="{Binding SaveCommand}"
+                            Command="{Binding ToggleTrackingCommand}"
                             Style="{DynamicResource MetroCircleButtonStyle}">
                         <Rectangle Width="10" Height="10">
                             <Rectangle.Style>
@@ -229,7 +233,7 @@
                 </Grid>
                 <ItemsControl Focusable="False"
                               ItemTemplate="{StaticResource BookingEntryTemplate}"
-                              ItemsSource="{Binding BookingContainer}" />
+                              ItemsSource="{Binding TimeAcquisitions}" />
             </StackPanel>
             <i:Interaction.Behaviors>
                 <behaviors:AutoScrollBehavior />

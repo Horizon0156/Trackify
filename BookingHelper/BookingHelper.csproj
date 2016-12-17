@@ -90,10 +90,6 @@
       <HintPath>..\packages\Horizon.MvvmFramework.Wpf.1.0.2\lib\net452\Horizon.MvvmFramework.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\net\JetBrains.Annotations.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -200,8 +196,8 @@
     <Compile Include="Controls\TimeTracker.cs" />
     <Compile Include="Converter\StringToTimespanConverter.cs" />
     <Compile Include="Converter\TotalEffortToColorConverter.cs" />
-    <Compile Include="DataModels\Booking.cs" />
-    <Compile Include="DataModels\BookingState.cs" />
+    <Compile Include="DataModels\TimeAcquisition.cs" />
+    <Compile Include="DataModels\AcquisitionState.cs" />
     <Compile Include="Messages\AccentColorChangedMessage.cs" />
     <Compile Include="Messages\BookingTimeIntervalChangedMessage.cs" />
     <Compile Include="Messages\PrepareNewEntryMessage.cs" />
@@ -226,15 +222,15 @@
     <Compile Include="UI\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\BookingModelState.cs" />
-    <Compile Include="DataModels\IBookingsContext.cs" />
-    <Compile Include="DataModels\BookingsContext.cs" />
+    <Compile Include="ViewModels\TimeAcquisitionStateModel.cs" />
+    <Compile Include="DataModels\IDatabaseContext.cs" />
+    <Compile Include="DataModels\DatabaseContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\BookingHelperWindow.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>BookingHelperWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\BookingModel.cs" />
+    <Compile Include="ViewModels\TimeAcquisitionModel.cs" />
     <Compile Include="ViewModels\Effort.cs" />
     <Compile Include="ViewModels\BookingHelperViewModel.cs" />
     <Compile Include="ViewModels\EffortComparer.cs" />

@@ -11,20 +11,20 @@ namespace BookingHelper.ViewModels
 {
     internal class SettingsViewModel : ViewModel
     {
-        private readonly IBookingsContext _bookingsContext;
+        private readonly IDatabaseContext _databaseContext;
         private readonly IMessenger _messenger;
         private readonly IProcess _process;
         private readonly ISettings _settings;
         private int _numberOfBookings;
 
-        public SettingsViewModel(IMessenger messenger, ISettings settings, IBookingsContext bookingsContext, ICommandFactory commandFactory, IProcess process)
+        public SettingsViewModel(IMessenger messenger, ISettings settings, IDatabaseContext databaseContext, ICommandFactory commandFactory, IProcess process)
         {
             _messenger = messenger;
             _settings = settings;
-            _bookingsContext = bookingsContext;
+            _databaseContext = databaseContext;
             _process = process;
 
-            _numberOfBookings = bookingsContext.Bookings.Count();
+            _numberOfBookings = databaseContext.TimeAcquisitions.Count();
             ResetDatabaseCommand = commandFactory.CreateCommand(ResetDatabase);
             LocateDatabaseCommand = commandFactory.CreateCommand(LocateDatabase);
             ReloadDatabaseCommand = commandFactory.CreateCommand(ReloadDatabase);
@@ -85,19 +85,19 @@ namespace BookingHelper.ViewModels
 
         private void LocateDatabase()
         {
-            _process.Start("explorer", _bookingsContext.StorageLocation);
+            _process.Start("explorer", _databaseContext.StorageLocation);
         }
 
         private void ReloadDatabase()
         {
-            _bookingsContext.EnsureDatabaseIsCreated();
-            NumberOfBookings = _bookingsContext.Bookings.Count();
+            _databaseContext.EnsureDatabaseIsCreated();
+            NumberOfBookings = _databaseContext.TimeAcquisitions.Count();
             _messenger.Send(new DatabaseChangedMessage());
         }
 
         private void ResetDatabase()
         {
-            _bookingsContext.ResetBookings();
+            _databaseContext.ClearTimeAcquisitions();
             ReloadDatabase();
         }
     }

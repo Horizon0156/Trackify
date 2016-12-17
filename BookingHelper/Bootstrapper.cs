@@ -57,7 +57,7 @@ namespace BookingHelper
             _container.RegisterSingleton<IMessenger>(_messageHub);
             _container.RegisterSingleton<ICommandFactory, CommandFactory>();
             _container.RegisterSingleton<ISettings, UserSettings>();
-            _container.Register<IBookingsContext, BookingsContext>();
+            _container.Register<IDatabaseContext, DatabaseContext>();
             _container.Register<IProcess, Process>();
             _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
             _container.RegisterSingleton<Func<SettingsViewModel>>(() => _container.GetInstance<SettingsViewModel>());
@@ -65,7 +65,7 @@ namespace BookingHelper
 
         private void InitializeMappings()
         {
-            Mapper.Initialize(config => config.CreateMap<Booking, BookingModel>().ReverseMap());
+            Mapper.Initialize(config => config.CreateMap<TimeAcquisition, TimeAcquisitionModel>().ReverseMap());
 #if DEBUG
             Mapper.AssertConfigurationIsValid();
 #endif

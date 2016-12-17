@@ -13,6 +13,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 
@@ -21,31 +22,31 @@ namespace BookingHelper.ViewModels
     internal class BookingHelperViewModel : ViewModel
     {
         private readonly ICommandFactory _commandFactory;
-        private readonly IBookingsContext _databaseContext;
+        private readonly IDatabaseContext _databaseContext;
         private readonly IMessenger _messenger;
         private readonly ISettings _settings;
         private readonly Func<SettingsViewModel> _settingsFactory;
-        private AttentiveCollection<BookingModel> _bookingContainer;
-        private BookingModel _currentBooking;
+        private AttentiveCollection<TimeAcquisitionModel> _timeAcquisitions;
+        private TimeAcquisitionModel _currentAcquisition;
         private IEnumerable<Effort> _efforts;
         private DateTime? _selectedDate;
 
         private bool _isTrackingActive;
 
-        public BookingHelperViewModel(IBookingsContext bookingsContext, ICommandFactory commandFactory, IMessenger messenger, ISettings settings, Func<SettingsViewModel> settingsFactory)
+        public BookingHelperViewModel(IDatabaseContext databaseContext, ICommandFactory commandFactory, IMessenger messenger, ISettings settings, Func<SettingsViewModel> settingsFactory)
         {
-            _databaseContext = bookingsContext;
+            _databaseContext = databaseContext;
             _commandFactory = commandFactory;
             _messenger = messenger;
             _settings = settings;
             _settingsFactory = settingsFactory;
 
-            //SaveCommand = commandFactory.CreateCommand(SaveBooking, IsCurrentBookingValid);
-            SaveCommand = commandFactory.CreateCommand(StartOrStopTimer);
+            ToggleTrackingCommand = commandFactory.CreateCommand(ToggleTracking, CanToggleTracking);
+           
             SettingsCommand = commandFactory.CreateCommand(OpenSettings);
-            DeleteCommand = commandFactory.CreateCommand<BookingModel>(DeleteBooking);
+            DeleteCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(DeleteBooking);
             
-            _messenger.Register<DatabaseChangedMessage>(msg => LoadBookingsForSelectedDate());
+            _messenger.Register<DatabaseChangedMessage>(msg => LoadAcquisitionsForSelectedDate());
             _messenger.Register<BookingTimeIntervalChangedMessage>(msg => UpdateEffort());
 
             InitializeContent();
@@ -63,32 +64,35 @@ namespace BookingHelper.ViewModels
             }
         }
 
-        private void StartOrStopTimer()
+        private void ToggleTracking()
         {
             IsTrackingActive = !IsTrackingActive;
+
+            PersistCurrentAcquisition();
+            ListCurrentAcquisitionProperly();
         }
 
-        public AttentiveCollection<BookingModel> BookingContainer
+        public AttentiveCollection<TimeAcquisitionModel> TimeAcquisitions
         {
             get
             {
-                return _bookingContainer;
+                return _timeAcquisitions;
             }
             set
             {
-                SetProperty(ref _bookingContainer, value);
+                SetProperty(ref _timeAcquisitions, value);
             }
         }
 
-        public BookingModel CurrentBooking
+        public TimeAcquisitionModel CurrentAcquisition
         {
             get
             {
-                return _currentBooking;
+                return _currentAcquisition;
             }
             private set
             {
-                SetProperty(ref _currentBooking, value);
+                SetProperty(ref _currentAcquisition, value);
             }
         }
 
@@ -114,7 +118,7 @@ namespace BookingHelper.ViewModels
 
         public TimeSpan? HomeTime => CalculateEstimatedHomeTime();
 
-        public INotifiableCommand SaveCommand { get; }
+        public INotifiableCommand ToggleTrackingCommand { get; }
 
         public DateTime? SelectedDate
         {
@@ -125,7 +129,7 @@ namespace BookingHelper.ViewModels
             set
             {
                 SetProperty(ref _selectedDate, value);
-                LoadBookingsForSelectedDate();
+                LoadAcquisitionsForSelectedDate();
             }
         }
 
@@ -140,17 +144,33 @@ namespace BookingHelper.ViewModels
             _databaseContext.EnsureDatabaseIsCreated();
 
             SelectedDate = DateTime.Today;
-            LoadBookingsForSelectedDate();
+            InitializeCurrentAcquisition();
+        }
 
-            PrepareNewBooking();
+        private void InitializeCurrentAcquisition()
+        {
+            var runningAcquisition = _databaseContext
+                .TimeAcquisitions
+                .SingleOrDefault(acquisition => acquisition.State == AcquisitionState.Tracking);
+
+            if (runningAcquisition != null)
+            {
+                CurrentAcquisition = Mapper.Map<TimeAcquisitionModel>(runningAcquisition);
+                IsTrackingActive = true;
+            }
+            else
+            {
+                CurrentAcquisition = new TimeAcquisitionModel();
+            }
+            CurrentAcquisition.PropertyChanged += NotifySaveCommand;
         }
 
         private TimeSpan? CalculateEstimatedHomeTime()
         {
-            var startTime = BookingContainer.Min(b => b.StartTime);
+            var startTime = TimeAcquisitions.Min(b => b.StartTime);
 
             return startTime.HasValue
-                ? startTime.Value + TimeSpan.FromHours(8 + (TotalEffortGrossToday - TotalEffortNetToday))
+                ? startTime.Value.TimeOfDay + TimeSpan.FromHours(8 + (TotalEffortGrossToday - TotalEffortNetToday))
                 : (TimeSpan?)null;
         }
 
@@ -165,39 +185,37 @@ namespace BookingHelper.ViewModels
             return netEffort ?? 0;
         }
 
-        private void DeleteBooking(BookingModel booking)
+        private void DeleteBooking(TimeAcquisitionModel timeAcquisition)
         {
-            BookingContainer.Remove(booking);
+            TimeAcquisitions.Remove(timeAcquisition);
 
-            _databaseContext.Bookings.Remove(_databaseContext.Bookings.First(b => b.Id == booking.Id));
+            _databaseContext.TimeAcquisitions.Remove(_databaseContext.TimeAcquisitions.First(b => b.Id == timeAcquisition.Id));
             _databaseContext.SaveChanges();
         }
 
-        private bool IsCurrentBookingValid()
+        private bool CanToggleTracking()
         {
-            return SelectedDate.HasValue
-                && CurrentBooking.IsBookingEntryValid();
+            return IsTrackingActive || !string.IsNullOrEmpty(CurrentAcquisition?.Description);
         }
 
-        private void LoadBookingsForSelectedDate()
+        private void LoadAcquisitionsForSelectedDate()
         {
-            if (BookingContainer != null)
+            if (TimeAcquisitions != null)
             {
-                BookingContainer.InnerElementChanged -= SaveChangedBooking;
-                BookingContainer.CollectionChanged -= UpdateEffort;
+                TimeAcquisitions.CollectionChanged -= UpdateEffort;
             }
 
             if (SelectedDate.HasValue)
             {
-                BookingContainer = new AttentiveCollection<BookingModel>(
+                TimeAcquisitions = new AttentiveCollection<TimeAcquisitionModel>(
                     _databaseContext
-                        .Bookings
-                        .Where(b => b.Date == SelectedDate)
-                        .Select(b => Mapper.Map<BookingModel>(b)));
+                        .TimeAcquisitions
+                        .Where(b => b.StartTime.HasValue &&  b.StartTime.Value.Date == SelectedDate.Value.Date)
+                        .Select(b => Mapper.Map<TimeAcquisitionModel>(b))
+                        .OrderBy(b => b.StartTime));
 
-                BookingContainer.FireCollectionChangeWhenInnerElementChanges = true;
-                BookingContainer.InnerElementChanged += SaveChangedBooking;
-                BookingContainer.CollectionChanged += UpdateEffort;
+                TimeAcquisitions.FireCollectionChangeWhenInnerElementChanges = true;
+                TimeAcquisitions.CollectionChanged += UpdateEffort;
                 UpdateEffort();
             }
         }
@@ -208,54 +226,72 @@ namespace BookingHelper.ViewModels
             _messenger.Send(settingsModel);
         }
 
-        private void SaveBooking()
+        private void PersistCurrentAcquisition()
         {
             Debug.Assert(SelectedDate.HasValue, "A valid date is a precondition for the command execution.");
 
-            // ReSharper disable once PossibleInvalidOperationException Value is availbale
-            CurrentBooking.Date = SelectedDate.Value;
-            var bookingDto = Mapper.Map<Booking>(CurrentBooking);
+            CurrentAcquisition.State = IsTrackingActive
+                ? TimeAcquisitionStateModel.Tracking
+                : TimeAcquisitionStateModel.Recorded;
 
-            _databaseContext.Bookings.Add(bookingDto);
+            var acquisition = _databaseContext.TimeAcquisitions.FirstOrDefault(a => a.Id == CurrentAcquisition.Id);
+
+            if (acquisition != null)
+            {
+                Mapper.Map(CurrentAcquisition, acquisition);
+            }
+            else
+            {
+                acquisition = Mapper.Map<TimeAcquisition>(CurrentAcquisition);
+                _databaseContext.TimeAcquisitions.Add(acquisition);
+            }
+            
             _databaseContext.SaveChanges();
-            CurrentBooking.Id = bookingDto.Id;
+            CurrentAcquisition.Id = acquisition.Id;
 
-            BookingContainer.Add(CurrentBooking);
-            PrepareNewBooking();
+            if (!IsTrackingActive)
+            {
+                TimeAcquisitions.Add(CurrentAcquisition);
+                ResetCurrentAcquisition();
+            }
         }
 
-        private void PrepareNewBooking()
+        private void ListCurrentAcquisitionProperly()
         {
-            if (CurrentBooking != null)
+            if (CurrentAcquisition?.StartTime == null || IsTrackingActive)
             {
-                CurrentBooking.PropertyChanged -= NotifySaveCommand;
+                return;
             }
 
-            CurrentBooking = new BookingModel();
-            CurrentBooking.PropertyChanged += NotifySaveCommand;
+            if (CurrentAcquisition.StartTime.Value.Date == DateTime.Today)
+            {
+                TimeAcquisitions.Add(CurrentAcquisition);
+            }
+           
+            ResetCurrentAcquisition();
+        }
+
+        private void ResetCurrentAcquisition()
+        {
+            if (CurrentAcquisition != null)
+            {
+                CurrentAcquisition.PropertyChanged -= NotifySaveCommand;
+            }
+
+            CurrentAcquisition = new TimeAcquisitionModel();
+            CurrentAcquisition.PropertyChanged += NotifySaveCommand;
+
             _messenger.Send(new PrepareNewEntryMessage());
         }
 
         private void NotifySaveCommand(object sender, PropertyChangedEventArgs e)
         {
-            SaveCommand.NotifyChange();
-        }
-
-        private void SaveChangedBooking(object sender, NotifyInnerElementChangedEventArgs e)
-        {
-            var booking = (BookingModel)e.ChangedItem;
-
-            if (booking.IsBookingEntryValid())
-            {
-                var bookingToEdit = _databaseContext.Bookings.First(b => b.Id == booking.Id);
-                Mapper.Map(booking, bookingToEdit);
-                _databaseContext.SaveChanges();
-            }
+            ToggleTrackingCommand.NotifyChange();
         }
 
         private void UpdateEffort()
         {
-            Efforts = BookingContainer
+            Efforts = TimeAcquisitions
                     .GroupBy(b => b.Description)
                     .Select(g => new Effort(_commandFactory, g.ToList()).RoundEffort(_settings.BookingTimeInterval));
         }

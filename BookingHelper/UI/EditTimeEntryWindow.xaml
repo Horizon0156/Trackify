@@ -74,14 +74,14 @@
         </Border>
 
         <metro:TimePicker Grid.Row="1"
-                          metro:TextBoxHelper.Watermark="Start"
                           Grid.Column="0"
-                          Margin="10" />
+                          Margin="10"
+                          metro:TextBoxHelper.Watermark="Start" />
 
         <metro:TimePicker Grid.Row="1"
                           Grid.Column="1"
-                          metro:TextBoxHelper.Watermark="End"
-                          Margin="10" />
+                          Margin="10"
+                          metro:TextBoxHelper.Watermark="End" />
 
         <StackPanel Grid.Row="2"
                     Grid.Column="0"
