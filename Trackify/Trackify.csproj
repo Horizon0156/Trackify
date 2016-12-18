@@ -191,10 +191,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behavior\UpdateableTextBoxBehavior.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Controls\TimeTracker.cs" />
-    <Compile Include="Converter\StringToTimespanConverter.cs" />
     <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\TimeAcquisition.cs" />
     <Compile Include="DataModels\AcquisitionState.cs" />
@@ -216,8 +214,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="UI\EditTimeEntryWindow.xaml.cs">
-      <DependentUpon>EditTimeEntryWindow.xaml</DependentUpon>
+    <Compile Include="UI\EditTimeAcquisitionWindow.xaml.cs">
+      <DependentUpon>EditTimeAcquisitionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -254,7 +252,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\EditTimeEntryWindow.xaml">
+    <Page Include="UI\EditTimeAcquisitionWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\SettingsWindow.xaml">
