@@ -33,11 +33,11 @@ Section "Trackify (required)"
   SetOutPath $INSTDIR
   
   ; Put files there
-  File "bin\Release\Trackify.exe"
-  File "bin\Release\Trackify.exe.config"
-  File "bin\Release\*.dll"
-  File /r "bin\Release\x64"
-  File /r "bin\Release\x86"
+  File "bin\Production\Trackify.exe"
+  File "bin\Production\Trackify.exe.config"
+  File "bin\Production\*.dll"
+  File /r "bin\Production\x64"
+  File /r "bin\Production\x86"
   
   ; Write the installation path into the registry
   WriteRegStr HKLM "Software\Trackify" "Install_Dir" "$INSTDIR"

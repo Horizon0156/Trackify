@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Trackify.DataModels
 {
-    internal class DatabaseContext : DbContext, IDatabaseContext
+    internal sealed class DatabaseContext : DbContext, IDatabaseContext
     {
         public DbSet<TimeAcquisition> TimeAcquisitions { get; set; }
 

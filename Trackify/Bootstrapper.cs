@@ -9,6 +9,7 @@ using System;
 using System.Reflection;
 using System.Windows;
 using Trackify.DataModels;
+using Trackify.Factories;
 using Trackify.Messages;
 using Trackify.Mocks;
 using Trackify.UI;
@@ -57,10 +58,10 @@ namespace Trackify
             _container.RegisterSingleton<IMessenger>(_messageHub);
             _container.RegisterSingleton<ICommandFactory, CommandFactory>();
             _container.RegisterSingleton<ISettings, UserSettings>();
-            _container.Register<IDatabaseContext, DatabaseContext>();
-            _container.Register<IProcess, Process>();
+            _container.RegisterSingleton<IViewModelFactory, ViewModelFactory>();
+            _container.RegisterSingleton<IDatabaseContext, DatabaseContext>();
             _container.RegisterSingleton(() => LogManager.GetLogger(Assembly.GetExecutingAssembly().GetName().Name));
-            _container.RegisterSingleton<Func<SettingsViewModel>>(() => _container.GetInstance<SettingsViewModel>());
+            _container.Register<IProcess, Process>();
         }
 
         private void InitializeMappings()

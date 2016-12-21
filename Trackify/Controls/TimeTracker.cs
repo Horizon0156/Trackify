@@ -7,8 +7,6 @@ namespace Trackify.Controls
 {
     internal class TimeTracker : TextBlock
     {
-        public static readonly DependencyProperty EllapsedTimeProperty;
-
         public static readonly DependencyProperty IsRunningProperty = DependencyProperty.Register(
             "IsRunning",
             typeof(bool),
@@ -27,18 +25,7 @@ namespace Trackify.Controls
            typeof(TimeTracker),
            new FrameworkPropertyMetadata(defaultValue: null, propertyChangedCallback: UpdateEllapsedTime));
 
-        private static readonly DependencyPropertyKey _ellapsedTimePropertyKey = DependencyProperty.RegisterReadOnly(
-            "EllapsedTime",
-            typeof(TimeSpan),
-            typeof(TimeTracker),
-            new FrameworkPropertyMetadata(TimeSpan.Zero));
-
         private readonly DispatcherTimer _updateTimer;
-
-        static TimeTracker()
-        {
-            EllapsedTimeProperty = _ellapsedTimePropertyKey.DependencyProperty;
-        }
 
         public TimeTracker()
         {
@@ -47,18 +34,6 @@ namespace Trackify.Controls
             _updateTimer.Interval = TimeSpan.FromSeconds(1);
 
             Text = "00:00:00";
-        }
-
-        public TimeSpan EllapsedTime
-        {
-            get
-            {
-                return (TimeSpan)GetValue(EllapsedTimeProperty);
-            }
-            private set
-            {
-                SetValue(_ellapsedTimePropertyKey, value);
-            }
         }
 
         public bool IsRunning
@@ -137,23 +112,21 @@ namespace Trackify.Controls
 
         private void UpdateEllapsedTime(TimeSpan ellapsedTime)
         {
-            EllapsedTime = ellapsedTime;
-
-            if (EllapsedTime.TotalSeconds < 1)
+            if (ellapsedTime.TotalSeconds < 1)
             {
                 Text = "00:00:00";
             }
-            else if (EllapsedTime.TotalSeconds < 60)
+            else if (ellapsedTime.TotalSeconds < 60)
             {
-                Text = $"{(int)EllapsedTime.TotalSeconds} sec";
+                Text = $"{(int)ellapsedTime.TotalSeconds} sec";
             }
-            else if (EllapsedTime.TotalMinutes < 60)
+            else if (ellapsedTime.TotalMinutes < 60)
             {
-                Text = $"{EllapsedTime:m\\:ss} min";
+                Text = $"{ellapsedTime:m\\:ss} min";
             }
             else
             {
-                Text = EllapsedTime.ToString("hh\\:mm\\:ss");
+                Text = ellapsedTime.ToString("hh\\:mm\\:ss");
             }
         }
     }

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using Trackify.DataModels;
+using Trackify.Factories;
 using Trackify.Messages;
 using Trackify.Mocks;
 using Trackify.Resources;
@@ -25,7 +26,7 @@ namespace Trackify.ViewModels
         private readonly IDatabaseContext _databaseContext;
         private readonly IMessenger _messenger;
         private readonly ISettings _settings;
-        private readonly Func<SettingsViewModel> _settingsFactory;
+        private readonly IViewModelFactory _viewModelFactory;
         private AttentiveCollection<TimeAcquisitionModel> _timeAcquisitions;
         private TimeAcquisitionModel _currentAcquisition;
         private IEnumerable<Effort> _efforts;
@@ -33,23 +34,51 @@ namespace Trackify.ViewModels
 
         private bool _isTrackingActive;
 
-        public TrackifyViewModel(IDatabaseContext databaseContext, ICommandFactory commandFactory, IMessenger messenger, ISettings settings, Func<SettingsViewModel> settingsFactory)
+        public TrackifyViewModel(IDatabaseContext databaseContext, ICommandFactory commandFactory, IMessenger messenger, ISettings settings, IViewModelFactory viewModelFactory)
         {
             _databaseContext = databaseContext;
             _commandFactory = commandFactory;
             _messenger = messenger;
             _settings = settings;
-            _settingsFactory = settingsFactory;
+            _viewModelFactory = viewModelFactory;
 
             ToggleTrackingCommand = commandFactory.CreateCommand(ToggleTracking, CanToggleTracking);
            
             SettingsCommand = commandFactory.CreateCommand(OpenSettings);
             DeleteCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(DeleteBooking);
-            
+            CreateCommand = commandFactory.CreateCommand(CreateTimeAcquisition);
+            EditCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(EditTimeAcquisition);
+            RestartCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(RestartTimeAcquisition);
+
             _messenger.Register<DatabaseChangedMessage>(msg => LoadAcquisitionsForSelectedDate());
             _messenger.Register<BookingTimeIntervalChangedMessage>(msg => UpdateEffort());
 
             InitializeContent();
+        }
+
+        private void RestartTimeAcquisition(TimeAcquisitionModel timeAcquisition)
+        {
+            if (IsTrackingActive)
+            {
+                ToggleTracking();
+            }
+
+            CurrentAcquisition.Description = timeAcquisition.Description;
+            IsTrackingActive = true;
+        }
+
+        private void CreateTimeAcquisition()
+        {
+            var creationModel = _viewModelFactory.CreateEditTimeAcquisitionViewModel(timeAcquisition: null);
+            _messenger.Send(creationModel);
+        }
+
+        public ICommand CreateCommand { get; set; }
+
+        private void EditTimeAcquisition(TimeAcquisitionModel timeAcquisition)
+        {
+            var editModel = _viewModelFactory.CreateEditTimeAcquisitionViewModel(timeAcquisition.Clone());
+            _messenger.Send(editModel);
         }
 
         public bool IsTrackingActive
@@ -98,6 +127,8 @@ namespace Trackify.ViewModels
 
         public INotifiableCommand DeleteCommand { get; }
 
+        public ICommand EditCommand { get; }
+
         public IEnumerable<Effort> Efforts
         {
             get
@@ -138,6 +169,8 @@ namespace Trackify.ViewModels
         public double TotalEffortGrossToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
 
         public double TotalEffortNetToday => CalculateNetEffortForToday();
+
+        public ICommand RestartCommand { get; }
 
         public void InitializeContent()
         {
@@ -203,6 +236,7 @@ namespace Trackify.ViewModels
             if (TimeAcquisitions != null)
             {
                 TimeAcquisitions.CollectionChanged -= UpdateEffort;
+                TimeAcquisitions.InnerElementChanged -= SaveChangedAcquisition;
             }
 
             if (SelectedDate.HasValue)
@@ -210,19 +244,21 @@ namespace Trackify.ViewModels
                 TimeAcquisitions = new AttentiveCollection<TimeAcquisitionModel>(
                     _databaseContext
                         .TimeAcquisitions
-                        .Where(b => b.StartTime.HasValue &&  b.StartTime.Value.Date == SelectedDate.Value.Date)
+                        .Where(b => (b.State == AcquisitionState.Booked || b.State == AcquisitionState.Recorded) && b.StartTime.Value.Date == SelectedDate.Value.Date)
                         .Select(b => Mapper.Map<TimeAcquisitionModel>(b))
                         .OrderBy(b => b.StartTime));
 
                 TimeAcquisitions.FireCollectionChangeWhenInnerElementChanges = true;
                 TimeAcquisitions.CollectionChanged += UpdateEffort;
+                TimeAcquisitions.InnerElementChanged += SaveChangedAcquisition;
+
                 UpdateEffort();
             }
         }
 
         private void OpenSettings()
         {
-            var settingsModel = _settingsFactory.Invoke();
+            var settingsModel = _viewModelFactory.CreateSettingsViewModel();
             _messenger.Send(settingsModel);
         }
 
@@ -282,6 +318,15 @@ namespace Trackify.ViewModels
             CurrentAcquisition.PropertyChanged += NotifySaveCommand;
 
             _messenger.Send(new PrepareNewEntryMessage());
+        }
+
+        private void SaveChangedAcquisition(object sender, NotifyInnerElementChangedEventArgs e)
+        {
+            var changedAcquisition = (TimeAcquisitionModel) e.ChangedItem;
+
+            var acquisitionToEdit = _databaseContext.TimeAcquisitions.First(b => b.Id == changedAcquisition.Id);
+            Mapper.Map(changedAcquisition, acquisitionToEdit);
+            _databaseContext.SaveChanges();
         }
 
         private void NotifySaveCommand(object sender, PropertyChangedEventArgs e)

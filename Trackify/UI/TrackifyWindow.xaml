@@ -11,6 +11,7 @@
                    xmlns:metroBehaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                    xmlns:resx="clr-namespace:Trackify.Resources"
                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                   xmlns:ui="clr-namespace:Trackify.UI"
                    xmlns:vm="clr-namespace:Trackify.ViewModels"
                    x:Name="Root"
                    Title="Trackify"
@@ -37,6 +38,7 @@
                 <ResourceDictionary Source="/Resources/UsedIcons.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <ui:BindingProxy x:Key="DataContextProxy" Data="{Binding ElementName=Root, Path=DataContext}" />
             <system:Double x:Key="DailyWorkHours">8.00</system:Double>
             <converter:TotalEffortToColorConverter x:Key="TotalEffortToColorConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -106,7 +108,24 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-
+                        <Grid.InputBindings>
+                            <MouseBinding Command="{Binding ElementName=Root,
+                                                            Path=DataContext.EditCommand}"
+                                          CommandParameter="{Binding}"
+                                          Gesture="LeftClick" />
+                        </Grid.InputBindings>
+                        <Grid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="{Binding Source={StaticResource DataContextProxy},
+                                                            Path=Data.EditCommand}"
+                                          CommandParameter="{Binding}"
+                                          Header="Edit" />
+                                <MenuItem Command="{Binding Source={StaticResource DataContextProxy},
+                                                            Path=Data.DeleteCommand}"
+                                          CommandParameter="{Binding}"
+                                          Header="Delete" />
+                            </ContextMenu>
+                        </Grid.ContextMenu>
                         <TextBlock Grid.Column="0"
                                    Margin="10"
                                    VerticalAlignment="Center"
@@ -121,6 +140,9 @@
                                 Width="35"
                                 Height="35"
                                 Margin="5"
+                                Command="{Binding ElementName=Root,
+                                                  Path=DataContext.RestartCommand}"
+                                CommandParameter="{Binding}"
                                 FocusVisualStyle="{x:Null}">
                             <Button.Style>
                                 <Style BasedOn="{StaticResource MetroCircleButtonStyle}" TargetType="Button">
@@ -175,7 +197,12 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-
+                    <Grid.InputBindings>
+                        <MouseBinding Command="{Binding ElementName=Root,
+                                                        Path=DataContext.EditCommand}"
+                                      CommandParameter="{Binding CurrentAcquisition}"
+                                      Gesture="LeftClick" />
+                    </Grid.InputBindings>
                     <TextBox Grid.Column="0"
                              Margin="5"
                              HorizontalAlignment="Stretch"
@@ -183,6 +210,7 @@
                              metro:TextBoxHelper.SelectAllOnFocus="True"
                              metro:TextBoxHelper.Watermark="What are you working on?"
                              BorderThickness="0"
+                             IsReadOnly="{Binding IsTrackingActive}"
                              Text="{Binding CurrentAcquisition.Description,
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=PropertyChanged}">
@@ -260,7 +288,8 @@
                     Height="15"
                     Margin="5 0 0 0"
                     VerticalAlignment="Center"
-                    Click="OpenTestWindow"
+                    Command="{Binding CreateCommand}"
+                    CommandParameter="{x:Null}"
                     DockPanel.Dock="Right"
                     Style="{DynamicResource ChromelessButtonStyle}">
                 <Rectangle Width="15"

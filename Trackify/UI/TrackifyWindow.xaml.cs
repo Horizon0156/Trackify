@@ -2,7 +2,6 @@
 using log4net;
 using MahApps.Metro.Controls.Dialogs;
 using System;
-using System.Windows;
 using Trackify.Messages;
 using Trackify.Resources;
 using Trackify.ViewModels;
@@ -22,6 +21,7 @@ namespace Trackify.UI
 
             messenger.Register<PrepareNewEntryMessage>(PrepareNewEntry);
             messenger.Register<SettingsViewModel>(OpenSettingsWindow);
+            messenger.Register<EditTimeAcquisitionViewModel>(OpenEditWindow);
         }
 
         private void PrepareNewEntry(PrepareNewEntryMessage message)
@@ -44,9 +44,9 @@ namespace Trackify.UI
             settingsWindow.ShowDialog();
         }
 
-        private void OpenTestWindow(object sender, RoutedEventArgs e)
+        private void OpenEditWindow(EditTimeAcquisitionViewModel editModel)
         {
-            var editWindow = new EditTimeEntryWindow();
+            var editWindow = new EditTimeAcquisitionWindow(editModel);
             editWindow.Owner = this;
             editWindow.ShowDialog();
         }

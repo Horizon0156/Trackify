@@ -196,6 +196,8 @@
     <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\TimeAcquisition.cs" />
     <Compile Include="DataModels\AcquisitionState.cs" />
+    <Compile Include="Factories\IViewModelFactory.cs" />
+    <Compile Include="Factories\ViewModelFactory.cs" />
     <Compile Include="Messages\AccentColorChangedMessage.cs" />
     <Compile Include="Messages\BookingTimeIntervalChangedMessage.cs" />
     <Compile Include="Messages\PrepareNewEntryMessage.cs" />
@@ -214,12 +216,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="UI\BindingProxy.cs" />
     <Compile Include="UI\EditTimeAcquisitionWindow.xaml.cs">
       <DependentUpon>EditTimeAcquisitionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\EditTimeAcquisitionViewModel.cs" />
     <Compile Include="ViewModels\TimeAcquisitionStateModel.cs" />
     <Compile Include="DataModels\IDatabaseContext.cs" />
     <Compile Include="DataModels\DatabaseContext.cs" />
@@ -231,7 +235,6 @@
     <Compile Include="ViewModels\TimeAcquisitionModel.cs" />
     <Compile Include="ViewModels\Effort.cs" />
     <Compile Include="ViewModels\TrackifyViewModel.cs" />
-    <Compile Include="ViewModels\EffortComparer.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
