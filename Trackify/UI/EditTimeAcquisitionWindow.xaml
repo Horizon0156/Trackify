@@ -116,6 +116,17 @@
                           Culture="{x:Static global:CultureInfo.CurrentUICulture}"
                           SelectedTime="{Binding StopTime,
                                                  Mode=TwoWay,
-                                                 UpdateSourceTrigger=PropertyChanged}" />
+                                                 UpdateSourceTrigger=PropertyChanged}">
+            <metro:TimePicker.Style>
+                <Style BasedOn="{StaticResource {x:Type metro:TimePicker}}" TargetType="metro:TimePicker">
+                    <Setter Property="IsEnabled" Value="True" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding TimeAcquisition.State}" Value="Tracking">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </metro:TimePicker.Style>
+        </metro:TimePicker>
     </Grid>
 </metro:MetroWindow>

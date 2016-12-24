@@ -18,16 +18,12 @@ namespace Trackify.ViewModels
         {
             _dataContext = dataContext;
             _messenger = messenger;
-            IsInEditMode = timeAcquisition != null;
             TimeAcquisition = timeAcquisition ?? new TimeAcquisitionModel() { State = TimeAcquisitionStateModel.Recorded };
 
             _referenceDate = TimeAcquisition.StartTime?.Date ?? DateTime.Today;
             _startTime = TimeAcquisition.StartTime?.TimeOfDay;
             _stopTime = TimeAcquisition.StopTime?.TimeOfDay;
         }
-
-
-        public bool IsInEditMode { get; }
 
         public DateTime? ReferenceDate
         {
