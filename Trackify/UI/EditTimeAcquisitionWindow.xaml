@@ -71,14 +71,25 @@
                          BorderThickness="0"
                          Text="{Binding TimeAcquisition.Description,
                                         Mode=TwoWay,
-                                        UpdateSourceTrigger=PropertyChanged}" />
+                                        UpdateSourceTrigger=LostFocus}" />
                 <controls:TimeTracker Grid.Column="1"
                                       Margin="5"
                                       VerticalAlignment="Center"
                                       StartTime="{Binding TimeAcquisition.StartTime,
-                                                          Mode=OneWay}"
+                                                          Mode=TwoWay}"
                                       StopTime="{Binding TimeAcquisition.StopTime,
-                                                         Mode=OneWay}" />
+                                                         Mode=TwoWay}">
+                    <controls:TimeTracker.Style>
+                        <Style TargetType="controls:TimeTracker">
+                            <Setter Property="IsRunning" Value="False" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding TimeAcquisition.State}" Value="Tracking">
+                                    <Setter Property="IsRunning" Value="True" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls:TimeTracker.Style>
+                </controls:TimeTracker>
             </Grid>
         </Border>
 
@@ -106,17 +117,5 @@
                           SelectedTime="{Binding StopTime,
                                                  Mode=TwoWay,
                                                  UpdateSourceTrigger=PropertyChanged}" />
-        <StackPanel Grid.Row="3"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    VerticalAlignment="Center">
-
-            <Button Margin="30 10"
-                    Command="{Binding SaveCommand}"
-                    Content="Save" />
-            <Button Margin="30 10"
-                    Command="{Binding CancelCommand}"
-                    Content="Cancel" />
-        </StackPanel>
     </Grid>
 </metro:MetroWindow>

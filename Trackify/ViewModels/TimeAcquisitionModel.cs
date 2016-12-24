@@ -35,7 +35,6 @@ namespace Trackify.ViewModels
             set
             {
                 SetProperty(ref _startTime, value);
-                OnPropertyChanged("Duration");
             }
         }
 
@@ -60,7 +59,6 @@ namespace Trackify.ViewModels
             set
             {
                 SetProperty(ref _stopTime, value);
-                OnPropertyChanged("Duration");
             }
         }
 

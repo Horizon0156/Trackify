@@ -42,7 +42,7 @@ namespace Trackify.ViewModels
             _settings = settings;
             _viewModelFactory = viewModelFactory;
 
-            ToggleTrackingCommand = commandFactory.CreateCommand(ToggleTracking, CanToggleTracking);
+            ToggleTrackingCommand = commandFactory.CreateCommand(ToggleTracking);
            
             SettingsCommand = commandFactory.CreateCommand(OpenSettings);
             DeleteCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(DeleteBooking);
@@ -77,7 +77,7 @@ namespace Trackify.ViewModels
 
         private void EditTimeAcquisition(TimeAcquisitionModel timeAcquisition)
         {
-            var editModel = _viewModelFactory.CreateEditTimeAcquisitionViewModel(timeAcquisition.Clone());
+            var editModel = _viewModelFactory.CreateEditTimeAcquisitionViewModel(timeAcquisition);
             _messenger.Send(editModel);
         }
 
@@ -99,6 +99,14 @@ namespace Trackify.ViewModels
 
             PersistCurrentAcquisition();
             ListCurrentAcquisitionProperly();
+        }
+
+        private void CreateDefaultDescriptionIfNeeded()
+        {
+            if (string.IsNullOrWhiteSpace(CurrentAcquisition.Description))
+            {
+                CurrentAcquisition.Description = $"Task #{CurrentAcquisition.Id}";
+            }
         }
 
         public AttentiveCollection<TimeAcquisitionModel> TimeAcquisitions
@@ -125,7 +133,7 @@ namespace Trackify.ViewModels
             }
         }
 
-        public INotifiableCommand DeleteCommand { get; }
+        public ICommand DeleteCommand { get; }
 
         public ICommand EditCommand { get; }
 
@@ -195,7 +203,7 @@ namespace Trackify.ViewModels
             {
                 CurrentAcquisition = new TimeAcquisitionModel();
             }
-            CurrentAcquisition.PropertyChanged += NotifySaveCommand;
+            CurrentAcquisition.PropertyChanged += SaveChangedAcquisition;
         }
 
         private TimeSpan? CalculateEstimatedHomeTime()
@@ -212,7 +220,7 @@ namespace Trackify.ViewModels
             var breakDeterminationExpression = new Regex($"^({CultureDependedTexts.BreakDescritption})$", RegexOptions.IgnoreCase);
 
             var netEffort = Efforts?
-                .Where(e => !breakDeterminationExpression.IsMatch(e.Description))
+                .Where(e => !breakDeterminationExpression.IsMatch(e.Description ?? string.Empty))
                 .Sum(e => e.EffortTimeInHours);
 
             return netEffort ?? 0;
@@ -224,11 +232,6 @@ namespace Trackify.ViewModels
 
             _databaseContext.TimeAcquisitions.Remove(_databaseContext.TimeAcquisitions.First(b => b.Id == timeAcquisition.Id));
             _databaseContext.SaveChanges();
-        }
-
-        private bool CanToggleTracking()
-        {
-            return IsTrackingActive || !string.IsNullOrEmpty(CurrentAcquisition?.Description);
         }
 
         private void LoadAcquisitionsForSelectedDate()
@@ -284,6 +287,7 @@ namespace Trackify.ViewModels
             
             _databaseContext.SaveChanges();
             CurrentAcquisition.Id = acquisition.Id;
+            CreateDefaultDescriptionIfNeeded();
 
             if (!IsTrackingActive)
             {
@@ -311,27 +315,36 @@ namespace Trackify.ViewModels
         {
             if (CurrentAcquisition != null)
             {
-                CurrentAcquisition.PropertyChanged -= NotifySaveCommand;
+                CurrentAcquisition.PropertyChanged -= SaveChangedAcquisition;
             }
 
             CurrentAcquisition = new TimeAcquisitionModel();
-            CurrentAcquisition.PropertyChanged += NotifySaveCommand;
+            CurrentAcquisition.PropertyChanged += SaveChangedAcquisition;
 
             _messenger.Send(new PrepareNewEntryMessage());
         }
 
-        private void SaveChangedAcquisition(object sender, NotifyInnerElementChangedEventArgs e)
+        private void SaveChangedAcquisition(object sender, PropertyChangedEventArgs e)
         {
-            var changedAcquisition = (TimeAcquisitionModel) e.ChangedItem;
-
-            var acquisitionToEdit = _databaseContext.TimeAcquisitions.First(b => b.Id == changedAcquisition.Id);
-            Mapper.Map(changedAcquisition, acquisitionToEdit);
-            _databaseContext.SaveChanges();
+            SaveChangedAcquisition((TimeAcquisitionModel) sender);
         }
 
-        private void NotifySaveCommand(object sender, PropertyChangedEventArgs e)
+        private void SaveChangedAcquisition(TimeAcquisitionModel changedAcquisition)
         {
-            ToggleTrackingCommand.NotifyChange();
+            var acquisitionToEdit = _databaseContext
+                .TimeAcquisitions
+                .FirstOrDefault(b => b.Id == changedAcquisition.Id);
+
+            if (acquisitionToEdit != null)
+            {
+                Mapper.Map(changedAcquisition, acquisitionToEdit);
+                _databaseContext.SaveChanges();
+            }
+        }
+
+        private void SaveChangedAcquisition(object sender, NotifyInnerElementChangedEventArgs e)
+        {
+            SaveChangedAcquisition((TimeAcquisitionModel) e.ChangedItem);
         }
 
         private void UpdateEffort()

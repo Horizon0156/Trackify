@@ -82,7 +82,9 @@ namespace Trackify.Controls
         private static void UpdateEllapsedTime(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var timeTracker = (TimeTracker)d;
-            timeTracker.UpdateEllapsedTime((timeTracker.StopTime - timeTracker.StartTime) ?? TimeSpan.Zero);
+
+            var endTime = timeTracker.StopTime ?? DateTime.Now;
+            timeTracker.UpdateEllapsedTime((endTime - timeTracker.StartTime) ?? TimeSpan.Zero);
         }
 
         private void ToggleTimeTracking()

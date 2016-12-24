@@ -207,10 +207,9 @@
                              Margin="5"
                              HorizontalAlignment="Stretch"
                              VerticalContentAlignment="Center"
-                             metro:TextBoxHelper.SelectAllOnFocus="True"
                              metro:TextBoxHelper.Watermark="What are you working on?"
+                             metro:VisibilityHelper.IsCollapsed="{Binding IsTrackingActive}"
                              BorderThickness="0"
-                             IsReadOnly="{Binding IsTrackingActive}"
                              Text="{Binding CurrentAcquisition.Description,
                                             Mode=TwoWay,
                                             UpdateSourceTrigger=PropertyChanged}">
@@ -218,6 +217,11 @@
                             <KeyBinding Key="Enter" Command="{Binding ToggleTrackingCommand}" />
                         </TextBox.InputBindings>
                     </TextBox>
+                    <TextBlock Grid.Column="0"
+                               Margin="10"
+                               VerticalAlignment="Center"
+                               metro:VisibilityHelper.IsVisible="{Binding IsTrackingActive}"
+                               Text="{Binding CurrentAcquisition.Description}" />
                     <controls:TimeTracker Grid.Column="1"
                                           Margin="5"
                                           VerticalAlignment="Center"
