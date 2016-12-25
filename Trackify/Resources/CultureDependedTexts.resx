@@ -170,9 +170,37 @@ Please have a look at the logs to get further information.</value>
     <value>Trackify</value>
   </data>
   <data name="Entries" xml:space="preserve">
-    <value>Entries</value>
+    <value>Entries:</value>
   </data>
   <data name="Summary" xml:space="preserve">
     <value>Summary:</value>
+  </data>
+  <data name="DefaultDescriptionTemplate" xml:space="preserve">
+    <value>Task #{0}</value>
+    <comment>0 -&gt; Task number</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DescriptionWatermark" xml:space="preserve">
+    <value>What are you working on?</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>New...</value>
+  </data>
+  <data name="NewEntryTooltip" xml:space="preserve">
+    <value>Adds a new entry manually</value>
+  </data>
+  <data name="RestartTooltip" xml:space="preserve">
+    <value>Continue activity on this time entry</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
   </data>
 </root>

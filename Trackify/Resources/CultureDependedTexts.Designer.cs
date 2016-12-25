@@ -108,6 +108,24 @@ namespace Trackify.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Task #{0}.
+        /// </summary>
+        public static string DefaultDescriptionTemplate {
+            get {
+                return ResourceManager.GetString("DefaultDescriptionTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {
@@ -117,7 +135,34 @@ namespace Trackify.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entries.
+        ///   Looks up a localized string similar to What are you working on?.
+        /// </summary>
+        public static string DescriptionWatermark {
+            get {
+                return ResourceManager.GetString("DescriptionWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End.
+        /// </summary>
+        public static string End {
+            get {
+                return ResourceManager.GetString("End", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entries:.
         /// </summary>
         public static string Entries {
             get {
@@ -154,6 +199,24 @@ namespace Trackify.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New....
+        /// </summary>
+        public static string New {
+            get {
+                return ResourceManager.GetString("New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adds a new entry manually.
+        /// </summary>
+        public static string NewEntryTooltip {
+            get {
+                return ResourceManager.GetString("NewEntryTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reload.
         /// </summary>
         public static string Reload {
@@ -181,11 +244,29 @@ namespace Trackify.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Continue activity on this time entry.
+        /// </summary>
+        public static string RestartTooltip {
+            get {
+                return ResourceManager.GetString("RestartTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string Start {
+            get {
+                return ResourceManager.GetString("Start", resourceCulture);
             }
         }
         

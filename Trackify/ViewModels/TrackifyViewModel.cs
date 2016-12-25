@@ -105,7 +105,7 @@ namespace Trackify.ViewModels
         {
             if (string.IsNullOrWhiteSpace(CurrentAcquisition.Description))
             {
-                CurrentAcquisition.Description = $"Task #{CurrentAcquisition.Id}";
+                CurrentAcquisition.Description = string.Format(CultureDependedTexts.DefaultDescriptionTemplate, CurrentAcquisition.Id);
             }
         }
 

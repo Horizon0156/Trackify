@@ -9,11 +9,12 @@
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                   xmlns:resx="clr-namespace:Trackify.Resources"
                    xmlns:vm="clr-namespace:Trackify.ViewModels"
                    x:Name="Root"
                    Title="{Binding TimeAcquisition.Description,
                                    Mode=OneWay,
-                                   TargetNullValue='New...'}"
+                                   TargetNullValue={x:Static resx:CultureDependedTexts.New}}"
                    Width="300"
                    Height="380"
                    MinWidth="280"
@@ -67,7 +68,7 @@
                          HorizontalAlignment="Stretch"
                          VerticalContentAlignment="Center"
                          metro:TextBoxHelper.SelectAllOnFocus="True"
-                         metro:TextBoxHelper.Watermark="What are you working on?"
+                         metro:TextBoxHelper.Watermark="{x:Static resx:CultureDependedTexts.DescriptionWatermark}"
                          BorderThickness="0"
                          Text="{Binding TimeAcquisition.Description,
                                         Mode=TwoWay,
