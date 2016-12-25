@@ -101,7 +101,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="BookingEntryTemplate" DataType="{x:Type vm:TimeAcquisitionModel}">
-                <Border BorderBrush="DimGray" BorderThickness="0 1 0 0">
+                <Border BorderBrush="DimGray" BorderThickness="0 0 0 1">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -181,96 +181,101 @@
     </metro:MetroWindow.RightWindowCommands>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0"
+
+        <Border Grid.Row="0" BorderBrush="DimGray" BorderThickness="0 0 0 1">
+            <Grid Margin="0 0 0 0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.InputBindings>
+                <MouseBinding Command="{Binding ElementName=Root,
+                                                Path=DataContext.EditCommand}"
+                              CommandParameter="{Binding CurrentAcquisition}"
+                              Gesture="LeftClick" />
+            </Grid.InputBindings>
+            <TextBox Grid.Column="0"
+                     Margin="5"
+                     HorizontalAlignment="Stretch"
+                     VerticalContentAlignment="Center"
+                     metro:TextBoxHelper.Watermark="What are you working on?"
+                     metro:VisibilityHelper.IsCollapsed="{Binding IsTrackingActive}"
+                     BorderThickness="0"
+                     Text="{Binding CurrentAcquisition.Description,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding ToggleTrackingCommand}" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <TextBlock Grid.Column="0"
+                       Margin="10"
+                       VerticalAlignment="Center"
+                       metro:VisibilityHelper.IsVisible="{Binding IsTrackingActive}"
+                       Text="{Binding CurrentAcquisition.Description}" />
+            <controls:TimeTracker Grid.Column="1"
+                                  Margin="5"
+                                  VerticalAlignment="Center"
+                                  IsRunning="{Binding IsTrackingActive}"
+                                  StartTime="{Binding CurrentAcquisition.StartTime,
+                                                      Mode=TwoWay,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                  StopTime="{Binding CurrentAcquisition.StopTime,
+                                                     Mode=TwoWay,
+                                                     UpdateSourceTrigger=PropertyChanged}" />
+            <Button Grid.Column="2"
+                    Width="35"
+                    Height="35"
+                    Margin="5"
+                    Command="{Binding ToggleTrackingCommand}"
+                    Style="{DynamicResource MetroCircleButtonStyle}">
+                <Rectangle Width="10" Height="10">
+                    <Rectangle.Style>
+                        <Style TargetType="Rectangle">
+                            <Setter Property="Fill" Value="Green" />
+                            <Setter Property="OpacityMask">
+                                <Setter.Value>
+                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_play}" />
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsTrackingActive}" Value="True">
+                                    <Setter Property="Fill" Value="Red" />
+                                    <Setter Property="OpacityMask">
+                                        <Setter.Value>
+                                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_stop}" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Rectangle.Style>
+                </Rectangle>
+            </Button>
+        </Grid>
+        </Border>
+        <ScrollViewer Grid.Row="1"
                       Grid.RowSpan="2"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Visible">
-            <StackPanel>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.InputBindings>
-                        <MouseBinding Command="{Binding ElementName=Root,
-                                                        Path=DataContext.EditCommand}"
-                                      CommandParameter="{Binding CurrentAcquisition}"
-                                      Gesture="LeftClick" />
-                    </Grid.InputBindings>
-                    <TextBox Grid.Column="0"
-                             Margin="5"
-                             HorizontalAlignment="Stretch"
-                             VerticalContentAlignment="Center"
-                             metro:TextBoxHelper.Watermark="What are you working on?"
-                             metro:VisibilityHelper.IsCollapsed="{Binding IsTrackingActive}"
-                             BorderThickness="0"
-                             Text="{Binding CurrentAcquisition.Description,
-                                            Mode=TwoWay,
-                                            UpdateSourceTrigger=PropertyChanged}">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding ToggleTrackingCommand}" />
-                        </TextBox.InputBindings>
-                    </TextBox>
-                    <TextBlock Grid.Column="0"
-                               Margin="10"
-                               VerticalAlignment="Center"
-                               metro:VisibilityHelper.IsVisible="{Binding IsTrackingActive}"
-                               Text="{Binding CurrentAcquisition.Description}" />
-                    <controls:TimeTracker Grid.Column="1"
-                                          Margin="5"
-                                          VerticalAlignment="Center"
-                                          IsRunning="{Binding IsTrackingActive}"
-                                          StartTime="{Binding CurrentAcquisition.StartTime,
-                                                              Mode=TwoWay,
-                                                              UpdateSourceTrigger=PropertyChanged}"
-                                          StopTime="{Binding CurrentAcquisition.StopTime,
-                                                             Mode=TwoWay,
-                                                             UpdateSourceTrigger=PropertyChanged}" />
-                    <Button Grid.Column="2"
-                            Width="35"
-                            Height="35"
-                            Margin="5"
-                            Command="{Binding ToggleTrackingCommand}"
-                            Style="{DynamicResource MetroCircleButtonStyle}">
-                        <Rectangle Width="10" Height="10">
-                            <Rectangle.Style>
-                                <Style TargetType="Rectangle">
-                                    <Setter Property="Fill" Value="Green" />
-                                    <Setter Property="OpacityMask">
-                                        <Setter.Value>
-                                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_play}" />
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsTrackingActive}" Value="True">
-                                            <Setter Property="Fill" Value="Red" />
-                                            <Setter Property="OpacityMask">
-                                                <Setter.Value>
-                                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_control_stop}" />
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Rectangle.Style>
-                        </Rectangle>
-                    </Button>
-                </Grid>
-                <ItemsControl Focusable="False"
-                              ItemTemplate="{StaticResource BookingEntryTemplate}"
-                              ItemsSource="{Binding TimeAcquisitions}" />
-            </StackPanel>
+
+            <ItemsControl Focusable="False"
+                          ItemTemplate="{StaticResource BookingEntryTemplate}"
+                          ItemsSource="{Binding TimeAcquisitions}" />
+
             <i:Interaction.Behaviors>
                 <behaviors:AutoScrollBehavior />
             </i:Interaction.Behaviors>
         </ScrollViewer>
-        <ScrollViewer Grid.Row="2"
+
+        <ScrollViewer Grid.Row="3"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Visible">
             <StackPanel Margin="5" Orientation="Vertical">
@@ -281,7 +286,7 @@
                               ItemsSource="{Binding Efforts}" />
             </StackPanel>
         </ScrollViewer>
-        <DockPanel Grid.Row="3"
+        <DockPanel Grid.Row="4"
                    Margin="0 5 15 5"
                    HorizontalAlignment="Stretch">
             <DatePicker Margin="0,0,15,0"
