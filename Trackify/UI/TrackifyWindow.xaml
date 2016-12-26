@@ -201,13 +201,15 @@
                                   CommandParameter="{Binding CurrentAcquisition}"
                                   Gesture="LeftClick" />
                 </Grid.InputBindings>
-                <TextBox Grid.Column="0"
+                <TextBox x:Name="DescriptionInput"
+                         Grid.Column="0"
                          Margin="5"
                          HorizontalAlignment="Stretch"
                          VerticalContentAlignment="Center"
                          metro:TextBoxHelper.Watermark="{x:Static resx:CultureDependedTexts.DescriptionWatermark}"
                          metro:VisibilityHelper.IsCollapsed="{Binding IsTrackingActive}"
                          BorderThickness="0"
+                         PreviewKeyDown="MoveFocusToNextElementOnEnter"
                          Text="{Binding CurrentAcquisition.Description,
                                         Mode=TwoWay,
                                         UpdateSourceTrigger=PropertyChanged}">

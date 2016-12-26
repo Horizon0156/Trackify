@@ -1,9 +1,9 @@
 ﻿using Horizon.MvvmFramework.Services;
 using log4net;
-using MahApps.Metro.Controls.Dialogs;
 using System;
+using System.Windows;
+using System.Windows.Input;
 using Trackify.Messages;
-using Trackify.Resources;
 using Trackify.ViewModels;
 
 namespace Trackify.UI
@@ -24,17 +24,28 @@ namespace Trackify.UI
             messenger.Register<EditTimeAcquisitionViewModel>(OpenEditWindow);
         }
 
-        private void PrepareNewEntry(PrepareNewEntryMessage message)
-        {
-            // Todo
-        }
-
-        private async void LogExceptionAndTerminateApplication(object sender, UnhandledExceptionEventArgs e)
+        private void LogExceptionAndTerminateApplication(object sender, UnhandledExceptionEventArgs e)
         {
             _logger.Fatal("Failed to initialize application", e.ExceptionObject as Exception);
 
-            await this.ShowMessageAsync("Uuups :(", CultureDependedTexts.InitializationFailure);
             Environment.Exit(-1);
+        }
+
+        private void MoveFocusToNextElementOnEnter(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var frameworkElement = (FrameworkElement)sender;
+                frameworkElement.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            }
+            e.Handled = false;
+        }
+
+        private void OpenEditWindow(EditTimeAcquisitionViewModel editModel)
+        {
+            var editWindow = new EditTimeAcquisitionWindow(editModel);
+            editWindow.Owner = this;
+            editWindow.ShowDialog();
         }
 
         private void OpenSettingsWindow(SettingsViewModel settingsModel)
@@ -44,11 +55,9 @@ namespace Trackify.UI
             settingsWindow.ShowDialog();
         }
 
-        private void OpenEditWindow(EditTimeAcquisitionViewModel editModel)
+        private void PrepareNewEntry(PrepareNewEntryMessage message)
         {
-            var editWindow = new EditTimeAcquisitionWindow(editModel);
-            editWindow.Owner = this;
-            editWindow.ShowDialog();
+            DescriptionInput.Focus();
         }
     }
 }
