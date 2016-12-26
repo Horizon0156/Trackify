@@ -62,6 +62,12 @@ namespace Trackify.ViewModels
             }
         }
 
+        public bool IsValid()
+        {
+            return !string.IsNullOrWhiteSpace(Description)
+                   && Duration > TimeSpan.Zero;
+        }
+
         public TimeAcquisitionModel Clone()
         {
             return new TimeAcquisitionModel()

@@ -12,7 +12,7 @@ namespace Trackify.ViewModels
 
         public EditTimeAcquisitionViewModel(TimeAcquisitionModel timeAcquisition)
         {
-            TimeAcquisition = timeAcquisition ?? new TimeAcquisitionModel() { State = TimeAcquisitionStateModel.Recorded };
+            TimeAcquisition = timeAcquisition;
 
             _referenceDate = TimeAcquisition.StartTime?.Date ?? DateTime.Today;
             _startTime = TimeAcquisition.StartTime?.TimeOfDay;

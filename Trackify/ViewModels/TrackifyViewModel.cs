@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 
 using System.Windows.Input;
@@ -199,8 +198,23 @@ namespace Trackify.ViewModels
 
         private void CreateTimeAcquisition()
         {
-            var creationModel = _viewModelFactory.CreateEditTimeAcquisitionViewModel(timeAcquisition: null);
-            _messenger.Send(creationModel);
+            var currentTime = DateTime.Now;
+            var preparedAcquisition = new TimeAcquisitionModel
+            {
+                State = TimeAcquisitionStateModel.Recorded,
+                StartTime = currentTime,
+                StopTime = currentTime
+            };
+
+            var editModel = _viewModelFactory.CreateEditTimeAcquisitionViewModel(preparedAcquisition);
+            _messenger.Send(editModel);
+
+            var createdAcquisition = editModel.TimeAcquisition;
+            if (createdAcquisition.IsValid())
+            {
+                PersistChangesToAcquisition(createdAcquisition);
+                ListAcquisitionProperly(createdAcquisition);
+            }
         }
 
         private void DeleteBooking(TimeAcquisitionModel timeAcquisition)
@@ -244,21 +258,27 @@ namespace Trackify.ViewModels
             {
                 CurrentAcquisition = new TimeAcquisitionModel();
             }
-            CurrentAcquisition.PropertyChanged += SaveChangedAcquisition;
+            CurrentAcquisition.PropertyChanged += PersistChangesToAcquisition;
+        }
+
+        private void ListAcquisitionProperly(TimeAcquisitionModel acquisition)
+        {
+            if (SelectedDate.HasValue
+                && acquisition.StartTime.HasValue
+                && acquisition.StartTime.Value.Date == SelectedDate.Value)
+            {
+                TimeAcquisitions.Add(acquisition);
+            }
         }
 
         private void ListCurrentAcquisitionProperly()
         {
-            if (CurrentAcquisition?.StartTime == null || IsTrackingActive)
+            if (IsTrackingActive)
             {
                 return;
             }
 
-            if (CurrentAcquisition.StartTime.Value.Date == DateTime.Today)
-            {
-                TimeAcquisitions.Add(CurrentAcquisition);
-            }
-
+            ListAcquisitionProperly(CurrentAcquisition);
             ResetCurrentAcquisition();
         }
 
@@ -267,7 +287,7 @@ namespace Trackify.ViewModels
             if (TimeAcquisitions != null)
             {
                 TimeAcquisitions.CollectionChanged -= UpdateEffort;
-                TimeAcquisitions.InnerElementChanged -= SaveChangedAcquisition;
+                TimeAcquisitions.InnerElementChanged -= PersistChangesToAcquisition;
             }
 
             if (SelectedDate.HasValue)
@@ -281,7 +301,7 @@ namespace Trackify.ViewModels
 
                 TimeAcquisitions.FireCollectionChangeWhenInnerElementChanges = true;
                 TimeAcquisitions.CollectionChanged += UpdateEffort;
-                TimeAcquisitions.InnerElementChanged += SaveChangedAcquisition;
+                TimeAcquisitions.InnerElementChanged += PersistChangesToAcquisition;
 
                 UpdateEffort();
             }
@@ -293,40 +313,45 @@ namespace Trackify.ViewModels
             _messenger.Send(settingsModel);
         }
 
-        private void PersistCurrentAcquisition()
+        private void PersistChangesToAcquisition(object sender, PropertyChangedEventArgs e)
         {
-            Debug.Assert(SelectedDate.HasValue, "A valid date is a precondition for the command execution.");
+            PersistChangesToAcquisition((TimeAcquisitionModel)sender);
+        }
 
-            CurrentAcquisition.State = IsTrackingActive
-                ? TimeAcquisitionStateModel.Tracking
-                : TimeAcquisitionStateModel.Recorded;
+        private void PersistChangesToAcquisition(TimeAcquisitionModel acquisition)
+        {
+            var acquisitionToEdit = _databaseContext
+                .TimeAcquisitions
+                .FirstOrDefault(entry => entry.Id == acquisition.Id);
 
-            var acquisition = _databaseContext.TimeAcquisitions.FirstOrDefault(a => a.Id == CurrentAcquisition.Id);
-
-            if (acquisition != null)
+            if (acquisitionToEdit != null)
             {
-                Mapper.Map(CurrentAcquisition, acquisition);
+                Mapper.Map(acquisition, acquisitionToEdit);
+                _databaseContext.SaveChanges();
             }
             else
             {
-                acquisition = Mapper.Map<TimeAcquisition>(CurrentAcquisition);
-                _databaseContext.TimeAcquisitions.Add(acquisition);
+                acquisitionToEdit = Mapper.Map<TimeAcquisition>(acquisition);
+                _databaseContext.TimeAcquisitions.Add(acquisitionToEdit);
+                _databaseContext.SaveChanges();
+                acquisition.Id = acquisitionToEdit.Id;
             }
+        }
 
-            _databaseContext.SaveChanges();
-            CurrentAcquisition.Id = acquisition.Id;
-            CreateDefaultDescriptionIfNeeded();
+        private void PersistChangesToAcquisition(object sender, NotifyInnerElementChangedEventArgs e)
+        {
+            PersistChangesToAcquisition((TimeAcquisitionModel)e.ChangedItem);
         }
 
         private void ResetCurrentAcquisition()
         {
             if (CurrentAcquisition != null)
             {
-                CurrentAcquisition.PropertyChanged -= SaveChangedAcquisition;
+                CurrentAcquisition.PropertyChanged -= PersistChangesToAcquisition;
             }
 
             CurrentAcquisition = new TimeAcquisitionModel();
-            CurrentAcquisition.PropertyChanged += SaveChangedAcquisition;
+            CurrentAcquisition.PropertyChanged += PersistChangesToAcquisition;
 
             _messenger.Send(new PrepareNewEntryMessage());
         }
@@ -342,34 +367,15 @@ namespace Trackify.ViewModels
             IsTrackingActive = true;
         }
 
-        private void SaveChangedAcquisition(object sender, PropertyChangedEventArgs e)
-        {
-            SaveChangedAcquisition((TimeAcquisitionModel)sender);
-        }
-
-        private void SaveChangedAcquisition(TimeAcquisitionModel changedAcquisition)
-        {
-            var acquisitionToEdit = _databaseContext
-                .TimeAcquisitions
-                .FirstOrDefault(b => b.Id == changedAcquisition.Id);
-
-            if (acquisitionToEdit != null)
-            {
-                Mapper.Map(changedAcquisition, acquisitionToEdit);
-                _databaseContext.SaveChanges();
-            }
-        }
-
-        private void SaveChangedAcquisition(object sender, NotifyInnerElementChangedEventArgs e)
-        {
-            SaveChangedAcquisition((TimeAcquisitionModel)e.ChangedItem);
-        }
-
         private void ToggleTracking()
         {
             IsTrackingActive = !IsTrackingActive;
 
-            PersistCurrentAcquisition();
+            CurrentAcquisition.State = IsTrackingActive
+                ? TimeAcquisitionStateModel.Tracking
+                : TimeAcquisitionStateModel.Recorded;
+            CreateDefaultDescriptionIfNeeded();
+
             ListCurrentAcquisitionProperly();
         }
 
