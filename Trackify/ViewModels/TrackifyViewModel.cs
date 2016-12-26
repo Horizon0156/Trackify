@@ -26,13 +26,14 @@ namespace Trackify.ViewModels
         private readonly IMessenger _messenger;
         private readonly ISettings _settings;
         private readonly IViewModelFactory _viewModelFactory;
-        private AttentiveCollection<TimeAcquisitionModel> _timeAcquisitions;
         private TimeAcquisitionModel _currentAcquisition;
         private IEnumerable<Effort> _efforts;
-        private DateTime? _selectedDate;
-
-        private bool _isTrackingActive;
         private bool _hasReachedDailyTarget;
+        private bool _isTrackingActive;
+        private DateTime? _selectedDate;
+        private TimeSpan? _targetTime;
+        private AttentiveCollection<TimeAcquisitionModel> _timeAcquisitions;
+        private double _totalEffort;
 
         public TrackifyViewModel(IDatabaseContext databaseContext, ICommandFactory commandFactory, IMessenger messenger, ISettings settings, IViewModelFactory viewModelFactory)
         {
@@ -43,7 +44,6 @@ namespace Trackify.ViewModels
             _viewModelFactory = viewModelFactory;
 
             ToggleTrackingCommand = commandFactory.CreateCommand(ToggleTracking);
-           
             SettingsCommand = commandFactory.CreateCommand(OpenSettings);
             DeleteCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(DeleteBooking);
             CreateCommand = commandFactory.CreateCommand(CreateTimeAcquisition);
@@ -51,49 +51,52 @@ namespace Trackify.ViewModels
             RestartCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(RestartTimeAcquisition);
 
             _messenger.Register<DatabaseChangedMessage>(msg => LoadAcquisitionsForSelectedDate());
-
             _settings.PropertyChanged += HandleSettingsUpdate;
 
             InitializeContent();
         }
 
-        private bool CanEditTimeAcquisition(TimeAcquisitionModel timeAcquisition)
-        {
-            return timeAcquisition != CurrentAcquisition
-                   || IsTrackingActive;
-        }
-
-        private void HandleSettingsUpdate(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(_settings.BookingTimeInterval))
-            {
-                UpdateEffort();
-            }
-        }
-
-        private void RestartTimeAcquisition(TimeAcquisitionModel timeAcquisition)
-        {
-            if (IsTrackingActive)
-            {
-                ToggleTracking();
-            }
-
-            CurrentAcquisition.Description = timeAcquisition.Description;
-            IsTrackingActive = true;
-        }
-
-        private void CreateTimeAcquisition()
-        {
-            var creationModel = _viewModelFactory.CreateEditTimeAcquisitionViewModel(timeAcquisition: null);
-            _messenger.Send(creationModel);
-        }
-
         public ICommand CreateCommand { get; set; }
 
-        private void EditTimeAcquisition(TimeAcquisitionModel timeAcquisition)
+        public TimeAcquisitionModel CurrentAcquisition
         {
-            var editModel = _viewModelFactory.CreateEditTimeAcquisitionViewModel(timeAcquisition);
-            _messenger.Send(editModel);
+            get
+            {
+                return _currentAcquisition;
+            }
+            private set
+            {
+                SetProperty(ref _currentAcquisition, value);
+            }
+        }
+
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global DeleteCommand is bound using BindingProxy
+        public ICommand DeleteCommand { get; }
+
+        public ICommand EditCommand { get; }
+
+        public IEnumerable<Effort> Efforts
+        {
+            get
+            {
+                return _efforts;
+            }
+            private set
+            {
+                SetProperty(ref _efforts, value);
+            }
+        }
+
+        public bool HasReachedDailyTarget
+        {
+            get
+            {
+                return _hasReachedDailyTarget;
+            }
+            set
+            {
+                SetProperty(ref _hasReachedDailyTarget, value);
+            }
         }
 
         public bool IsTrackingActive
@@ -108,70 +111,7 @@ namespace Trackify.ViewModels
             }
         }
 
-        private void ToggleTracking()
-        {
-            IsTrackingActive = !IsTrackingActive;
-
-            PersistCurrentAcquisition();
-            ListCurrentAcquisitionProperly();
-        }
-
-        private void CreateDefaultDescriptionIfNeeded()
-        {
-            if (string.IsNullOrWhiteSpace(CurrentAcquisition.Description))
-            {
-                CurrentAcquisition.Description = string.Format(CultureDependedTexts.DefaultDescriptionTemplate, CurrentAcquisition.Id);
-            }
-        }
-
-        public AttentiveCollection<TimeAcquisitionModel> TimeAcquisitions
-        {
-            get
-            {
-                return _timeAcquisitions;
-            }
-            set
-            {
-                SetProperty(ref _timeAcquisitions, value);
-            }
-        }
-
-        public TimeAcquisitionModel CurrentAcquisition
-        {
-            get
-            {
-                return _currentAcquisition;
-            }
-            private set
-            {
-                SetProperty(ref _currentAcquisition, value);
-            }
-        }
-
-        public ICommand DeleteCommand { get; }
-
-        public ICommand EditCommand { get; }
-
-        public IEnumerable<Effort> Efforts
-        {
-            get
-            {
-                return _efforts;
-            }
-            private set
-            {
-                SetProperty(ref _efforts, value);
-
-                // ReSharper disable ExplicitCallerInfoArgument, an update of foreign props is desired.
-                OnPropertyChanged(nameof(TotalEffort));
-                OnPropertyChanged(nameof(TargetTime));
-                // ReSharper restore ExplicitCallerInfoArgument
-            }
-        }
-
-        public TimeSpan? TargetTime => CalculateEstimatedTargetTime();
-
-        public INotifiableCommand ToggleTrackingCommand { get; }
+        public ICommand RestartCommand { get; }
 
         public DateTime? SelectedDate
         {
@@ -188,9 +128,43 @@ namespace Trackify.ViewModels
 
         public ICommand SettingsCommand { get; }
 
-        public double TotalEffort => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
+        public TimeSpan? TargetTime
+        {
+            get
+            {
+                return _targetTime;
+            }
+            private set
+            {
+                SetProperty(ref _targetTime, value);
+            }
+        }
 
-        public ICommand RestartCommand { get; }
+        public AttentiveCollection<TimeAcquisitionModel> TimeAcquisitions
+        {
+            get
+            {
+                return _timeAcquisitions;
+            }
+            set
+            {
+                SetProperty(ref _timeAcquisitions, value);
+            }
+        }
+
+        public INotifiableCommand ToggleTrackingCommand { get; }
+
+        public double TotalEffort
+        {
+            get
+            {
+                return _totalEffort;
+            }
+            private set
+            {
+                SetProperty(ref _totalEffort, value);
+            }
+        }
 
         public void InitializeContent()
         {
@@ -198,6 +172,61 @@ namespace Trackify.ViewModels
 
             SelectedDate = DateTime.Today;
             InitializeCurrentAcquisition();
+        }
+
+        private void CalculateEstimatedTargetTime()
+        {
+            var startTime = TimeAcquisitions.Min(b => b.StartTime);
+
+            TargetTime = startTime.HasValue
+                ? startTime.Value.TimeOfDay + TimeSpan.FromHours(_settings.DailyTarget)
+                : (TimeSpan?)null;
+        }
+
+        private bool CanEditTimeAcquisition(TimeAcquisitionModel timeAcquisition)
+        {
+            return timeAcquisition != CurrentAcquisition
+                   || IsTrackingActive;
+        }
+
+        private void CreateDefaultDescriptionIfNeeded()
+        {
+            if (string.IsNullOrWhiteSpace(CurrentAcquisition.Description))
+            {
+                CurrentAcquisition.Description = string.Format(CultureDependedTexts.DefaultDescriptionTemplate, CurrentAcquisition.Id);
+            }
+        }
+
+        private void CreateTimeAcquisition()
+        {
+            var creationModel = _viewModelFactory.CreateEditTimeAcquisitionViewModel(timeAcquisition: null);
+            _messenger.Send(creationModel);
+        }
+
+        private void DeleteBooking(TimeAcquisitionModel timeAcquisition)
+        {
+            TimeAcquisitions.Remove(timeAcquisition);
+
+            _databaseContext.TimeAcquisitions.Remove(_databaseContext.TimeAcquisitions.First(b => b.Id == timeAcquisition.Id));
+            _databaseContext.SaveChanges();
+        }
+
+        private void EditTimeAcquisition(TimeAcquisitionModel timeAcquisition)
+        {
+            var editModel = _viewModelFactory.CreateEditTimeAcquisitionViewModel(timeAcquisition);
+            _messenger.Send(editModel);
+        }
+
+        private void HandleSettingsUpdate(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_settings.BookingTimeInterval))
+            {
+                UpdateEffort();
+            }
+            else if (e.PropertyName == nameof(_settings.DailyTarget))
+            {
+                CalculateEstimatedTargetTime();
+            }
         }
 
         private void InitializeCurrentAcquisition()
@@ -218,21 +247,19 @@ namespace Trackify.ViewModels
             CurrentAcquisition.PropertyChanged += SaveChangedAcquisition;
         }
 
-        private TimeSpan? CalculateEstimatedTargetTime()
+        private void ListCurrentAcquisitionProperly()
         {
-            var startTime = TimeAcquisitions.Min(b => b.StartTime);
+            if (CurrentAcquisition?.StartTime == null || IsTrackingActive)
+            {
+                return;
+            }
 
-            return startTime.HasValue
-                ? startTime.Value.TimeOfDay + TimeSpan.FromHours(_settings.DailyTarget)
-                : (TimeSpan?)null;
-        }
+            if (CurrentAcquisition.StartTime.Value.Date == DateTime.Today)
+            {
+                TimeAcquisitions.Add(CurrentAcquisition);
+            }
 
-        private void DeleteBooking(TimeAcquisitionModel timeAcquisition)
-        {
-            TimeAcquisitions.Remove(timeAcquisition);
-
-            _databaseContext.TimeAcquisitions.Remove(_databaseContext.TimeAcquisitions.First(b => b.Id == timeAcquisition.Id));
-            _databaseContext.SaveChanges();
+            ResetCurrentAcquisition();
         }
 
         private void LoadAcquisitionsForSelectedDate()
@@ -285,31 +312,10 @@ namespace Trackify.ViewModels
                 acquisition = Mapper.Map<TimeAcquisition>(CurrentAcquisition);
                 _databaseContext.TimeAcquisitions.Add(acquisition);
             }
-            
+
             _databaseContext.SaveChanges();
             CurrentAcquisition.Id = acquisition.Id;
             CreateDefaultDescriptionIfNeeded();
-
-            if (!IsTrackingActive)
-            {
-                TimeAcquisitions.Add(CurrentAcquisition);
-                ResetCurrentAcquisition();
-            }
-        }
-
-        private void ListCurrentAcquisitionProperly()
-        {
-            if (CurrentAcquisition?.StartTime == null || IsTrackingActive)
-            {
-                return;
-            }
-
-            if (CurrentAcquisition.StartTime.Value.Date == DateTime.Today)
-            {
-                TimeAcquisitions.Add(CurrentAcquisition);
-            }
-           
-            ResetCurrentAcquisition();
         }
 
         private void ResetCurrentAcquisition()
@@ -325,9 +331,20 @@ namespace Trackify.ViewModels
             _messenger.Send(new PrepareNewEntryMessage());
         }
 
+        private void RestartTimeAcquisition(TimeAcquisitionModel timeAcquisition)
+        {
+            if (IsTrackingActive)
+            {
+                ToggleTracking();
+            }
+
+            CurrentAcquisition.Description = timeAcquisition.Description;
+            IsTrackingActive = true;
+        }
+
         private void SaveChangedAcquisition(object sender, PropertyChangedEventArgs e)
         {
-            SaveChangedAcquisition((TimeAcquisitionModel) sender);
+            SaveChangedAcquisition((TimeAcquisitionModel)sender);
         }
 
         private void SaveChangedAcquisition(TimeAcquisitionModel changedAcquisition)
@@ -345,19 +362,15 @@ namespace Trackify.ViewModels
 
         private void SaveChangedAcquisition(object sender, NotifyInnerElementChangedEventArgs e)
         {
-            SaveChangedAcquisition((TimeAcquisitionModel) e.ChangedItem);
+            SaveChangedAcquisition((TimeAcquisitionModel)e.ChangedItem);
         }
 
-        public bool HasReachedDailyTarget
+        private void ToggleTracking()
         {
-            get
-            {
-                return _hasReachedDailyTarget;
-            }
-            set
-            {
-                SetProperty(ref _hasReachedDailyTarget, value);
-            }
+            IsTrackingActive = !IsTrackingActive;
+
+            PersistCurrentAcquisition();
+            ListCurrentAcquisitionProperly();
         }
 
         private void UpdateEffort()
@@ -366,7 +379,10 @@ namespace Trackify.ViewModels
                     .GroupBy(b => b.Description)
                     .Select(g => new Effort(_commandFactory, g.ToList()).RoundEffort(_settings.BookingTimeInterval));
 
+            TotalEffort = Efforts.Sum(e => e.EffortTimeInHours);
             HasReachedDailyTarget = TotalEffort >= _settings.DailyTarget;
+
+            CalculateEstimatedTargetTime();
         }
 
         private void UpdateEffort(object sender, NotifyCollectionChangedEventArgs e)
