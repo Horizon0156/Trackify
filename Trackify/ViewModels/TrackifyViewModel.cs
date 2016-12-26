@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 
-using System.Text.RegularExpressions;
 using System.Windows.Input;
 using Trackify.DataModels;
 using Trackify.Factories;
@@ -33,6 +32,7 @@ namespace Trackify.ViewModels
         private DateTime? _selectedDate;
 
         private bool _isTrackingActive;
+        private bool _hasReachedDailyTarget;
 
         public TrackifyViewModel(IDatabaseContext databaseContext, ICommandFactory commandFactory, IMessenger messenger, ISettings settings, IViewModelFactory viewModelFactory)
         {
@@ -148,14 +148,13 @@ namespace Trackify.ViewModels
                 SetProperty(ref _efforts, value);
 
                 // ReSharper disable ExplicitCallerInfoArgument, an update of foreign props is desired.
-                OnPropertyChanged(nameof(TotalEffortGrossToday));
-                OnPropertyChanged(nameof(TotalEffortNetToday));
-                OnPropertyChanged(nameof(HomeTime));
+                OnPropertyChanged(nameof(TotalEffort));
+                OnPropertyChanged(nameof(TargetTime));
                 // ReSharper restore ExplicitCallerInfoArgument
             }
         }
 
-        public TimeSpan? HomeTime => CalculateEstimatedHomeTime();
+        public TimeSpan? TargetTime => CalculateEstimatedTargetTime();
 
         public INotifiableCommand ToggleTrackingCommand { get; }
 
@@ -174,9 +173,7 @@ namespace Trackify.ViewModels
 
         public ICommand SettingsCommand { get; }
 
-        public double TotalEffortGrossToday => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
-
-        public double TotalEffortNetToday => CalculateNetEffortForToday();
+        public double TotalEffort => Efforts?.Sum(e => e.EffortTimeInHours) ?? 0;
 
         public ICommand RestartCommand { get; }
 
@@ -206,24 +203,13 @@ namespace Trackify.ViewModels
             CurrentAcquisition.PropertyChanged += SaveChangedAcquisition;
         }
 
-        private TimeSpan? CalculateEstimatedHomeTime()
+        private TimeSpan? CalculateEstimatedTargetTime()
         {
             var startTime = TimeAcquisitions.Min(b => b.StartTime);
 
             return startTime.HasValue
-                ? startTime.Value.TimeOfDay + TimeSpan.FromHours(8 + (TotalEffortGrossToday - TotalEffortNetToday))
+                ? startTime.Value.TimeOfDay + TimeSpan.FromHours(_settings.DailyTarget)
                 : (TimeSpan?)null;
-        }
-
-        private double CalculateNetEffortForToday()
-        {
-            var breakDeterminationExpression = new Regex($"^({CultureDependedTexts.BreakDescritption})$", RegexOptions.IgnoreCase);
-
-            var netEffort = Efforts?
-                .Where(e => !breakDeterminationExpression.IsMatch(e.Description ?? string.Empty))
-                .Sum(e => e.EffortTimeInHours);
-
-            return netEffort ?? 0;
         }
 
         private void DeleteBooking(TimeAcquisitionModel timeAcquisition)
@@ -347,11 +333,25 @@ namespace Trackify.ViewModels
             SaveChangedAcquisition((TimeAcquisitionModel) e.ChangedItem);
         }
 
+        public bool HasReachedDailyTarget
+        {
+            get
+            {
+                return _hasReachedDailyTarget;
+            }
+            set
+            {
+                SetProperty(ref _hasReachedDailyTarget, value);
+            }
+        }
+
         private void UpdateEffort()
         {
             Efforts = TimeAcquisitions
                     .GroupBy(b => b.Description)
                     .Select(g => new Effort(_commandFactory, g.ToList()).RoundEffort(_settings.BookingTimeInterval));
+
+            HasReachedDailyTarget = TotalEffort >= _settings.DailyTarget;
         }
 
         private void UpdateEffort(object sender, NotifyCollectionChangedEventArgs e)

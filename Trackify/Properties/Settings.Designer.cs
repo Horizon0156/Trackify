@@ -46,5 +46,17 @@ namespace Trackify.Properties {
                 this["BookingTimeInterval"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public double DailyTarget {
+            get {
+                return ((double)(this["DailyTarget"]));
+            }
+            set {
+                this["DailyTarget"] = value;
+            }
+        }
     }
 }

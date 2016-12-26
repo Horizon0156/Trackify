@@ -129,14 +129,9 @@
   <data name="TimeInterval" xml:space="preserve">
     <value>Time interval:</value>
   </data>
-  <data name="BreakDescritption" xml:space="preserve">
-    <value>Pause|Break</value>
-    <comment>Task description which will be identified as a break. Reg. expressions are allowed. Case will be ignored</comment>
-  </data>
   <data name="BreakTimeSnippet" xml:space="preserve">
-    <value>Sum incl. breaks: {0:N2} h
-Sum excl. breaks: {1:N2} h
-Est. home time: {2:hh\:mm}</value>
+    <value>Total effort today: {0:N2} h
+Est. target time: {1:hh\:mm}</value>
   </data>
   <data name="Database" xml:space="preserve">
     <value>Database:</value>
@@ -202,5 +197,12 @@ Please have a look at the logs to get further information.</value>
   </data>
   <data name="Start" xml:space="preserve">
     <value>Start</value>
+  </data>
+  <data name="DailyTarget" xml:space="preserve">
+    <value>Daily target:</value>
+  </data>
+  <data name="HourStringFormat" xml:space="preserve">
+    <value>{0:N2} h</value>
+    <comment>0 -&gt; Amount of hours</comment>
   </data>
 </root>

@@ -43,6 +43,18 @@ namespace Trackify.ViewModels
             }
         }
 
+        public double DailyTarget
+        {
+            get
+            {
+                return _settings.DailyTarget;
+            }
+            set
+            {
+                _settings.DailyTarget = value;
+            }
+        }
+
         public ICommand LocateDatabaseCommand { get; }
 
         public int NumberOfBookings

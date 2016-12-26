@@ -53,6 +53,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="10" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -64,7 +66,6 @@
                    Grid.Column="0"
                    VerticalAlignment="Center"
                    Text="{x:Static resx:CultureDependedTexts.AccentColor}" />
-
         <ComboBox Grid.Row="0"
                   Grid.Column="2"
                   FocusVisualStyle="{x:Null}"
@@ -79,42 +80,58 @@
                    Grid.Column="0"
                    VerticalAlignment="Center"
                    Text="{x:Static resx:CultureDependedTexts.TimeInterval}" />
-
         <metro:NumericUpDown Grid.Row="2"
                              Grid.Column="2"
                              Interval="0.01"
                              Minimum="0"
+                             StringFormat="{x:Static resx:CultureDependedTexts.HourStringFormat}"
                              Value="{Binding BookingTimeInterval}" />
+
         <TextBlock Grid.Row="4"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Text="{x:Static resx:CultureDependedTexts.DailyTarget}" />
+        <metro:NumericUpDown Grid.Row="4"
+                             Grid.Column="2"
+                             Interval="0.01"
+                             Minimum="0"
+                             StringFormat="{x:Static resx:CultureDependedTexts.HourStringFormat}"
+                             Value="{Binding DailyTarget}" />
+
+        <TextBlock Grid.Row="6"
                    Grid.Column="0"
                    Grid.ColumnSpan="3"
                    Text="{x:Static resx:CultureDependedTexts.Database}" />
-        <TextBlock Grid.Row="6"
-                   Grid.Column="0"
-                   Margin="10 0 0 0"
-                   Text="{x:Static resx:CultureDependedTexts.Entries}" />
-        <TextBlock Grid.Row="6"
-                   Grid.Column="2"
-                   Text="{Binding NumberOfBookings}" />
+
         <TextBlock Grid.Row="8"
                    Grid.Column="0"
                    Margin="10 0 0 0"
+                   Text="{x:Static resx:CultureDependedTexts.Entries}" />
+        <TextBlock Grid.Row="8"
+                   Grid.Column="2"
+                   Text="{Binding NumberOfBookings}" />
+
+        <TextBlock Grid.Row="10"
+                   Grid.Column="0"
+                   Margin="10 0 0 0"
                    Text="{x:Static resx:CultureDependedTexts.Backup}" />
-        <Button Grid.Row="8"
+        <Button Grid.Row="10"
                 Grid.Column="2"
                 Command="{Binding LocateDatabaseCommand}"
                 Content="{x:Static resx:CultureDependedTexts.LocateInExplorer}"
                 FocusVisualStyle="{x:Null}" />
-        <Button Grid.Row="10"
+
+        <Button Grid.Row="12"
                 Grid.Column="2"
                 Command="{Binding ReloadDatabaseCommand}"
                 Content="{x:Static resx:CultureDependedTexts.Reload}"
                 FocusVisualStyle="{x:Null}" />
-        <TextBlock Grid.Row="12"
+
+        <TextBlock Grid.Row="14"
                    Grid.Column="0"
                    Margin="10 0 0 0"
                    Text="{x:Static resx:CultureDependedTexts.Reset}" />
-        <Button Grid.Row="12"
+        <Button Grid.Row="14"
                 Grid.Column="2"
                 Command="{Binding ResetDatabaseCommand}"
                 Content="{x:Static resx:CultureDependedTexts.ResetData}"

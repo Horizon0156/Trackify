@@ -193,7 +193,6 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Controls\TimeTracker.cs" />
-    <Compile Include="Converter\TotalEffortToColorConverter.cs" />
     <Compile Include="DataModels\TimeAcquisition.cs" />
     <Compile Include="DataModels\AcquisitionState.cs" />
     <Compile Include="Factories\IViewModelFactory.cs" />
@@ -294,7 +293,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Converter\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -4,14 +4,12 @@
                    xmlns:behaviors="clr-namespace:Horizon.MvvmFramework.Wpf.Behaviors;assembly=Horizon.MvvmFramework.Wpf"
                    xmlns:bindings="clr-namespace:Horizon.MvvmFramework.Wpf.Bindings;assembly=Horizon.MvvmFramework.Wpf"
                    xmlns:controls="clr-namespace:Trackify.Controls"
-                   xmlns:converter="clr-namespace:Trackify.Converter"
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                    xmlns:metroBehaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                    xmlns:resx="clr-namespace:Trackify.Resources"
-                   xmlns:system="clr-namespace:System;assembly=mscorlib"
                    xmlns:vm="clr-namespace:Trackify.ViewModels"
                    x:Name="Root"
                    Title="{x:Static resx:CultureDependedTexts.Title}"
@@ -39,8 +37,6 @@
             </ResourceDictionary.MergedDictionaries>
 
             <bindings:BindingProxy x:Key="DataContextProxy" Data="{Binding ElementName=Root, Path=DataContext}" />
-            <system:Double x:Key="DailyWorkHours">8.00</system:Double>
-            <converter:TotalEffortToColorConverter x:Key="TotalEffortToColorConverter" />
 
             <Style x:Key="FocusableButtonStyle"
                    BasedOn="{StaticResource MetroCircleButtonStyle}"
@@ -331,19 +327,24 @@
             <TextBlock Margin="0,0,10,0"
                        VerticalAlignment="Center"
                        DockPanel.Dock="Right"
-                       Foreground="{Binding TotalEffortNetToday,
-                                            Converter={StaticResource TotalEffortToColorConverter},
-                                            ConverterParameter={StaticResource DailyWorkHours}}"
-                       Text="{Binding TotalEffortNetToday,
-                                      StringFormat='{}{0:N2} h'}"
+                       Text="{Binding TotalEffort,
+                                      StringFormat={x:Static resx:CultureDependedTexts.HourStringFormat}}"
                        TextAlignment="Right">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasReachedDailyTarget}" Value="True">
+                                <Setter Property="Foreground" Value="LimeGreen" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
                 <TextBlock.ToolTip>
-                    <TextBlock>
+                    <TextBlock TextAlignment="Left">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{x:Static resx:CultureDependedTexts.BreakTimeSnippet}">
-                                <Binding Path="TotalEffortGrossToday" />
-                                <Binding Path="TotalEffortNetToday" />
-                                <Binding Path="HomeTime" />
+                                <Binding Path="TotalEffort" />
+                                <Binding Path="TargetTime" />
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>

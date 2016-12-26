@@ -79,22 +79,21 @@ namespace Trackify.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pause|Break.
-        /// </summary>
-        public static string BreakDescritption {
-            get {
-                return ResourceManager.GetString("BreakDescritption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sum incl. breaks: {0:N2} h
-        ///Sum excl. breaks: {1:N2} h
-        ///Est. home time: {2:hh\:mm}.
+        ///   Looks up a localized string similar to Total effort today: {0:N2} h
+        ///Est. target time: {1:hh\:mm}.
         /// </summary>
         public static string BreakTimeSnippet {
             get {
                 return ResourceManager.GetString("BreakTimeSnippet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Daily target:.
+        /// </summary>
+        public static string DailyTarget {
+            get {
+                return ResourceManager.GetString("DailyTarget", resourceCulture);
             }
         }
         
@@ -176,6 +175,15 @@ namespace Trackify.Resources {
         public static string GoHome {
             get {
                 return ResourceManager.GetString("GoHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0:N2} h.
+        /// </summary>
+        public static string HourStringFormat {
+            get {
+                return ResourceManager.GetString("HourStringFormat", resourceCulture);
             }
         }
         

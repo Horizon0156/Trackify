@@ -29,5 +29,18 @@ namespace Trackify.Mocks
                 Settings.Default.Save();
             }
         }
+
+        public double DailyTarget
+        {
+            get
+            {
+                return Settings.Default.DailyTarget;
+            }
+            set
+            {
+                Settings.Default.DailyTarget = value;
+                Settings.Default.Save();
+            }
+        }
     }
 }
