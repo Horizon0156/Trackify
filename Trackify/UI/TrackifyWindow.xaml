@@ -12,7 +12,6 @@
                    xmlns:metroBehaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                    xmlns:resx="clr-namespace:Trackify.Resources"
                    xmlns:system="clr-namespace:System;assembly=mscorlib"
-                   xmlns:ui="clr-namespace:Trackify.UI"
                    xmlns:vm="clr-namespace:Trackify.ViewModels"
                    x:Name="Root"
                    Title="{x:Static resx:CultureDependedTexts.Title}"
@@ -42,7 +41,18 @@
             <bindings:BindingProxy x:Key="DataContextProxy" Data="{Binding ElementName=Root, Path=DataContext}" />
             <system:Double x:Key="DailyWorkHours">8.00</system:Double>
             <converter:TotalEffortToColorConverter x:Key="TotalEffortToColorConverter" />
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+            <Style x:Key="FocusableButtonStyle"
+                   BasedOn="{StaticResource MetroCircleButtonStyle}"
+                   TargetType="Button">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Style.Triggers>
+                    <Trigger Property="IsKeyboardFocused" Value="True">
+                        <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
             <DataTemplate x:Key="EffortTemplate" DataType="{x:Type vm:Effort}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -73,9 +83,8 @@
                                Height="10"
                                Margin="5 0 0 0"
                                VerticalAlignment="Center"
-                               Fill="DimGray"
-                               Visibility="{Binding MarkedAsBooked,
-                                                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                               metro:VisibilityHelper.IsVisible="{Binding MarkedAsBooked}"
+                               Fill="DimGray">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_check}" />
                         </Rectangle.OpacityMask>
@@ -144,17 +153,8 @@
                                 Command="{Binding ElementName=Root,
                                                   Path=DataContext.RestartCommand}"
                                 CommandParameter="{Binding}"
-                                FocusVisualStyle="{x:Null}"
+                                Style="{StaticResource FocusableButtonStyle}"
                                 ToolTip="{x:Static resx:CultureDependedTexts.RestartTooltip}">
-                            <Button.Style>
-                                <Style BasedOn="{StaticResource MetroCircleButtonStyle}" TargetType="Button">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsKeyboardFocused" Value="True">
-                                            <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
                             <Rectangle Width="10"
                                        Height="10"
                                        Fill="White">
@@ -218,6 +218,9 @@
                     <TextBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding ToggleTrackingCommand}" />
                     </TextBox.InputBindings>
+                    <i:Interaction.Behaviors>
+                        <behaviors:InitialFocusBehavior FallbackElement="{Binding ElementName=TrackButton}" />
+                    </i:Interaction.Behaviors>
                 </TextBox>
                 <TextBlock Grid.Column="0"
                            Margin="10"
@@ -234,12 +237,13 @@
                                       StopTime="{Binding CurrentAcquisition.StopTime,
                                                          Mode=TwoWay,
                                                          UpdateSourceTrigger=PropertyChanged}" />
-                <Button Grid.Column="2"
+                <Button x:Name="TrackButton"
+                        Grid.Column="2"
                         Width="35"
                         Height="35"
                         Margin="5"
                         Command="{Binding ToggleTrackingCommand}"
-                        Style="{DynamicResource MetroCircleButtonStyle}">
+                        Style="{StaticResource FocusableButtonStyle}">
                     <Rectangle Width="10" Height="10">
                         <Rectangle.Style>
                             <Style TargetType="Rectangle">
@@ -297,18 +301,28 @@
                         BorderThickness="0"
                         DockPanel.Dock="Left"
                         SelectedDate="{Binding SelectedDate}" />
-            <Button Width="15"
+            <Button x:Name="AddEntryButton"
+                    Width="15"
                     Height="15"
                     Margin="5 0 0 0"
                     VerticalAlignment="Center"
                     Command="{Binding CreateCommand}"
                     CommandParameter="{x:Null}"
                     DockPanel.Dock="Right"
+                    FocusVisualStyle="{x:Null}"
                     Style="{DynamicResource ChromelessButtonStyle}"
                     ToolTip="{x:Static resx:CultureDependedTexts.NewEntryTooltip}">
-                <Rectangle Width="15"
-                           Height="15"
-                           Fill="White">
+                <Rectangle Width="15" Height="15">
+                    <Rectangle.Style>
+                        <Style TargetType="Rectangle">
+                            <Setter Property="Fill" Value="White" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=AddEntryButton, Path=IsKeyboardFocused}" Value="True">
+                                    <Setter Property="Fill" Value="{DynamicResource AccentColorBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Rectangle.Style>
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_list_add_below}" />
                     </Rectangle.OpacityMask>

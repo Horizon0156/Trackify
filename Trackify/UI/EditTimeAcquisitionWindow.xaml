@@ -72,7 +72,11 @@
                          BorderThickness="0"
                          Text="{Binding TimeAcquisition.Description,
                                         Mode=TwoWay,
-                                        UpdateSourceTrigger=LostFocus}" />
+                                        UpdateSourceTrigger=LostFocus}">
+                    <i:Interaction.Behaviors>
+                        <behaviors:InitialFocusBehavior />
+                    </i:Interaction.Behaviors>
+                </TextBox>
                 <controls:TimeTracker Grid.Column="1"
                                       Margin="5"
                                       VerticalAlignment="Center"

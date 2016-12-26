@@ -67,8 +67,13 @@
 
         <ComboBox Grid.Row="0"
                   Grid.Column="2"
+                  FocusVisualStyle="{x:Null}"
                   ItemsSource="{StaticResource AccentColors}"
-                  SelectedItem="{Binding SelectedAccentColor}" />
+                  SelectedItem="{Binding SelectedAccentColor}">
+            <i:Interaction.Behaviors>
+                <behaviors:InitialFocusBehavior />
+            </i:Interaction.Behaviors>
+        </ComboBox>
 
         <TextBlock Grid.Row="2"
                    Grid.Column="0"
@@ -98,11 +103,13 @@
         <Button Grid.Row="8"
                 Grid.Column="2"
                 Command="{Binding LocateDatabaseCommand}"
-                Content="{x:Static resx:CultureDependedTexts.LocateInExplorer}" />
+                Content="{x:Static resx:CultureDependedTexts.LocateInExplorer}"
+                FocusVisualStyle="{x:Null}" />
         <Button Grid.Row="10"
                 Grid.Column="2"
                 Command="{Binding ReloadDatabaseCommand}"
-                Content="{x:Static resx:CultureDependedTexts.Reload}" />
+                Content="{x:Static resx:CultureDependedTexts.Reload}"
+                FocusVisualStyle="{x:Null}" />
         <TextBlock Grid.Row="12"
                    Grid.Column="0"
                    Margin="10 0 0 0"
@@ -110,6 +117,7 @@
         <Button Grid.Row="12"
                 Grid.Column="2"
                 Command="{Binding ResetDatabaseCommand}"
-                Content="{x:Static resx:CultureDependedTexts.ResetData}" />
+                Content="{x:Static resx:CultureDependedTexts.ResetData}"
+                FocusVisualStyle="{x:Null}" />
     </Grid>
 </metro:MetroWindow>
