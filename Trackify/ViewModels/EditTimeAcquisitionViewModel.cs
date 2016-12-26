@@ -1,23 +1,17 @@
 ﻿using Horizon.MvvmFramework.Components;
 using System;
-using Horizon.MvvmFramework.Services;
-using Trackify.DataModels;
 
 namespace Trackify.ViewModels
 {
     internal class EditTimeAcquisitionViewModel : ViewModel
     {
-        private readonly IDatabaseContext _dataContext;
-        private readonly IMessenger _messenger;
         private DateTime? _referenceDate;
         private TimeSpan? _startTime;
         private TimeSpan? _stopTime;
         private TimeAcquisitionModel _timeAcquisition;
 
-        public EditTimeAcquisitionViewModel(TimeAcquisitionModel timeAcquisition, IDatabaseContext dataContext, IMessenger messenger)
+        public EditTimeAcquisitionViewModel(TimeAcquisitionModel timeAcquisition)
         {
-            _dataContext = dataContext;
-            _messenger = messenger;
             TimeAcquisition = timeAcquisition ?? new TimeAcquisitionModel() { State = TimeAcquisitionStateModel.Recorded };
 
             _referenceDate = TimeAcquisition.StartTime?.Date ?? DateTime.Today;

@@ -16,10 +16,7 @@ namespace Trackify.Factories
 
         public EditTimeAcquisitionViewModel CreateEditTimeAcquisitionViewModel(TimeAcquisitionModel timeAcquisition)
         {
-            return new EditTimeAcquisitionViewModel(
-                timeAcquisition,
-                _iocContainer.GetInstance<IDatabaseContext>(),
-                _iocContainer.GetInstance<IMessenger>());
+            return new EditTimeAcquisitionViewModel(timeAcquisition);
         }
 
         public SettingsViewModel CreateSettingsViewModel()
