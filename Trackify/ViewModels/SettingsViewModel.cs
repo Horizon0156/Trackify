@@ -39,7 +39,6 @@ namespace Trackify.ViewModels
             set
             {
                 _settings.BookingTimeInterval = value;
-                _messenger.Send(new BookingTimeIntervalChangedMessage());
             }
         }
 
@@ -82,16 +81,6 @@ namespace Trackify.ViewModels
             set
             {
                 _settings.AccentColor = value;
-                OnPropertyChanged();
-                BroadcastAccentColorChange();
-            }
-        }
-
-        private void BroadcastAccentColorChange()
-        {
-            if (SelectedAccentColor != null)
-            {
-                _messenger.Send(new AccentColorChangedMessage(SelectedAccentColor));
             }
         }
 

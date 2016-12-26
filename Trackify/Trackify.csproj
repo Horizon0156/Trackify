@@ -197,8 +197,6 @@
     <Compile Include="DataModels\AcquisitionState.cs" />
     <Compile Include="Factories\IViewModelFactory.cs" />
     <Compile Include="Factories\ViewModelFactory.cs" />
-    <Compile Include="Messages\AccentColorChangedMessage.cs" />
-    <Compile Include="Messages\BookingTimeIntervalChangedMessage.cs" />
     <Compile Include="Messages\PrepareNewEntryMessage.cs" />
     <Compile Include="Messages\DatabaseChangedMessage.cs" />
     <Compile Include="Mocks\IProcess.cs" />

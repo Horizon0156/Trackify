@@ -1,9 +1,13 @@
-﻿using Trackify.Properties;
+﻿using System;
+using Horizon.MvvmFramework.Components;
+using Trackify.Properties;
 
 namespace Trackify.Mocks
 {
-    internal class UserSettings : ISettings
+    internal class UserSettings : ObserveableObject, ISettings
     {
+        private const double TOLERANCE = 0.01;
+
         public string AccentColor
         {
             get
@@ -12,8 +16,12 @@ namespace Trackify.Mocks
             }
             set
             {
-                Settings.Default.AccentColor = value;
-                Settings.Default.Save();
+                if (Settings.Default.AccentColor != value)
+                {
+                    Settings.Default.AccentColor = value;
+                    OnPropertyChanged();
+                    Settings.Default.Save();
+                }
             }
         }
 
@@ -25,8 +33,12 @@ namespace Trackify.Mocks
             }
             set
             {
-                Settings.Default.BookingTimeInterval = value;
-                Settings.Default.Save();
+                if (Math.Abs(Settings.Default.BookingTimeInterval - value) > TOLERANCE)
+                {
+                    Settings.Default.BookingTimeInterval = value;
+                    OnPropertyChanged();
+                    Settings.Default.Save();
+                }
             }
         }
 
@@ -38,8 +50,12 @@ namespace Trackify.Mocks
             }
             set
             {
-                Settings.Default.DailyTarget = value;
-                Settings.Default.Save();
+                if (Math.Abs(Settings.Default.DailyTarget - value) > TOLERANCE)
+                {
+                    Settings.Default.DailyTarget = value;
+                    OnPropertyChanged();
+                    Settings.Default.Save();
+                }
             }
         }
     }

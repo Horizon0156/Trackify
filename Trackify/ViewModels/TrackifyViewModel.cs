@@ -51,9 +51,18 @@ namespace Trackify.ViewModels
             RestartCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(RestartTimeAcquisition);
 
             _messenger.Register<DatabaseChangedMessage>(msg => LoadAcquisitionsForSelectedDate());
-            _messenger.Register<BookingTimeIntervalChangedMessage>(msg => UpdateEffort());
+
+            _settings.PropertyChanged += HandleSettingsUpdate;
 
             InitializeContent();
+        }
+
+        private void HandleSettingsUpdate(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_settings.BookingTimeInterval))
+            {
+                UpdateEffort();
+            }
         }
 
         private void RestartTimeAcquisition(TimeAcquisitionModel timeAcquisition)

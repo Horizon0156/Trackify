@@ -1,6 +1,8 @@
-﻿namespace Trackify.Mocks
+﻿using System.ComponentModel;
+
+namespace Trackify.Mocks
 {
-    internal interface ISettings
+    internal interface ISettings : INotifyPropertyChanged
     {
         string AccentColor { get; set; }
 

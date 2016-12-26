@@ -4,16 +4,16 @@ using Horizon.MvvmFramework.Services;
 using Horizon.MvvmFramework.Wpf.Extensions;
 using log4net;
 using MahApps.Metro;
-using SimpleInjector;
 using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using Trackify.DataModels;
 using Trackify.Factories;
-using Trackify.Messages;
 using Trackify.Mocks;
 using Trackify.UI;
 using Trackify.ViewModels;
+using Container = SimpleInjector.Container;
 
 namespace Trackify
 {
@@ -43,14 +43,6 @@ namespace Trackify
         {
             base.OnStartup(e);
             _container.GetInstance<TrackifyWindow>().Show();
-        }
-
-        private void ChangeAppStyle(AccentColorChangedMessage message)
-        {
-            ThemeManager.ChangeAppStyle(
-                this,
-                ThemeManager.GetAccent(message.NewAccentColor),
-                ThemeManager.GetAppTheme("BaseDark"));
         }
 
         private void InitializeDependencyInjection()
@@ -83,8 +75,26 @@ namespace Trackify
             this.InjectResourceDictionary("MahApps.Metro", "Styles/Accents/BaseLight.xaml");
 
             var settings = _container.GetInstance<ISettings>();
-            _messageHub.Register<AccentColorChangedMessage>(ChangeAppStyle);
-            ChangeAppStyle(new AccentColorChangedMessage(settings.AccentColor));
+            settings.PropertyChanged += UpdateTheme;
+            UpdateTheme(settings.AccentColor);
+        }
+
+        private void UpdateTheme(object sender, PropertyChangedEventArgs e)
+        {
+            var settings = (ISettings) sender;
+
+            if (e.PropertyName == nameof(settings.AccentColor))
+            {
+                UpdateTheme(settings.AccentColor);
+            }
+        }
+
+        private void UpdateTheme(string accentColor)
+        {
+            ThemeManager.ChangeAppStyle(
+                this,
+                ThemeManager.GetAccent(accentColor),
+                ThemeManager.GetAppTheme("BaseDark"));
         }
     }
 }
