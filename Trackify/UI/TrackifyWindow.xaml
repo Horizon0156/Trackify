@@ -22,6 +22,8 @@
                    BorderBrush="{DynamicResource AccentColorBrush}"
                    BorderThickness="1"
                    SaveWindowPosition="True"
+                   Topmost="{Binding Settings.ShouldApplicationStayAlwaysOnTop,
+                                     Mode=TwoWay}"
                    mc:Ignorable="d">
     <i:Interaction.Behaviors>
         <behaviors:ViewModelBehavior UnhandledException="LogExceptionAndTerminateApplication" />
@@ -268,9 +270,18 @@
             </Grid>
         </Border>
         <ScrollViewer Grid.Row="1"
-                      Grid.RowSpan="2"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Visible">
+            <ScrollViewer.Style>
+                <Style TargetType="ScrollViewer">
+                    <Setter Property="Grid.RowSpan" Value="2" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Settings.IsDailyReportVisible}" Value="False">
+                            <Setter Property="Grid.RowSpan" Value="3" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ScrollViewer.Style>
 
             <ItemsControl Focusable="False"
                           ItemTemplate="{StaticResource BookingEntryTemplate}"
@@ -282,6 +293,7 @@
         </ScrollViewer>
 
         <ScrollViewer Grid.Row="3"
+                      metro:VisibilityHelper.IsVisible="{Binding Settings.IsDailyReportVisible}"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Visible">
             <StackPanel Margin="5" Orientation="Vertical">

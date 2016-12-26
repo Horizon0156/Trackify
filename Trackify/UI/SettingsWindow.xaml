@@ -12,9 +12,9 @@
                    x:Name="Root"
                    Title="{x:Static resx:CultureDependedTexts.Settings}"
                    Width="300"
-                   Height="380"
+                   Height="480"
                    MinWidth="280"
-                   MinHeight="350"
+                   MinHeight="400"
                    d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
                    x:ClassModifier="internal"
                    BorderBrush="{DynamicResource AccentColorBrush}"
@@ -55,6 +55,12 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="10" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -70,7 +76,7 @@
                   Grid.Column="2"
                   FocusVisualStyle="{x:Null}"
                   ItemsSource="{StaticResource AccentColors}"
-                  SelectedItem="{Binding SelectedAccentColor}">
+                  SelectedItem="{Binding Settings.AccentColor}">
             <i:Interaction.Behaviors>
                 <behaviors:InitialFocusBehavior />
             </i:Interaction.Behaviors>
@@ -85,7 +91,7 @@
                              Interval="0.01"
                              Minimum="0"
                              StringFormat="{x:Static resx:CultureDependedTexts.HourStringFormat}"
-                             Value="{Binding BookingTimeInterval}" />
+                             Value="{Binding Settings.BookingTimeInterval}" />
 
         <TextBlock Grid.Row="4"
                    Grid.Column="0"
@@ -96,7 +102,7 @@
                              Interval="0.01"
                              Minimum="0"
                              StringFormat="{x:Static resx:CultureDependedTexts.HourStringFormat}"
-                             Value="{Binding DailyTarget}" />
+                             Value="{Binding Settings.DailyTarget}" />
 
         <TextBlock Grid.Row="6"
                    Grid.Column="0"
@@ -136,5 +142,33 @@
                 Command="{Binding ResetDatabaseCommand}"
                 Content="{x:Static resx:CultureDependedTexts.ResetData}"
                 FocusVisualStyle="{x:Null}" />
+
+        <TextBlock Grid.Row="16"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Text="{x:Static resx:CultureDependedTexts.ShowDailyReport}" />
+        <CheckBox Grid.Row="16"
+                  Grid.Column="2"
+                  FocusVisualStyle="{x:Null}"
+                  IsChecked="{Binding Settings.IsDailyReportVisible}" />
+
+        <TextBlock Grid.Row="18"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Text="{x:Static resx:CultureDependedTexts.KeepAlwaysOnTop}" />
+        <CheckBox Grid.Row="18"
+                  Grid.Column="2"
+                  FocusVisualStyle="{x:Null}"
+                  IsChecked="{Binding Settings.ShouldApplicationStayAlwaysOnTop}" />
+
+        <TextBlock Grid.Row="20"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Text="{x:Static resx:CultureDependedTexts.StartWithWindows}" />
+        <CheckBox Grid.Row="20"
+                  Grid.Column="2"
+                  FocusVisualStyle="{x:Null}"
+                  IsChecked="{Binding Settings.ShouldApplicationStartWithWindows}" />
+
     </Grid>
 </metro:MetroWindow>

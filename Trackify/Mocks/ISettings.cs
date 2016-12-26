@@ -9,5 +9,11 @@ namespace Trackify.Mocks
         double BookingTimeInterval { get; set; }
 
         double DailyTarget { get; set; }
+
+        bool IsDailyReportVisible { get; set; }
+
+        bool ShouldApplicationStayAlwaysOnTop { get; set; }
+
+        bool ShouldApplicationStartWithWindows { get; set; }
     }
 }

@@ -179,6 +179,15 @@ namespace Trackify.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep Trackify always on top:.
+        /// </summary>
+        public static string KeepAlwaysOnTop {
+            get {
+                return ResourceManager.GetString("KeepAlwaysOnTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Locate in Explorer.
         /// </summary>
         public static string LocateInExplorer {
@@ -251,11 +260,29 @@ namespace Trackify.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show daily report:.
+        /// </summary>
+        public static string ShowDailyReport {
+            get {
+                return ResourceManager.GetString("ShowDailyReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start.
         /// </summary>
         public static string Start {
             get {
                 return ResourceManager.GetString("Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Trackify with Windows:.
+        /// </summary>
+        public static string StartWithWindows {
+            get {
+                return ResourceManager.GetString("StartWithWindows", resourceCulture);
             }
         }
         

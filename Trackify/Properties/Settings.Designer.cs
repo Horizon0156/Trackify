@@ -58,5 +58,29 @@ namespace Trackify.Properties {
                 this["DailyTarget"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsDailyReportVisible {
+            get {
+                return ((bool)(this["IsDailyReportVisible"]));
+            }
+            set {
+                this["IsDailyReportVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShouldApplicationStayAlwaysOnTop {
+            get {
+                return ((bool)(this["ShouldApplicationStayAlwaysOnTop"]));
+            }
+            set {
+                this["ShouldApplicationStayAlwaysOnTop"] = value;
+            }
+        }
     }
 }

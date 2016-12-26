@@ -21,6 +21,7 @@ namespace Trackify.ViewModels
         {
             _messenger = messenger;
             _settings = settings;
+            Settings = settings;
             _databaseContext = databaseContext;
             _process = process;
 
@@ -30,29 +31,7 @@ namespace Trackify.ViewModels
             ReloadDatabaseCommand = commandFactory.CreateCommand(ReloadDatabase);
         }
 
-        public double BookingTimeInterval
-        {
-            get
-            {
-                return _settings.BookingTimeInterval;
-            }
-            set
-            {
-                _settings.BookingTimeInterval = value;
-            }
-        }
-
-        public double DailyTarget
-        {
-            get
-            {
-                return _settings.DailyTarget;
-            }
-            set
-            {
-                _settings.DailyTarget = value;
-            }
-        }
+        public ISettings Settings { get; }
 
         public ICommand LocateDatabaseCommand { get; }
 
@@ -71,18 +50,6 @@ namespace Trackify.ViewModels
         public ICommand ReloadDatabaseCommand { get; }
 
         public ICommand ResetDatabaseCommand { get; }
-
-        public string SelectedAccentColor
-        {
-            get
-            {
-                return _settings.AccentColor;
-            }
-            set
-            {
-                _settings.AccentColor = value;
-            }
-        }
 
         private void LocateDatabase()
         {

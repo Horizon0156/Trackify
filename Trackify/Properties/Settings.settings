@@ -11,5 +11,11 @@
     <Setting Name="DailyTarget" Type="System.Double" Scope="User">
       <Value Profile="(Default)">8</Value>
     </Setting>
+    <Setting Name="IsDailyReportVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ShouldApplicationStayAlwaysOnTop" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

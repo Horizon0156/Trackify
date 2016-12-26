@@ -23,7 +23,6 @@ namespace Trackify.ViewModels
         private readonly ICommandFactory _commandFactory;
         private readonly IDatabaseContext _databaseContext;
         private readonly IMessenger _messenger;
-        private readonly ISettings _settings;
         private readonly IViewModelFactory _viewModelFactory;
         private TimeAcquisitionModel _currentAcquisition;
         private IEnumerable<Effort> _efforts;
@@ -39,7 +38,6 @@ namespace Trackify.ViewModels
             _databaseContext = databaseContext;
             _commandFactory = commandFactory;
             _messenger = messenger;
-            _settings = settings;
             _viewModelFactory = viewModelFactory;
 
             ToggleTrackingCommand = commandFactory.CreateCommand(ToggleTracking);
@@ -50,7 +48,9 @@ namespace Trackify.ViewModels
             RestartCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(RestartTimeAcquisition);
 
             _messenger.Register<DatabaseChangedMessage>(msg => LoadAcquisitionsForSelectedDate());
-            _settings.PropertyChanged += HandleSettingsUpdate;
+
+            Settings = settings;
+            Settings.PropertyChanged += HandleSettingsUpdate;
 
             InitializeContent();
         }
@@ -125,6 +125,8 @@ namespace Trackify.ViewModels
             }
         }
 
+        public ISettings Settings { get; }
+
         public ICommand SettingsCommand { get; }
 
         public TimeSpan? TargetTime
@@ -178,7 +180,7 @@ namespace Trackify.ViewModels
             var startTime = TimeAcquisitions.Min(b => b.StartTime);
 
             TargetTime = startTime.HasValue
-                ? startTime.Value.TimeOfDay + TimeSpan.FromHours(_settings.DailyTarget)
+                ? startTime.Value.TimeOfDay + TimeSpan.FromHours(Settings.DailyTarget)
                 : (TimeSpan?)null;
         }
 
@@ -233,11 +235,11 @@ namespace Trackify.ViewModels
 
         private void HandleSettingsUpdate(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_settings.BookingTimeInterval))
+            if (e.PropertyName == nameof(Settings.BookingTimeInterval))
             {
                 UpdateEffort();
             }
-            else if (e.PropertyName == nameof(_settings.DailyTarget))
+            else if (e.PropertyName == nameof(Settings.DailyTarget))
             {
                 CalculateEstimatedTargetTime();
             }
@@ -383,10 +385,10 @@ namespace Trackify.ViewModels
         {
             Efforts = TimeAcquisitions
                     .GroupBy(b => b.Description)
-                    .Select(g => new Effort(_commandFactory, g.ToList()).RoundEffort(_settings.BookingTimeInterval));
+                    .Select(g => new Effort(_commandFactory, g.ToList()).RoundEffort(Settings.BookingTimeInterval));
 
             TotalEffort = Efforts.Sum(e => e.EffortTimeInHours);
-            HasReachedDailyTarget = TotalEffort >= _settings.DailyTarget;
+            HasReachedDailyTarget = TotalEffort >= Settings.DailyTarget;
 
             CalculateEstimatedTargetTime();
         }
