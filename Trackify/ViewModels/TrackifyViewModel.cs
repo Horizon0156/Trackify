@@ -47,7 +47,7 @@ namespace Trackify.ViewModels
             SettingsCommand = commandFactory.CreateCommand(OpenSettings);
             DeleteCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(DeleteBooking);
             CreateCommand = commandFactory.CreateCommand(CreateTimeAcquisition);
-            EditCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(EditTimeAcquisition);
+            EditCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(EditTimeAcquisition, CanEditTimeAcquisition);
             RestartCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(RestartTimeAcquisition);
 
             _messenger.Register<DatabaseChangedMessage>(msg => LoadAcquisitionsForSelectedDate());
@@ -55,6 +55,12 @@ namespace Trackify.ViewModels
             _settings.PropertyChanged += HandleSettingsUpdate;
 
             InitializeContent();
+        }
+
+        private bool CanEditTimeAcquisition(TimeAcquisitionModel timeAcquisition)
+        {
+            return timeAcquisition != CurrentAcquisition
+                   || IsTrackingActive;
         }
 
         private void HandleSettingsUpdate(object sender, PropertyChangedEventArgs e)
