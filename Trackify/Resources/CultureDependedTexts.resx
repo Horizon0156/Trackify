@@ -139,13 +139,6 @@ Est. target time: {1:hh\:mm}</value>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
-  <data name="GoHome" xml:space="preserve">
-    <value>Go home!!!</value>
-  </data>
-  <data name="InitializationFailure" xml:space="preserve">
-    <value>Failed to initialize application.
-Please have a look at the logs to get further information.</value>
-  </data>
   <data name="LocateInExplorer" xml:space="preserve">
     <value>Locate in Explorer</value>
   </data>

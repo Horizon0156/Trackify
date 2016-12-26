@@ -170,30 +170,11 @@ namespace Trackify.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Go home!!!.
-        /// </summary>
-        public static string GoHome {
-            get {
-                return ResourceManager.GetString("GoHome", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0:N2} h.
         /// </summary>
         public static string HourStringFormat {
             get {
                 return ResourceManager.GetString("HourStringFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to initialize application.
-        ///Please have a look at the logs to get further information..
-        /// </summary>
-        public static string InitializationFailure {
-            get {
-                return ResourceManager.GetString("InitializationFailure", resourceCulture);
             }
         }
         
