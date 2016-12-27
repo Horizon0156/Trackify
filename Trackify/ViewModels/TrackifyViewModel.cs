@@ -5,6 +5,7 @@ using Horizon.MvvmFramework.Components;
 using Horizon.MvvmFramework.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace Trackify.ViewModels
         private readonly IDatabaseContext _databaseContext;
         private readonly IMessenger _messenger;
         private readonly IViewModelFactory _viewModelFactory;
+        private ObservableCollection<string> _autoCompletionValues;
         private TimeAcquisitionModel _currentAcquisition;
         private IEnumerable<Effort> _efforts;
         private bool _hasReachedDailyTarget;
@@ -54,6 +56,18 @@ namespace Trackify.ViewModels
             Settings.PropertyChanged += HandleSettingsUpdate;
 
             InitializeContent();
+        }
+
+        public ObservableCollection<string> AutoCompletionValues
+        {
+            get
+            {
+                return _autoCompletionValues;
+            }
+            private set
+            {
+                SetProperty(ref _autoCompletionValues, value);
+            }
         }
 
         public ICommand CreateCommand { get; set; }
@@ -175,6 +189,7 @@ namespace Trackify.ViewModels
         {
             _databaseContext.EnsureDatabaseIsCreated();
 
+            PrepareAutocompletion();
             SelectedDate = DateTime.Today;
             InitializeCurrentAcquisition();
         }
@@ -284,6 +299,7 @@ namespace Trackify.ViewModels
             }
 
             ListAcquisitionProperly(CurrentAcquisition);
+            RememberDescriptionForAutoCompletion();
             ResetCurrentAcquisition();
         }
 
@@ -346,6 +362,25 @@ namespace Trackify.ViewModels
         private void PersistChangesToAcquisition(object sender, NotifyInnerElementChangedEventArgs e)
         {
             PersistChangesToAcquisition((TimeAcquisitionModel)e.ChangedItem);
+        }
+
+        private void PrepareAutocompletion()
+        {
+            AutoCompletionValues = new ObservableCollection<string>(
+                _databaseContext
+                    .TimeAcquisitions
+                    .OrderByDescending(a => a.StartTime)
+                    .Select(a => a.Description)
+                    .Distinct()
+                    .Take(50));
+        }
+
+        private void RememberDescriptionForAutoCompletion()
+        {
+            if (!AutoCompletionValues.Contains(CurrentAcquisition.Description))
+            {
+                AutoCompletionValues.Add(CurrentAcquisition.Description);
+            }
         }
 
         private void ResetCurrentAcquisition()
