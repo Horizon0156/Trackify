@@ -191,6 +191,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\AutoCompleteTextboxBehavior.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Controls\TimeTracker.cs" />
     <Compile Include="DataModels\TimeAcquisition.cs" />
