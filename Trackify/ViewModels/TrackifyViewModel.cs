@@ -44,7 +44,7 @@ namespace Trackify.ViewModels
 
             ToggleTrackingCommand = commandFactory.CreateCommand(ToggleTracking);
             SettingsCommand = commandFactory.CreateCommand(OpenSettings);
-            DeleteCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(DeleteBooking);
+            DeleteCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(DeleteAcquisition);
             CreateCommand = commandFactory.CreateCommand(CreateTimeAcquisition);
             EditAcquisitionCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(EditTimeAcquisition);
             EditCurrentAcquisitionCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(EditTimeAcquisition, CanEditCurrentTimeAcquisition);
@@ -237,7 +237,7 @@ namespace Trackify.ViewModels
             }
         }
 
-        private void DeleteBooking(TimeAcquisitionModel timeAcquisition)
+        private void DeleteAcquisition(TimeAcquisitionModel timeAcquisition)
         {
             TimeAcquisitions.Remove(timeAcquisition);
 
