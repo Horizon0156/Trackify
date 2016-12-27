@@ -188,10 +188,36 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+
+        <ScrollViewer Grid.Row="0"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="0 46 0 0"
+                      VerticalScrollBarVisibility="Visible">
+            <ScrollViewer.Style>
+                <Style TargetType="ScrollViewer">
+                    <Setter Property="Grid.RowSpan" Value="3" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Settings.IsDailyReportVisible}" Value="False">
+                            <Setter Property="Grid.RowSpan" Value="4" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ScrollViewer.Style>
+
+            <ItemsControl Focusable="False"
+                          ItemTemplate="{StaticResource BookingEntryTemplate}"
+                          ItemsSource="{Binding TimeAcquisitions}" />
+
+            <i:Interaction.Behaviors>
+                <behaviors:AutoScrollBehavior />
+            </i:Interaction.Behaviors>
+        </ScrollViewer>
+
         <Border Grid.Row="0"
+                Margin="0 0 14 0"
                 BorderBrush="DimGray"
                 BorderThickness="0 0 0 1">
-            <Grid Margin="0 0 0 0">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -269,28 +295,7 @@
                 </Button>
             </Grid>
         </Border>
-        <ScrollViewer Grid.Row="1"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Visible">
-            <ScrollViewer.Style>
-                <Style TargetType="ScrollViewer">
-                    <Setter Property="Grid.RowSpan" Value="2" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Settings.IsDailyReportVisible}" Value="False">
-                            <Setter Property="Grid.RowSpan" Value="3" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ScrollViewer.Style>
 
-            <ItemsControl Focusable="False"
-                          ItemTemplate="{StaticResource BookingEntryTemplate}"
-                          ItemsSource="{Binding TimeAcquisitions}" />
-
-            <i:Interaction.Behaviors>
-                <behaviors:AutoScrollBehavior />
-            </i:Interaction.Behaviors>
-        </ScrollViewer>
 
         <ScrollViewer Grid.Row="3"
                       metro:VisibilityHelper.IsVisible="{Binding Settings.IsDailyReportVisible}"
