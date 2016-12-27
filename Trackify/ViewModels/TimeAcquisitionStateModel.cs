@@ -2,6 +2,7 @@
 {
     internal enum TimeAcquisitionStateModel
     {
+        Initialized,
         Tracking,
         Recorded,
         Booked

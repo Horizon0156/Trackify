@@ -341,6 +341,11 @@ namespace Trackify.ViewModels
 
         private void PersistChangesToAcquisition(TimeAcquisitionModel acquisition)
         {
+            if (acquisition.State == TimeAcquisitionStateModel.Initialized)
+            {
+                return;
+            }
+
             var acquisitionToEdit = _databaseContext
                 .TimeAcquisitions
                 .FirstOrDefault(entry => entry.Id == acquisition.Id);
