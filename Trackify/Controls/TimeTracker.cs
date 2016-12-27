@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using Trackify.Resources;
 
 namespace Trackify.Controls
 {
@@ -120,15 +121,19 @@ namespace Trackify.Controls
             }
             else if (ellapsedTime.TotalSeconds < 60)
             {
-                Text = $"{(int)ellapsedTime.TotalSeconds} sec";
+                Text = $"{(int)ellapsedTime.TotalSeconds} {CultureDependedTexts.SecondsShort}";
             }
             else if (ellapsedTime.TotalMinutes < 60)
             {
-                Text = $"{ellapsedTime:m\\:ss} min";
+                Text = $"{ellapsedTime:m\\:ss} {CultureDependedTexts.MinuetsShort}";
             }
             else
             {
-                Text = ellapsedTime.ToString("hh\\:mm\\:ss");
+                var hours = ellapsedTime.TotalHours;
+                var minuets = ellapsedTime.Minutes;
+                var seconds = ellapsedTime.Seconds;
+
+                Text = $"{hours:00}:{minuets:00}:{seconds:00}";
             }
         }
     }

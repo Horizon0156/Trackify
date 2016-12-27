@@ -197,6 +197,15 @@ namespace Trackify.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to min.
+        /// </summary>
+        public static string MinuetsShort {
+            get {
+                return ResourceManager.GetString("MinuetsShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New....
         /// </summary>
         public static string New {
@@ -247,6 +256,15 @@ namespace Trackify.Resources {
         public static string RestartTooltip {
             get {
                 return ResourceManager.GetString("RestartTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sec.
+        /// </summary>
+        public static string SecondsShort {
+            get {
+                return ResourceManager.GetString("SecondsShort", resourceCulture);
             }
         }
         

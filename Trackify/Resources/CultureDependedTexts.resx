@@ -196,7 +196,7 @@ Est. target time: {1:hh\:mm}</value>
   </data>
   <data name="HourStringFormat" xml:space="preserve">
     <value>{0:N2} h</value>
-    <comment>0 -&gt; Amount of hours</comment>
+    <comment>0 -&gt; Amount of hours (with 2 decimals)</comment>
   </data>
   <data name="KeepAlwaysOnTop" xml:space="preserve">
     <value>Keep Trackify always on top:</value>
@@ -206,5 +206,11 @@ Est. target time: {1:hh\:mm}</value>
   </data>
   <data name="StartWithWindows" xml:space="preserve">
     <value>Start Trackify with Windows:</value>
+  </data>
+  <data name="MinuetsShort" xml:space="preserve">
+    <value>min</value>
+  </data>
+  <data name="SecondsShort" xml:space="preserve">
+    <value>sec</value>
   </data>
 </root>
