@@ -1,5 +1,7 @@
-﻿using Horizon.MvvmFramework.Components;
+﻿using Horizon.MvvmFramework.Commands;
+using Horizon.MvvmFramework.Components;
 using System;
+using System.Windows.Input;
 
 namespace Trackify.ViewModels
 {
@@ -10,14 +12,18 @@ namespace Trackify.ViewModels
         private TimeSpan? _stopTime;
         private TimeAcquisitionModel _timeAcquisition;
 
-        public EditTimeAcquisitionViewModel(TimeAcquisitionModel timeAcquisition)
+        public EditTimeAcquisitionViewModel(TimeAcquisitionModel timeAcquisition, ICommandFactory commandFactory)
         {
             TimeAcquisition = timeAcquisition;
 
             _referenceDate = TimeAcquisition.StartTime?.Date ?? DateTime.Today;
             _startTime = TimeAcquisition.StartTime?.TimeOfDay;
             _stopTime = TimeAcquisition.StopTime?.TimeOfDay;
+
+            CloseCommand = commandFactory.CreateCommand(CloseEditWindow);
         }
+
+        public ICommand CloseCommand { get; }
 
         public DateTime? ReferenceDate
         {
@@ -31,7 +37,7 @@ namespace Trackify.ViewModels
                 UpdateTimeAcquisition();
             }
         }
-        
+
         public TimeSpan? StartTime
         {
             get
@@ -68,6 +74,11 @@ namespace Trackify.ViewModels
             {
                 SetProperty(ref _timeAcquisition, value);
             }
+        }
+
+        private void CloseEditWindow()
+        {
+            OnClosureRequested();
         }
 
         private void UpdateTimeAcquisition()

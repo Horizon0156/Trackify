@@ -1,6 +1,5 @@
-﻿using SimpleInjector;
-using Horizon.MvvmFramework.Services;
-using Trackify.DataModels;
+﻿using Horizon.MvvmFramework.Commands;
+using SimpleInjector;
 using Trackify.ViewModels;
 
 namespace Trackify.Factories
@@ -16,7 +15,7 @@ namespace Trackify.Factories
 
         public EditTimeAcquisitionViewModel CreateEditTimeAcquisitionViewModel(TimeAcquisitionModel timeAcquisition)
         {
-            return new EditTimeAcquisitionViewModel(timeAcquisition);
+            return new EditTimeAcquisitionViewModel(timeAcquisition, _iocContainer.GetInstance<ICommandFactory>());
         }
 
         public SettingsViewModel CreateSettingsViewModel()
