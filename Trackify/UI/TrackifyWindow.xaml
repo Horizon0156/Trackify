@@ -118,18 +118,18 @@
                         </Grid.ColumnDefinitions>
                         <Grid.InputBindings>
                             <MouseBinding Command="{Binding ElementName=Root,
-                                                            Path=DataContext.EditCommand}"
+                                                            Path=DataContext.EditAcquisitionCommand}"
                                           CommandParameter="{Binding}"
                                           Gesture="LeftClick" />
                         </Grid.InputBindings>
                         <Grid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Command="{Binding Source={StaticResource DataContextProxy},
-                                                            Path=Data.EditCommand}"
+                                                            Path=Data.EditAcquisitionCommand}"
                                           CommandParameter="{Binding}"
                                           Header="{x:Static resx:CultureDependedTexts.Edit}" />
                                 <MenuItem Command="{Binding Source={StaticResource DataContextProxy},
-                                                            Path=Data.DeleteCommand}"
+                                                            Path=Data.EditAcquisitionCommand}"
                                           CommandParameter="{Binding}"
                                           Header="{x:Static resx:CultureDependedTexts.Delete}" />
                             </ContextMenu>
@@ -224,8 +224,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Grid.InputBindings>
-                    <MouseBinding Command="{Binding ElementName=Root,
-                                                    Path=DataContext.EditCommand}"
+                    <MouseBinding Command="{Binding EditCurrentAcquisitionCommand}"
                                   CommandParameter="{Binding CurrentAcquisition}"
                                   Gesture="LeftClick" />
                 </Grid.InputBindings>
@@ -252,6 +251,7 @@
                            Margin="10"
                            VerticalAlignment="Center"
                            metro:VisibilityHelper.IsVisible="{Binding IsTrackingActive}"
+                           Background="Aqua"
                            Text="{Binding CurrentAcquisition.Description}" />
                 <controls:TimeTracker Grid.Column="1"
                                       Margin="5"

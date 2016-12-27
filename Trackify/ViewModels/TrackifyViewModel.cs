@@ -44,7 +44,8 @@ namespace Trackify.ViewModels
             SettingsCommand = commandFactory.CreateCommand(OpenSettings);
             DeleteCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(DeleteBooking);
             CreateCommand = commandFactory.CreateCommand(CreateTimeAcquisition);
-            EditCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(EditTimeAcquisition, CanEditTimeAcquisition);
+            EditAcquisitionCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(EditTimeAcquisition);
+            EditCurrentAcquisitionCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(EditTimeAcquisition, CanEditCurrentTimeAcquisition);
             RestartCommand = commandFactory.CreateCommand<TimeAcquisitionModel>(RestartTimeAcquisition);
 
             _messenger.Register<DatabaseChangedMessage>(msg => LoadAcquisitionsForSelectedDate());
@@ -72,7 +73,9 @@ namespace Trackify.ViewModels
         // ReSharper disable once UnusedAutoPropertyAccessor.Global DeleteCommand is bound using BindingProxy
         public ICommand DeleteCommand { get; }
 
-        public ICommand EditCommand { get; }
+        public ICommand EditAcquisitionCommand { get; }
+
+        public INotifiableCommand EditCurrentAcquisitionCommand { get; }
 
         public IEnumerable<Effort> Efforts
         {
@@ -107,6 +110,7 @@ namespace Trackify.ViewModels
             private set
             {
                 SetProperty(ref _isTrackingActive, value);
+                EditCurrentAcquisitionCommand.NotifyChange();
             }
         }
 
@@ -184,10 +188,9 @@ namespace Trackify.ViewModels
                 : (TimeSpan?)null;
         }
 
-        private bool CanEditTimeAcquisition(TimeAcquisitionModel timeAcquisition)
+        private bool CanEditCurrentTimeAcquisition(TimeAcquisitionModel timeAcquisition)
         {
-            return timeAcquisition != CurrentAcquisition
-                   || IsTrackingActive;
+            return IsTrackingActive;
         }
 
         private void CreateDefaultDescriptionIfNeeded()
