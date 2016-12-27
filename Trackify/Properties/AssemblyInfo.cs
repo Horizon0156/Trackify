@@ -5,9 +5,9 @@ using System.Windows;
 [assembly: AssemblyTitle("Trackify")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Horizon777")]
 [assembly: AssemblyProduct("Trackify")]
-[assembly: AssemblyCopyright("Copyright 2016")]
+[assembly: AssemblyCopyright("Copyright 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -16,5 +16,5 @@ using System.Windows;
 [assembly: log4net.Config.XmlConfigurator]
 
 // The assembly version has following format : Major.Minor
-[assembly: AssemblyVersion("0.9")]
+[assembly: AssemblyVersion("1.0")]
 
