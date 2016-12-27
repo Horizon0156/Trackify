@@ -29,9 +29,10 @@ namespace Trackify.ViewModels
             ResetDatabaseCommand = commandFactory.CreateCommand(ResetDatabase);
             LocateDatabaseCommand = commandFactory.CreateCommand(LocateDatabase);
             ReloadDatabaseCommand = commandFactory.CreateCommand(ReloadDatabase);
+            CloseCommand = commandFactory.CreateCommand(CloseSettings);
         }
 
-        public ISettings Settings { get; }
+        public ICommand CloseCommand { get; }
 
         public ICommand LocateDatabaseCommand { get; }
 
@@ -50,6 +51,13 @@ namespace Trackify.ViewModels
         public ICommand ReloadDatabaseCommand { get; }
 
         public ICommand ResetDatabaseCommand { get; }
+
+        public ISettings Settings { get; }
+
+        private void CloseSettings()
+        {
+            OnClosureRequested();
+        }
 
         private void LocateDatabase()
         {

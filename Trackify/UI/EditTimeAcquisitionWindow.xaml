@@ -33,6 +33,9 @@
         <behaviours:WindowsSettingBehaviour />
         <behaviours:GlowWindowBehavior />
     </i:Interaction.Behaviors>
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CloseCommand}" />
+    </Window.InputBindings>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
