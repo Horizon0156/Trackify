@@ -15,6 +15,6 @@ using System.Windows;
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 [assembly: log4net.Config.XmlConfigurator]
 
-// The assembly version has following format : Major.Minor
-[assembly: AssemblyVersion("1.0")]
+// The assembly version has following format : Major.Minor.Hotfix
+[assembly: AssemblyVersion("1.0.1")]
 

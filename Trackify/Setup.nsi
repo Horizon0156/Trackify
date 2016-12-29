@@ -2,7 +2,7 @@
 Name "Trackify"
 
 ; The file to write
-OutFile "Trackify Setup 1.0.exe"
+OutFile "Trackify Setup 1.0.1.exe"
 
 ; The default installation directory
 InstallDir "$PROGRAMFILES\Trackify"
@@ -44,7 +44,7 @@ Section "Trackify (required)"
   
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Trackify" "DisplayName" "Trackify"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Trackify" "DisplayVersion" "1.0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Trackify" "DisplayVersion" "1.0.1"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Trackify" "Publisher" "Horizon777"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Trackify" "UninstallString" '"$INSTDIR\Uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Trackify" "NoModify" 1
