@@ -1,6 +1,7 @@
 ---
-title:Test
+title: Blogging Like a Hacker
 ---
+
 ## Trackify
 ...
 
