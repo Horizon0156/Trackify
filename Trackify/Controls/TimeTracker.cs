@@ -129,7 +129,7 @@ namespace Trackify.Controls
             }
             else
             {
-                var hours = ellapsedTime.TotalHours;
+                var hours = Math.Floor(ellapsedTime.TotalHours);
                 var minuets = ellapsedTime.Minutes;
                 var seconds = ellapsedTime.Seconds;
 
