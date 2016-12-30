@@ -11,22 +11,19 @@ Trackify comes with the following easy-to-learn features:
 #### Track your current activity
 Adding a new activity to your daily task list and start time tracking is as _simple as it looks_. Enter a short description and there it goes!
 
-
 #### Continue previous activities
 When continuing with an already existing task you just have to _start it again_ to create a new entry.
-
 
 #### Edit existing activities
 You can rename already existing activities as well as correcting the start and end time.
 
-
 #### Get a daily overview (with history)
 Trackify _persists your activities_, so you can view the history of your entries day by day.
-
 
 #### Calculation of total effort and finishing time
 As Trackify is primarily used to track your tasks at work, it _rounds your time to configurable units_ and _calculates your daily finishing_ time based on a configurable daily minimum effort.
 
-
 #### Options
 Trackify offers _various configuration possibilities_ to facilitate the usage for your personal use.
+
+![overview](/images/summary.png?raw=true)
