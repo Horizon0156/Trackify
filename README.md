@@ -8,25 +8,25 @@ __Download it here:__ [Trackify 1.0.1 Setup.exe](https://github.com/Horizon0156/
 ----------
 Trackify comes with the following easy-to-learn features:
 
-#### :clock10: Track your current activity
+#### Track your current activity
 Adding a new activity to your daily task list and start time tracking is as _simple as it looks_. Enter a short description and there it goes!
 
 
-#### :leftwards_arrow_with_hook: Continue previous activities
+#### Continue previous activities
 When continuing with an already existing task you just have to _start it again_ to create a new entry.
 
 
-#### :pencil: Edit existing activities
+#### Edit existing activities
 You can rename already existing activities as well as correcting the start and end time.
 
 
-#### :chart_with_upwards_trend: Get a daily overview (with history)
+#### Get a daily overview (with history)
 Trackify _persists your activities_, so you can view the history of your entries day by day.
 
 
-#### :hourglass_flowing_sand: Calculation of total effort and finishing time
+#### Calculation of total effort and finishing time
 As Trackify is primarily used to track your tasks at work, it _rounds your time to configurable units_ and _calculates your daily finishing_ time based on a configurable daily minimum effort.
 
 
-#### :wrench: Options
+#### Options
 Trackify offers _various configuration possibilities_ to facilitate the usage for your personal use.
