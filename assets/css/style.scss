@@ -9,3 +9,12 @@
 @media screen and (max-width: 42em) { .page-header { padding: 2rem 1rem; } }
 
 .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 { margin-top: 2rem; margin-bottom: 1rem; font-weight: normal; color: #7d2222; }
+
+.site-footer { padding-top: 2rem; margin-top: 2rem; border-top: solid 1px #eff0f1; text-align:center;}
+@media screen and (min-width: 64em) { .site-footer { font-size: 1rem; } }
+@media screen and (min-width: 42em) and (max-width: 64em) { .site-footer { font-size: 1rem; } }
+@media screen and (max-width: 42em) { .site-footer { font-size: 0.9rem; } }
+
+.site-footer-owner { display: block; font-weight: normal; }
+
+.site-footer-credits { color: #7d2222; }
