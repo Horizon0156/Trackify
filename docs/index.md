@@ -30,7 +30,7 @@ As Trackify is primarily used to track your tasks at work, it _rounds your time 
 #### Options
 Trackify offers _various configuration possibilities_ to facilitate the usage for your personal use.
 
-![overview](https://raw.githubusercontent.com/Horizon0156/Trackify/master/images/summary.png)
+![overview](https://raw.githubusercontent.com/Horizon0156/Trackify/master/docs/images/Trackify.png)
 
 #### Credits
 Trackify makes use of the following components
