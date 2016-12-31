@@ -26,4 +26,4 @@ As Trackify is primarily used to track your tasks at work, it _rounds your time 
 #### Options
 Trackify offers _various configuration possibilities_ to facilitate the usage for your personal use.
 
-![overview](/images/summary.png?raw=true)
+![overview](/images/summary.png)
