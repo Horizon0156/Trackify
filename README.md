@@ -5,7 +5,7 @@
 #### Installation 
 To install Trackify just use the bundled installation package of the [latest version] (https://github.com/Horizon0156/Trackify/releases/download/v1.0.1_time_tracker/Trackify.Setup.1.0.1.exe).
 ##### Requirements
-- [.NET Framework 4.5.2](https://www.microsoft.com/de-de/download/details.aspx?id=42642), which should alreaddy be available on Windows 8 and upcoming versions.
+- [.NET Framework 4.5.2](https://www.microsoft.com/de-de/download/details.aspx?id=42642), which should already be available on Windows 8 and upcoming versions.
 
 ----------
 Trackify comes with the following easy-to-learn features:
