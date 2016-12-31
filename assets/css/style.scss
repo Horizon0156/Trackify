@@ -3,9 +3,9 @@
 
 @import "{{ site.theme }}";
 
-.page-header { color: #fff; text-align: center; background-color: #601577; background-image: linear-gradient(120deg, #4f084a, #cf02ba); }
+.page-header { color: #fff; text-align: center; background-color: #601577; background-image: linear-gradient(120deg, #b300ff, #7d2222); }
 @media screen and (min-width: 64em) { .page-header { padding: 5rem 6rem; } }
 @media screen and (min-width: 42em) and (max-width: 64em) { .page-header { padding: 3rem 4rem; } }
 @media screen and (max-width: 42em) { .page-header { padding: 2rem 1rem; } }
 
-.main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 { margin-top: 2rem; margin-bottom: 1rem; font-weight: normal; color: #cf02ba; }
+.main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 { margin-top: 2rem; margin-bottom: 1rem; font-weight: normal; color: #b300ff; }
