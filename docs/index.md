@@ -36,6 +36,6 @@ Trackify offers _various configuration possibilities_ to facilitate the usage fo
 Trackify makes use of the following components
 
 * [MahappsMetro](http://mahapps.com/)
-* [MvvmFramework](https://github.com/Horizon0156/Horizon.MvvmFramework)
+* [MvvmFramework](https://horizon0156.github.io/Horizon.MvvmFramework/)
 * [EntityFramework Core](https://docs.microsoft.com/en-us/ef/core/)
 * [AutoMapper](http://automapper.org/)
